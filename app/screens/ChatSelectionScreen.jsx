@@ -72,6 +72,12 @@ const ChatSelectionScreen = ({ navigation }) => {
         return nameArray.map(word => word[0]).join("").toUpperCase();
     };
 
+    const handleChatSelection = (chat) => {
+        // Handle chat selection logic here
+        // For example, you can navigate to the chat screen
+        navigation.navigate("ChatScreen", { chat });
+    }
+
     return (
         <SafeAreaView className="flex-1 items-center justify-start">
             <Text className="flex text-4xl font-bold py-4">Chat Selection</Text>
@@ -79,7 +85,7 @@ const ChatSelectionScreen = ({ navigation }) => {
                 <View className="flex flex-col gap-y-2 w-full justify-center items-center">
                     {
                         chatData.map((chat) => (
-                            <TouchableOpacity key={chat.id} className="flex flex-row w-full p-4 content-center items-center">
+                            <TouchableOpacity key={chat.id} onPress={() => handleChatSelection(chat)} className="flex flex-row w-full p-4 content-center items-center">
                                 <View className="w-10 h-10 rounded-full flex justify-center items-center bg-black">
                                     <Text className="text-xl font-bold text-white">{getInitials(chat.name)}</Text>
                                 </View>
