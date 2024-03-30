@@ -16,6 +16,13 @@ const LoginScreen = ({navigation}) => {
         });
     };
 
+    const handleLogin = () => {
+        // Here you can perform login logic using formData
+        // For example, you can send formData to your backend for authentication
+        // After successful login, you can navigate to the next screen
+        navigation.navigate("ChatSelectionScreen");
+    };
+
     return (
         <SafeAreaView testID="login-page" className="flex-1 bg-primary">
             <View className="flex-1 flex justify-center my-4">
@@ -37,7 +44,7 @@ const LoginScreen = ({navigation}) => {
                     />
                 </View>
                 <View className="space-y-4 mx-7">
-                    <TextButton onPress={() => navigation.navigate("ChatSelectionScreen")} title={"Login"} testID="login-button"/>
+                    <TextButton onPress={handleLogin} title={"Login"} testID="login-button"/>
                 </View>
             </View>
         </SafeAreaView>
