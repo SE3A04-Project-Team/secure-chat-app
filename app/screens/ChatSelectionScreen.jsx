@@ -1,11 +1,12 @@
 import {SafeAreaView, Text} from "react-native";
 
-const HomeScreen = ({navigation}) => {
+const ChatSelectionScreen = ({ navigation }) => {
+
     return (
         <SafeAreaView className="flex-1 items-center justify-center">
-            <Text>Home</Text>
+            <Text>Chat Selection</Text>
         </SafeAreaView>
     );
 };
 
-export default HomeScreen;
+export default ChatSelectionScreen;
