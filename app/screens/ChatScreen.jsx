@@ -1,11 +1,12 @@
-import {View, Text} from "react-native";
+import {View, Text, SafeAreaView} from "react-native";
 
-const ChatScreen = ({navigation}) => {
+const ChatScreen = ({route, navigation}) => {
+    const {chat} = route.params;
 
     return (
-        <View>
-            <Text>Chat Screen</Text>
-        </View>
+        <SafeAreaView>
+            <Text>Chat with {chat.name}</Text>
+        </SafeAreaView>
     );
 };
 
