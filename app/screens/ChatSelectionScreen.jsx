@@ -3,6 +3,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 const ChatSelectionScreen = ({ navigation }) => {
 
+    // TODO: Query chat data (only name and id) from backend
+
     // Sample JSON data for chat selection
     const chatData = [
         {
