@@ -1,7 +1,5 @@
 # Secure Chat App
 
-cd app, follow the instructions in the README.md file
-
 ## Contributors
 - [Aidan Froggatt](https://github.com/aidanfroggatt)
 - [Rosa Chen](https://github.com/rosachen3)
