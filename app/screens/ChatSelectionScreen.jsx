@@ -79,12 +79,12 @@ const ChatSelectionScreen = ({ navigation }) => {
                 <View className="flex flex-col gap-y-2 w-full justify-center items-center">
                     {
                         chatData.map((chat) => (
-                            <TouchableOpacity key={chat.id} className="flex flex-row w-full p-4 content-center items-center justify-between">
+                            <TouchableOpacity key={chat.id} className="flex flex-row w-full p-4 content-center items-center">
                                 <View className="w-10 h-10 rounded-full border-2 border-black flex justify-center items-center bg-black">
                                     <Text className="text-xl font-bold text-white">{getInitials(chat.name)}</Text>
                                 </View>
-                                <Text className="text-lg">{chat.name}</Text>
-                                <Icon name="angle-right" size={24} color="black" className="ml-auto"/>
+                                <Text className="flex-grow text-lg mx-2">{chat.name}</Text>
+                                <Icon name="angle-right" size={24} color="black" className="self-end"/>
                             </TouchableOpacity>
                         ))
                     }
