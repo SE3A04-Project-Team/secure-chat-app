@@ -80,7 +80,7 @@ const ChatSelectionScreen = ({ navigation }) => {
                     {
                         chatData.map((chat) => (
                             <TouchableOpacity key={chat.id} className="flex flex-row w-full p-4 content-center items-center">
-                                <View className="w-10 h-10 rounded-full border-2 border-black flex justify-center items-center bg-black">
+                                <View className="w-10 h-10 rounded-full flex justify-center items-center bg-black">
                                     <Text className="text-xl font-bold text-white">{getInitials(chat.name)}</Text>
                                 </View>
                                 <Text className="flex-grow text-lg mx-2">{chat.name}</Text>
