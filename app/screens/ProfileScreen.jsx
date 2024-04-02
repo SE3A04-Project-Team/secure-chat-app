@@ -1,7 +1,7 @@
-import {View, Text, ScrollView, TouchableOpacity} from "react-native";
+import {View, Text} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({navigation}) => {
 
     const profileData = {
         name: 'John Doe',
