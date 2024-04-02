@@ -48,18 +48,12 @@ const ChatScreen = ({route, navigation}) => {
                     <View className="flex flex-col justify-center items-center mt-4">
                         {
                             chatMessages.map((message) => (
-                                <>
-                                    {
-                                        message.senderID === currentUserID ?
-                                            <View key={message.messageID} className="bg-gray-700 p-4 my-2 rounded-full max-w-3/4 self-end">
-                                                <Text className="text-primary text-md font-medium">{message.message}</Text>
-                                            </View>
-                                            :
-                                            <View key={message.messageID} className="bg-indigo-700 p-4 my-2 rounded-full max-w-3/4 self-start">
-                                                <Text className="text-white text-md font-medium">{message.message}</Text>
-                                            </View>
-                                    }
-                                </>
+                                <View
+                                    key={message.messageID}
+                                    className={`p-4 my-2 rounded-full max-w-3/4 ${message.senderID === currentUserID ? 'bg-gray-700 self-end' : 'bg-indigo-700 self-start'}`}
+                                >
+                                    <Text className="text-primary text-md font-medium">{message.message}</Text>
+                                </View>
                             ))
                         }
                     </View>
