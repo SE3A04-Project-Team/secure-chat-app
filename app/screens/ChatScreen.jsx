@@ -45,18 +45,18 @@ const ChatScreen = ({route, navigation}) => {
             </View>
             <View className="bg-primary rounded-t-3xl h-4/5">
                 <ScrollView className="p-2">
-                    <View className="flex flex-col justify-center items-center">
+                    <View className="flex flex-col justify-center items-center mt-4">
                         {
                             chatMessages.map((message) => (
                                 <>
                                     {
                                         message.senderID === currentUserID ?
-                                            <View key={message.messageID} className="bg-primary p-4 my-2 rounded-full w-3/4 self-end">
-                                                <Text className="text-white">{message.message}</Text>
+                                            <View key={message.messageID} className="bg-gray-700 p-4 my-2 rounded-full max-w-3/4 self-end">
+                                                <Text className="text-primary text-md font-medium">{message.message}</Text>
                                             </View>
                                             :
-                                            <View key={message.messageID} className="bg-secondary p-4 my-2 rounded-full w-3/4 self-start">
-                                                <Text className="text-black">{message.message}</Text>
+                                            <View key={message.messageID} className="bg-indigo-700 p-4 my-2 rounded-full max-w-3/4 self-start">
+                                                <Text className="text-white text-md font-medium">{message.message}</Text>
                                             </View>
                                     }
                                 </>
