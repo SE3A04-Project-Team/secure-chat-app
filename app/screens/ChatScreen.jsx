@@ -1,4 +1,4 @@
-import {View, Text, SafeAreaView, ScrollView, TouchableOpacity} from "react-native";
+import {View, Text, SafeAreaView, ScrollView} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import SlidingModal from "../components/SlidingModal";
 import {useState} from "react";
