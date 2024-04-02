@@ -1,6 +1,6 @@
 import {TouchableOpacity} from "react-native";
 
-const TouchIcon = ({ icon, onPress }) => {
+const IconButton = ({ icon, onPress }) => {
     return (
         <TouchableOpacity onPress={onPress}>
             {icon}
@@ -8,4 +8,4 @@ const TouchIcon = ({ icon, onPress }) => {
     );
 };
 
-export default TouchIcon;
+export default IconButton;
