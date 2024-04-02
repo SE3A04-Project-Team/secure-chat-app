@@ -1,5 +1,8 @@
 import {View, Text, SafeAreaView, ScrollView, TouchableOpacity} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import SlidingModal from "../components/SlidingModal";
+import {useState} from "react";
+import TextButton from "../components/TextButton";
 
 const ChatScreen = ({route, navigation}) => {
     const {chat} = route.params;
@@ -26,6 +29,12 @@ const ChatScreen = ({route, navigation}) => {
     // Sample current user ID, this is used for determining the message sender for styling
     const currentUserID = 1; // TODO: Get the current user's ID from the authentication context
 
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const handleLeaveChat = () => {
+        // TODO: Implement leave chat functionality
+    }
+
     return (
         <SafeAreaView>
             <View className="flex flex-row justify-between items-center content-center gap-4 mb-8">
@@ -33,7 +42,7 @@ const ChatScreen = ({route, navigation}) => {
                     <Icon name="arrow-left" size={24} color="black"/>
                 </TouchableOpacity>
                 <Text className="flex-grow font-bold text-xl">{chat.name}</Text>
-                <TouchableOpacity className="px-4">
+                <TouchableOpacity className="px-4" onPress={() => setModalVisible(true)}>
                     <Icon name="gear" size={24} color="black"/>
                 </TouchableOpacity>
             </View>
@@ -48,6 +57,13 @@ const ChatScreen = ({route, navigation}) => {
                     }
                 </View>
             </ScrollView>
+
+            <SlidingModal modalVisible={modalVisible} setModalVisible={setModalVisible}>
+                <View className="m-8">
+                    <TextButton onPress={() => handleLeaveChat} title="Leave Chat"/>
+                </View>
+            </SlidingModal>
+
         </SafeAreaView>
     );
 };
