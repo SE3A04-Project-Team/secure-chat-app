@@ -4,7 +4,27 @@ import Icon from "react-native-vector-icons/FontAwesome";
 const ChatScreen = ({route, navigation}) => {
     const {chat} = route.params;
 
-    // TODO: Query chat messages from backend using chat.id
+    // Sample chat messages data
+    const chatMessages = [
+        {
+            messageID: 1,
+            senderID: 1,
+            message: 'Hello, how are you?',
+        },
+        {
+            messageID: 2,
+            senderID: 2,
+            message: 'I am good, thank you!',
+        },
+        {
+            messageID: 3,
+            senderID: 1,
+            message: 'That\'s great to hear!',
+        },
+    ]; // TODO: Query chat messages from backend using chat.id
+
+    // Sample current user ID, this is used for determining the message sender for styling
+    const currentUserID = 1; // TODO: Get the current user's ID from the authentication context
 
     return (
         <SafeAreaView>
@@ -16,6 +36,15 @@ const ChatScreen = ({route, navigation}) => {
             </View>
             <ScrollView>
                 {/* Display chat messages here */}
+                <View className="flex flex-col gap-y-2 justify-center items-center">
+                    {
+                        chatMessages.map((message) => (
+                            <View key={message.messageID} className={message.senderID === currentUserID ? "bg-blue-500 p-2 rounded-lg w-3/4 self-end" : "bg-gray-300 p-2 rounded-lg w-3/4 self-start"}>
+                                <Text className={message.senderID === currentUserID ? "text-white" : "text-black"}>{message.message}</Text>
+                            </View>
+                        ))
+                    }
+                </View>
             </ScrollView>
         </SafeAreaView>
     );
