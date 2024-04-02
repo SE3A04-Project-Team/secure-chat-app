@@ -1,4 +1,4 @@
-import {View, Text, SafeAreaView, ScrollView, Button, TouchableOpacity} from "react-native";
+import {View, Text, SafeAreaView, ScrollView, TouchableOpacity} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 const ChatScreen = ({route, navigation}) => {
