@@ -3,7 +3,7 @@ import {SafeAreaView, Text, TextInput, TouchableOpacity, View} from 'react-nativ
 import TextButton from '../components/TextButton';
 import Icon from "react-native-vector-icons/FontAwesome";
 
-const LoginScreen = ({navigation}) => {
+const UserLoginScreen = ({navigation}) => {
 
     const [formData, setFormData] = useState({
         email: '',
@@ -64,4 +64,4 @@ const LoginScreen = ({navigation}) => {
     );
 };
 
-export default LoginScreen;
+export default UserLoginScreen;
