@@ -8,13 +8,13 @@ const ContactScreen = () => {
     }
 
     return (
-        <View className="flex-1 min-h-screen bg-green-300 justify-start">
+        <View className="flex-1 min-h-screen bg-accent justify-start">
             <View className="flex-1 flex-row justify-between items-center content-center px-8">
                 <Icon name="plus" size={32} color="white"/>
                 <Text className="text-white text-xl font-extrabold text-center">Home</Text>
                 <Icon name="user" size={32} color="white"/>
             </View>
-            <View className="bg-white rounded-t-3xl h-4/5">
+            <View className="bg-primary rounded-t-3xl h-4/5">
                 <ScrollView className="p-2">
                     <View className="flex flex-col gap-y-2 justify-center items-center">
                         {

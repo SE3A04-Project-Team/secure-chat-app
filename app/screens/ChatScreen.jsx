@@ -37,20 +37,29 @@ const ChatScreen = ({route, navigation}) => {
     }
 
     return (
-        <View className="flex-1 min-h-screen bg-green-300 justify-start">
+        <View className="flex-1 min-h-screen bg-accent justify-start">
             <View className="flex-1 flex-row justify-between items-center content-center px-8">
                 <IconButton icon={<Icon name="arrow-left" size={32} color="white"/>}/>
                 <Text className="text-white text-xl font-extrabold text-center">{chat.name}</Text>
                 <IconButton icon={<Icon name="gear" size={32} color="white"/>} onPress={() => setModalVisible(true)}/>
             </View>
-            <View className="bg-white rounded-t-3xl h-4/5">
+            <View className="bg-primary rounded-t-3xl h-4/5">
                 <ScrollView className="p-2">
-                    <View className="flex flex-col gap-y-4 justify-center items-center">
+                    <View className="flex flex-col justify-center items-center">
                         {
                             chatMessages.map((message) => (
-                                <View key={message.messageID} className={message.senderID === currentUserID ? "bg-blue-500 p-2 rounded-lg w-3/4 self-end" : "bg-gray-300 p-2 rounded-lg w-3/4 self-start"}>
-                                    <Text className={message.senderID === currentUserID ? "text-white" : "text-black"}>{message.message}</Text>
-                                </View>
+                                <>
+                                    {
+                                        message.senderID === currentUserID ?
+                                            <View key={message.messageID} className="bg-primary p-4 my-2 rounded-full w-3/4 self-end">
+                                                <Text className="text-white">{message.message}</Text>
+                                            </View>
+                                            :
+                                            <View key={message.messageID} className="bg-secondary p-4 my-2 rounded-full w-3/4 self-start">
+                                                <Text className="text-black">{message.message}</Text>
+                                            </View>
+                                    }
+                                </>
                             ))
                         }
                     </View>

@@ -11,11 +11,11 @@ const ProfileScreen = ({navigation}) => {
     }; //TODO: Query current user profile data from backend
 
     return (
-        <View className="flex-1 min-h-screen bg-green-300 justify-start">
+        <View className="flex-1 min-h-screen bg-accent justify-start">
             <View className="flex-1 flex-row justify-center items-center content-center">
                 <Icon name="user" size={96} color="white"/>
             </View>
-            <View className="bg-white rounded-t-3xl h-3/5">
+            <View className="bg-primary rounded-t-3xl h-3/5">
                 {
                     Object.keys(profileData).map((key, index) => (
                         <View key={index} className="flex flex-col justify-between p-4 border-b border-gray-200">
