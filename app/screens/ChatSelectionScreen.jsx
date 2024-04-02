@@ -1,5 +1,6 @@
 import {SafeAreaView, ScrollView, Text, TouchableOpacity, View} from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import TouchIcon from "../components/TouchIcon";
 
 const ChatSelectionScreen = ({ navigation }) => {
 
@@ -85,7 +86,7 @@ const ChatSelectionScreen = ({ navigation }) => {
             <View className="flex-1 flex-row justify-between items-center content-center px-8">
                 <Icon name="plus" size={32} color="white"/>
                 <Text className="text-white text-xl font-extrabold text-center">Home</Text>
-                <Icon name="user" size={32} color="white"/>
+                <TouchIcon icon={<Icon name="user" size={32} color="white"/>} onPress={() => navigation.navigate("ProfileScreen")}/>
             </View>
             <View className="bg-white rounded-t-3xl h-4/5">
                 <ScrollView className="p-2">
