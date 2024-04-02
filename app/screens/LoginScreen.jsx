@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {SafeAreaView, Text, TextInput, View} from 'react-native';
+import {SafeAreaView, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import TextButton from '../components/TextButton';
 
 const LoginScreen = ({navigation}) => {
@@ -24,30 +24,41 @@ const LoginScreen = ({navigation}) => {
     };
 
     return (
-        <SafeAreaView testID="login-page" className="flex-1 bg-primary">
-            <View className="flex-1 flex justify-center my-4">
-                <Text className="text-secondary font-bold text-4xl text-center">Login</Text>
-                <View className="flex flex-col gap-y-2 m-7">
-                    <TextInput
-                        className="p-4 text-secondary rounded-2xl"
-                        placeholder="Email"
-                        keyboardType="email-address"
-                        value={formData.email}
-                        onChangeText={(text) => handleInputChange('email', text)}
-                    />
-                    <TextInput
-                        className="p-4 text-secondary rounded-2xl"
-                        placeholder="Password"
-                        secureTextEntry={true}
-                        value={formData.password}
-                        onChangeText={(text) => handleInputChange('password', text)}
-                    />
-                </View>
-                <View className="space-y-4 mx-7">
-                    <TextButton onPress={handleLogin} title={"Login"} testID="login-button"/>
-                </View>
+        <View className="flex-1 min-h-screen bg-green-300 justify-end">
+            <View className="flex-1 flex justify-center items-center content-center">
+                <Text className="text-white text-7xl font-bold text-center py-4">Chat App</Text>
             </View>
-        </SafeAreaView>
+            <SafeAreaView testID="login-page" className="bg-white rounded-t-3xl">
+                <View className="flex justify-center py-8 gap-y-8">
+                    <Text className="text-secondary font-bold text-4xl text-center py-4">User Login</Text>
+                    <View className="flex flex-col gap-y-2 m-7">
+                        <TextInput
+                            className="p-4 text-secondary rounded-2xl bg-gray-100"
+                            placeholder="Email"
+                            keyboardType="email-address"
+                            value={formData.email}
+                            onChangeText={(text) => handleInputChange('email', text)}
+                        />
+                        <TextInput
+                            className="p-4 text-secondary rounded-2xl bg-gray-100"
+                            placeholder="Password"
+                            secureTextEntry={true}
+                            value={formData.password}
+                            onChangeText={(text) => handleInputChange('password', text)}
+                        />
+                    </View>
+                    <View className="space-y-4 mx-7">
+                        <TextButton onPress={handleLogin} title={"Login"} testID="login-button"/>
+                    </View>
+                    <View className="flex flex-row justify-center text-lg font-semibold">
+                        <Text>Admin Member? </Text>
+                        <TouchableOpacity>
+                            <Text className="text-green-300">Login here</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </SafeAreaView>
+        </View>
     );
 };
 
