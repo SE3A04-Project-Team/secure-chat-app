@@ -3,6 +3,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import SlidingModal from "../components/SlidingModal";
 import {useState} from "react";
 import TextButton from "../components/TextButton";
+import IconButton from "../components/IconButton";
 
 const ChatScreen = ({route, navigation}) => {
     const {chat} = route.params;
@@ -37,14 +38,10 @@ const ChatScreen = ({route, navigation}) => {
 
     return (
         <SafeAreaView>
-            <View className="flex flex-row justify-between items-center content-center gap-4 mb-8">
-                <TouchableOpacity className="p-4">
-                    <Icon name="arrow-left" size={24} color="black"/>
-                </TouchableOpacity>
-                <Text className="flex-grow font-bold text-xl">{chat.name}</Text>
-                <TouchableOpacity className="px-4" onPress={() => setModalVisible(true)}>
-                    <Icon name="gear" size={24} color="black"/>
-                </TouchableOpacity>
+            <View className="flex flex-row justify-between items-center content-center mb-8 px-6">
+                <IconButton icon={<Icon name="arrow-left" size={24} color="black"/>}/>
+                <Text className="flex-grow font-bold text-xl ml-4">{chat.name}</Text>
+                <IconButton icon={<Icon name="gear" size={24} color="black"/>} onPress={() => setModalVisible(true)}/>
             </View>
             <ScrollView className="p-2">
                 <View className="flex flex-col gap-y-4 justify-center items-center">
