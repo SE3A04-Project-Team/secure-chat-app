@@ -1,4 +1,5 @@
-import {View, Text, SafeAreaView} from "react-native";
+import {View, Text, SafeAreaView, ScrollView, Button, TouchableOpacity} from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const ChatScreen = ({route, navigation}) => {
     const {chat} = route.params;
@@ -7,7 +8,15 @@ const ChatScreen = ({route, navigation}) => {
 
     return (
         <SafeAreaView>
-            <Text>Chat with {chat.name}</Text>
+            <View className="flex flex-row justify-between items-center content-center p-2 gap-4">
+                <TouchableOpacity className="px-4">
+                    <Icon name="arrow-left" size={24} color="black"/>
+                </TouchableOpacity>
+                <Text className="flex-grow font-bold text-xl">{chat.name}</Text>
+            </View>
+            <ScrollView>
+                {/* Display chat messages here */}
+            </ScrollView>
         </SafeAreaView>
     );
 };
