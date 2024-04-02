@@ -1,4 +1,4 @@
-import {SafeAreaView, ScrollView, Text, TouchableOpacity, View} from "react-native";
+import {ScrollView, Text, TouchableOpacity, View} from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconButton from "../components/IconButton";
 

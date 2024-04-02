@@ -1,5 +1,5 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import UserLoginScreen from "./screens/UserLoginScreen";
 import ChatSelectionScreen from "./screens/ChatSelectionScreen";
 import ChatScreen from "./screens/ChatScreen";
