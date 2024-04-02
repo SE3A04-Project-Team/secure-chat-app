@@ -1,4 +1,4 @@
-import {SafeAreaView, ScrollView, Text, View} from "react-native";
+import {SafeAreaView, ScrollView, Text, TouchableOpacity, View} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import SlidingModal from "../components/SlidingModal";
 import {useState} from "react";
@@ -37,29 +37,31 @@ const ChatScreen = ({route, navigation}) => {
     }
 
     return (
-        <SafeAreaView>
-            <View className="flex flex-row justify-between items-center content-center mb-8 px-6">
-                <IconButton icon={<Icon name="arrow-left" size={24} color="black"/>}/>
-                <Text className="flex-grow font-bold text-xl ml-4">{chat.name}</Text>
-                <IconButton icon={<Icon name="gear" size={24} color="black"/>} onPress={() => setModalVisible(true)}/>
+        <View className="flex-1 min-h-screen bg-green-300 justify-start">
+            <View className="flex-1 flex-row justify-between items-center content-center px-8">
+                <IconButton icon={<Icon name="arrow-left" size={32} color="white"/>}/>
+                <Text className="text-white text-xl font-extrabold text-center">{chat.name}</Text>
+                <IconButton icon={<Icon name="gear" size={32} color="white"/>} onPress={() => setModalVisible(true)}/>
             </View>
-            <ScrollView className="p-2">
-                <View className="flex flex-col gap-y-4 justify-center items-center">
-                    {
-                        chatMessages.map((message) => (
-                            <View key={message.messageID} className={message.senderID === currentUserID ? "bg-blue-500 p-2 rounded-lg w-3/4 self-end" : "bg-gray-300 p-2 rounded-lg w-3/4 self-start"}>
-                                <Text className={message.senderID === currentUserID ? "text-white" : "text-black"}>{message.message}</Text>
-                            </View>
-                        ))
-                    }
-                </View>
-            </ScrollView>
+            <View className="bg-white rounded-t-3xl h-4/5">
+                <ScrollView className="p-2">
+                    <View className="flex flex-col gap-y-4 justify-center items-center">
+                        {
+                            chatMessages.map((message) => (
+                                <View key={message.messageID} className={message.senderID === currentUserID ? "bg-blue-500 p-2 rounded-lg w-3/4 self-end" : "bg-gray-300 p-2 rounded-lg w-3/4 self-start"}>
+                                    <Text className={message.senderID === currentUserID ? "text-white" : "text-black"}>{message.message}</Text>
+                                </View>
+                            ))
+                        }
+                    </View>
+                </ScrollView>
+            </View>
             <SlidingModal modalVisible={modalVisible} setModalVisible={setModalVisible}>
                 <View className="m-8">
                     <TextButton onPress={() => handleLeaveChat} title="Leave Chat"/>
                 </View>
             </SlidingModal>
-        </SafeAreaView>
+        </View>
     );
 };
 
