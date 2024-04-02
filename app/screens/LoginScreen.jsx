@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {SafeAreaView, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import TextButton from '../components/TextButton';
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const LoginScreen = ({navigation}) => {
 
@@ -25,8 +26,9 @@ const LoginScreen = ({navigation}) => {
 
     return (
         <View className="flex-1 min-h-screen bg-green-300 justify-end">
-            <View className="flex-1 flex justify-center items-center content-center">
-                <Text className="text-white text-7xl font-bold text-center py-4">Chat App</Text>
+            <View className="flex-1 flex-row justify-center items-center content-center gap-x-4">
+                <Icon name="lock" size={64} color="white" className="self-end"/>
+                <Text className="text-white text-6xl font-bold text-center py-4">Chat App</Text>
             </View>
             <SafeAreaView testID="login-page" className="bg-white rounded-t-3xl">
                 <View className="flex justify-center py-8 gap-y-8">
