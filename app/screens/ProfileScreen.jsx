@@ -3,11 +3,12 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 const ProfileScreen = ({navigation}) => {
 
+    // Sample profile data
     const profileData = {
         name: 'John Doe',
         email: 'johndoe@gmail.com',
         phone: '+1234567890',
-    };
+    }; //TODO: Query current user profile data from backend
 
     return (
         <View className="flex-1 min-h-screen bg-green-300 justify-start">
