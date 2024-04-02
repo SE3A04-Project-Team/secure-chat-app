@@ -54,13 +54,11 @@ const ChatScreen = ({route, navigation}) => {
                     }
                 </View>
             </ScrollView>
-
             <SlidingModal modalVisible={modalVisible} setModalVisible={setModalVisible}>
                 <View className="m-8">
                     <TextButton onPress={() => handleLeaveChat} title="Leave Chat"/>
                 </View>
             </SlidingModal>
-
         </SafeAreaView>
     );
 };
