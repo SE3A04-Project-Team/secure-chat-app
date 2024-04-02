@@ -54,7 +54,7 @@ const UserLoginScreen = ({navigation}) => {
                     </View>
                     <View className="flex flex-row justify-center text-lg font-semibold">
                         <Text>Admin Member? </Text>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate("AdminLoginScreen")}>
                             <Text className="text-green-300">Login here</Text>
                         </TouchableOpacity>
                     </View>
