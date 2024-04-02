@@ -28,15 +28,17 @@ const ChatScreen = ({route, navigation}) => {
 
     return (
         <SafeAreaView>
-            <View className="flex flex-row justify-between items-center content-center p-2 gap-4">
-                <TouchableOpacity className="px-4">
+            <View className="flex flex-row justify-between items-center content-center gap-4 mb-8">
+                <TouchableOpacity className="p-4">
                     <Icon name="arrow-left" size={24} color="black"/>
                 </TouchableOpacity>
                 <Text className="flex-grow font-bold text-xl">{chat.name}</Text>
+                <TouchableOpacity className="px-4">
+                    <Icon name="gear" size={24} color="black"/>
+                </TouchableOpacity>
             </View>
-            <ScrollView>
-                {/* Display chat messages here */}
-                <View className="flex flex-col gap-y-2 justify-center items-center">
+            <ScrollView className="p-2">
+                <View className="flex flex-col gap-y-4 justify-center items-center">
                     {
                         chatMessages.map((message) => (
                             <View key={message.messageID} className={message.senderID === currentUserID ? "bg-blue-500 p-2 rounded-lg w-3/4 self-end" : "bg-gray-300 p-2 rounded-lg w-3/4 self-start"}>
