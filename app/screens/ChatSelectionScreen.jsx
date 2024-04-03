@@ -122,7 +122,7 @@ const ChatSelectionScreen = ({ navigation }) => {
                 </View>
             </SafeAreaView>
             <View className="flex flex-col flex-grow bg-primary rounded-t-3xl">
-                <ScrollView className="p-2">
+                <ScrollView className="p-2 flex-1 mb-8">
                     <View className="flex flex-col gap-y-2 justify-center items-center">
                         {
                             chatData.map((chat) => {
