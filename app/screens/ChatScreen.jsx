@@ -24,8 +24,8 @@ const ChatScreen = ({route, navigation}) => {
         },
         {
             messageID: 3,
-            senderID: 1,
-            message: 'That\'s great to hear!',
+            senderID: 2,
+            message: 'Ayo!',
         },
         {
             messageID: 4,
@@ -35,7 +35,7 @@ const ChatScreen = ({route, navigation}) => {
         {
             messageID: 5,
             senderID: 1,
-            message: 'I am doing well, thank you!',
+            message: 'I am doing well, thank you!\nTesting multiline message.',
         },
         {
             messageID: 6,
@@ -190,14 +190,14 @@ const ChatScreen = ({route, navigation}) => {
                     <IconButton icon={<Icon name="gear" size={32} color="#86efac"/>} onPress={() => setModalVisible(true)}/>
                 </View>
             </SafeAreaView>
-            <View className="bg-primary rounded-t-3xl">
-                <ScrollView className="p-2">
-                    <View className="flex flex-col justify-center items-center">
+            <SafeAreaView>
+                <ScrollView className="px-3 ">
+                    <View className="flex flex-col items-center">
                         {
                             chatMessages.map((message) => (
                                 <View
                                     key={message.messageID}
-                                    className={`p-4 my-2 rounded-2xl max-w-3/4 ${message.senderID === currentUserID ? 'bg-green-300 self-end' : 'bg-gray-200 self-start'}`}
+                                    className={`py-2 px-3 my-2 rounded-2xl max-w-3/4 ${message.senderID === currentUserID ? 'bg-green-300 self-end' : 'bg-gray-200 self-start'}`}
                                 >
                                     <Text
                                         className={`text-primary text-md font-normal ${message.senderID === currentUserID ? 'text-white' : 'text-black'}`}
@@ -207,9 +207,9 @@ const ChatScreen = ({route, navigation}) => {
                         }
                     </View>
                 </ScrollView>
-            </View>
+            </SafeAreaView>
             {/*TODO: Fix message input field, it currently gets covered by keyboard*/}
-            <SafeAreaView className="flex flex-col z-40 w-full bg-gray-100">
+            <SafeAreaView className="absolute bottom-0 flex-col z-40 w-full bg-gray-100">
                 <View className="flex flex-row justify-between items-center content-center px-4 pt-2">
                     <TextInput
                         placeholder="Message"
