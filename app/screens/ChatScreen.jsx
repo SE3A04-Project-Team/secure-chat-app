@@ -62,6 +62,7 @@ const ChatScreen = ({route, navigation}) => {
                     </View>
                 </ScrollView>
             </View>
+            {/*TODO: Fix message input field, it currently gets covered by keyboard*/}
             <SafeAreaView className="flex flex-col z-40 bg-gray-400 w-full ">
                 <View className="flex flex-row justify-between items-center content-center p-4">
                     <TextInput
