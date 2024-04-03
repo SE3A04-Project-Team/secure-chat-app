@@ -152,7 +152,7 @@ const ChatSelectionScreen = ({ navigation }) => {
             </View>
             <SlidingModal modalVisible={modalVisible} setModalVisible={setModalVisible} height={0.85}>
                 <View className="m-8">
-
+                {/* TODO: Add contents of create new chat modal, similar design to iMessage */}
                 </View>
             </SlidingModal>
         </View>
