@@ -209,7 +209,6 @@ const ChatScreen = ({route, navigation}) => {
                     }}
                 >
                     <View className="flex flex-col items-center pb-28">
-                        {/*TODO: Chat messages render off the bottom of the screen*/}
                         {
                             chatMessages.map((message) => (
                                 <View
