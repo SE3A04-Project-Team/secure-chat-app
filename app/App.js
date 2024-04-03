@@ -9,17 +9,46 @@ import AdminLoginScreen from "./screens/AdminLoginScreen";
 
 const Stack = createNativeStackNavigator();
 
+// Navigation stack for authenticated users
+const AuthenticatedApp = () => {
+    return (
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+            <Stack.Screen name="ChatSelectionScreen" component={ChatSelectionScreen}/>
+            <Stack.Screen name="ChatScreen" component={ChatScreen}/>
+            <Stack.Screen name="ContactScreen" component={ContactScreen}/>
+            <Stack.Screen name="ProfileScreen" component={ProfileScreen}/>
+        </Stack.Navigator>
+    );
+};
+
+// Navigation stack for unauthenticated users
+const UnauthenticatedApp = () => {
+    return (
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+            <Stack.Screen name="UserLoginScreen" component={UserLoginScreen}/>
+            <Stack.Screen name="AdminLoginScreen" component={AdminLoginScreen}/>
+        </Stack.Navigator>
+    );
+};
+
+// Testing stack for all screens
+const AllScreens = () => {
+    return (
+        <Stack.Navigator screenOptions={{headerShown: false}}>
+            <Stack.Screen name="UserLoginScreen" component={UserLoginScreen}/>
+            <Stack.Screen name="ChatSelectionScreen" component={ChatSelectionScreen}/>
+            <Stack.Screen name="ChatScreen" component={ChatScreen}/>
+            <Stack.Screen name="ContactScreen" component={ContactScreen}/>
+            <Stack.Screen name="ProfileScreen" component={ProfileScreen}/>
+            <Stack.Screen name="AdminLoginScreen" component={AdminLoginScreen}/>
+        </Stack.Navigator>
+    );
+};
+
 export default function App() {
     return (
         <NavigationContainer>
-            <Stack.Navigator screenOptions={{headerShown: false}}>
-                <Stack.Screen name="UserLoginScreen" component={UserLoginScreen}/>
-                <Stack.Screen name="AdminLoginScreen" component={AdminLoginScreen}/>
-                <Stack.Screen name="ChatSelectionScreen" component={ChatSelectionScreen}/>
-                <Stack.Screen name="ChatScreen" component={ChatScreen}/>
-                <Stack.Screen name="ContactScreen" component={ContactScreen}/>
-                <Stack.Screen name="ProfileScreen" component={ProfileScreen}/>
-            </Stack.Navigator>
+            <AllScreens/>
         </NavigationContainer>
     );
 };
