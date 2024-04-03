@@ -77,7 +77,7 @@ const ChatSelectionScreen = ({ navigation }) => {
 
     const handleChatSelection = (chat) => {
         // Handle chat selection logic here
-        // For example, you can navigate to the chat screen
+        // navigate to ChatScreen with chat data for the selected chat
         navigation.navigate("ChatScreen", { chat });
     }
 
