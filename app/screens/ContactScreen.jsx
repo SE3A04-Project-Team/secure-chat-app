@@ -44,7 +44,7 @@ const ContactScreen = ({navigation}) => {
                     <View className="flex flex-col gap-y-2 justify-center items-center">
                         {
                             contactData.map((chat) => (
-                                <TouchableOpacity key={chat.id} onPress={() => handleChatSelection(chat)} className="flex flex-row w-full p-4 content-center items-center">
+                                <TouchableOpacity key={chat.id} className="flex flex-row w-full p-4 content-center items-center">
                                     <Text className="flex-grow text-lg mx-2">{chat.name}</Text>
                                 </TouchableOpacity>
                             ))

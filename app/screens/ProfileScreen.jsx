@@ -21,11 +21,11 @@ const ProfileScreen = ({navigation}) => {
 
     return (
         <View className="flex-1 min-h-screen bg-accent justify-start">
-            <IconButton
-                icon={<Icon name="arrow-left" size={32} color="white"/>}
-                containerStyle={"absolute top-0 left-5 z-40 h-1/5 flex justify-center"}
-                onPress={() => navigation.goBack()}
-            />
+            <SafeAreaView className="">
+                <View className="flex-row justify-between items-center content-center p-8">
+                    <IconButton icon={<Icon name="arrow-left" size={32} color="white"/>} onPress={() => navigation.goBack()}/>
+                </View>
+            </SafeAreaView>
             <View className="flex-1 flex-row justify-center items-center content-center">
                 <Icon name="user" size={96} color="white"/>
             </View>
