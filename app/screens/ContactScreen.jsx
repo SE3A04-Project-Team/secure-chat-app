@@ -1,18 +1,19 @@
 import {ScrollView, Text, TouchableOpacity, View} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import IconButton from "../components/IconButton";
 
-const ContactScreen = () => {
+const ContactScreen = ({navigation}) => {
 
-    const contactData = {
+    const contactData = [
 
-    }
+    ]
 
     return (
         <View className="flex-1 min-h-screen bg-accent justify-start">
             <View className="flex-1 flex-row justify-between items-center content-center px-8">
-                <Icon name="plus" size={32} color="white"/>
-                <Text className="text-white text-xl font-extrabold text-center">Home</Text>
-                <Icon name="user" size={32} color="white"/>
+                <IconButton icon={<Icon name="arrow-left" size={32} color="white"/>} onPress={() => navigation.goBack()}/>
+                <Text className="text-white text-xl font-extrabold text-center">Contacts</Text>
+                <IconButton icon={<Icon name="user" size={32} color="white"/>} onPress={() => navigation.navigate("ProfileScreen")}/>
             </View>
             <View className="bg-primary rounded-t-3xl h-4/5">
                 <ScrollView className="p-2">
