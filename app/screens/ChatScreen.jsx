@@ -51,7 +51,7 @@ const ChatScreen = ({route, navigation}) => {
                             chatMessages.map((message) => (
                                 <View
                                     key={message.messageID}
-                                    className={`p-4 my-2 rounded-full max-w-3/4 ${message.senderID === currentUserID ? 'bg-gray-700 self-end' : 'bg-indigo-700 self-start'}`}
+                                    className={`p-4 my-2 rounded-xl max-w-3/4 ${message.senderID === currentUserID ? 'bg-gray-700 self-end' : 'bg-indigo-700 self-start'}`}
                                 >
                                     <Text className="text-primary text-md font-medium">{message.message}</Text>
                                 </View>
