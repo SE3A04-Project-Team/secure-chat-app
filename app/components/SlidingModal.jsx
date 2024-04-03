@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Animated, Dimensions, Modal, TouchableOpacity} from "react-native";
+import TextButton from "./TextButton";
 
-const SlidingModal = ({ children, modalVisible, setModalVisible }) => {
+const SlidingModal = ({ children, modalVisible, setModalVisible, height }) => {
     const [backgroundAnimation] = useState(new Animated.Value(0));
     const [contentAnimation] = useState(new Animated.Value(0));
 
@@ -56,7 +57,7 @@ const SlidingModal = ({ children, modalVisible, setModalVisible }) => {
     });
 
     const screenHeight = Dimensions.get('window').height;
-    const contentHeight = screenHeight * 0.25; // Minimum 25% of screen height
+    const contentHeight = screenHeight * (height ? height : 0.25); // Minimum 25% of screen height
 
     const contentTranslateY = contentAnimation.interpolate({
         inputRange: [0, 1],
@@ -113,6 +114,8 @@ const SlidingModal = ({ children, modalVisible, setModalVisible }) => {
                     borderTopRightRadius: 20,
                     height: contentHeight,
                     transform: [{ translateY: contentTranslateY }],
+                    display: 'flex',
+                    flexDirection: 'column',
                 }}
             >
                 {children}

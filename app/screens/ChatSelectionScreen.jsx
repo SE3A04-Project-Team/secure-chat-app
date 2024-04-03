@@ -3,6 +3,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import IconButton from "../components/IconButton";
 import formatDate from "../utils/dateUtils";
 import InitialIcon from "../components/InitialIcon";
+import {useState} from "react";
+import TextButton from "../components/TextButton";
+import SlidingModal from "../components/SlidingModal";
 
 const ChatSelectionScreen = ({ navigation }) => {
 
@@ -111,13 +114,15 @@ const ChatSelectionScreen = ({ navigation }) => {
         navigation.navigate("ChatScreen", { chat });
     }
 
+    const [modalVisible, setModalVisible] = useState(false);
+
     return (
         <View className="flex-1 min-h-screen bg-accent justify-start">
             <SafeAreaView className="">
                 <View className="flex-row justify-between items-center content-center p-8">
                     <IconButton icon={<Icon name="address-book-o" size={32} color="white"/>} onPress={() => navigation.navigate("ContactScreen")}/>
                     <Text className="text-primary text-xl font-extrabold text-center">Chats</Text>
-                    <IconButton icon={<Icon name="pencil-square-o" size={32} color="white"/>} onPress={() => navigation.navigate("ProfileScreen")}/>
+                    <IconButton icon={<Icon name="pencil-square-o" size={32} color="white"/>} onPress={() => setModalVisible(true)}/>
                 </View>
             </SafeAreaView>
             <View className="flex flex-col flex-grow bg-primary rounded-t-3xl">
@@ -145,6 +150,11 @@ const ChatSelectionScreen = ({ navigation }) => {
                     </View>
                 </ScrollView>
             </View>
+            <SlidingModal modalVisible={modalVisible} setModalVisible={setModalVisible} height={0.85}>
+                <View className="m-8">
+
+                </View>
+            </SlidingModal>
         </View>
     );
 };
