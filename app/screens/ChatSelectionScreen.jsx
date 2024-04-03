@@ -122,24 +122,24 @@ const ChatSelectionScreen = ({ navigation }) => {
                 </View>
             </SafeAreaView>
             <View className="flex flex-col flex-grow bg-primary rounded-t-3xl">
-                <ScrollView className="p-2 flex-1 mb-8">
-                    <View className="flex flex-col gap-y-2 justify-center items-center">
+                <ScrollView className="p-2 flex-1">
+                    <View className="flex flex-col gap-y-2 justify-center items-center pb-12">
                         {
                             chatData.map((chat) => {
                                 const formattedDate = formatDate(chat.timeOfLastMessage);
 
                                 return (
-                                <TouchableOpacity key={chat.id} onPress={() => handleChatSelection(chat)} className="flex flex-row w-full p-4 content-center items-center justify-center">
-                                    <InitialIcon name={chat.name}/>
-                                    <View className="flex flex-col flex-grow">
-                                        <View className="flex flex-row justify-between items-center content-center mx-2">
-                                            <Text className="text-lg flex-grow font-semibold">{chat.name}</Text>
-                                            <Text className="px-2 text-gray-400">{formattedDate}</Text>
-                                            <Icon name="angle-right" size={24} color="#9ca3af" className="self-end"/>
+                                    <TouchableOpacity key={chat.id} onPress={() => handleChatSelection(chat)} className="flex flex-row w-full p-4 content-center items-center justify-center">
+                                        <InitialIcon name={chat.name}/>
+                                        <View className="flex flex-col flex-grow">
+                                            <View className="flex flex-row justify-between items-center content-center mx-2">
+                                                <Text className="text-lg flex-grow font-semibold">{chat.name}</Text>
+                                                <Text className="px-2 text-gray-400">{formattedDate}</Text>
+                                                <Icon name="angle-right" size={24} color="#9ca3af" className="self-end"/>
+                                            </View>
+                                            <Text className="mx-2 text-gray-400">{chat.lastMessage}</Text>
                                         </View>
-                                        <Text className="mx-2 text-gray-400">{chat.lastMessage}</Text>
-                                    </View>
-                                </TouchableOpacity>
+                                    </TouchableOpacity>
                                 );
                             })
                         }
