@@ -2,6 +2,7 @@ import {SafeAreaView, ScrollView, Text, TouchableOpacity, View} from "react-nati
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconButton from "../components/IconButton";
 import formatDate from "../utils/dateUtils";
+import getInitials from "../utils/stringUtils";
 
 const ChatSelectionScreen = ({ navigation }) => {
 
@@ -103,11 +104,6 @@ const ChatSelectionScreen = ({ navigation }) => {
 
     // Order chatData by timeOfLastMessage in descending order
     chatData.sort((a, b) => new Date(b.timeOfLastMessage) - new Date(a.timeOfLastMessage));
-
-    const getInitials = (name) => {
-        const nameArray = name.split(" ");
-        return nameArray.map(word => word[0]).join("").toUpperCase();
-    };
 
     const handleChatSelection = (chat) => {
         // Handle chat selection logic here
