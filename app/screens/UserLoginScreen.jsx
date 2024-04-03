@@ -29,6 +29,7 @@ const UserLoginScreen = ({navigation}) => {
             <View className="flex-1 flex-row justify-evenly items-center content-center">
                 <Icon name="lock" size={64} color="white"/>
                 <Text className="text-primary text-6xl font-bold text-center">Chat App</Text>
+                <TextButton title="Generate Report Screen" onPress={() => navigation.navigate("GenerateReportScreen")}/>
             </View>
             <SafeAreaView className="bg-white rounded-t-3xl">
                 <View className="flex justify-center py-8 gap-y-8">
