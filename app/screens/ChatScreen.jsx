@@ -193,6 +193,7 @@ const ChatScreen = ({route, navigation}) => {
             <SafeAreaView>
                 <ScrollView className="px-3 ">
                     <View className="flex flex-col items-center">
+                        {/*TODO: Chat messages render off the bottom of the screen*/}
                         {
                             chatMessages.map((message) => (
                                 <View
