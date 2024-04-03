@@ -1,4 +1,4 @@
-import {SafeAreaView, ScrollView, Text, View} from "react-native";
+import {SafeAreaView, ScrollView, Text, TextInput, View} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import SlidingModal from "../components/SlidingModal";
 import {useState} from "react";
@@ -39,12 +39,14 @@ const ChatScreen = ({route, navigation}) => {
 
     return (
         <View className="flex-1 min-h-screen bg-primary justify-start">
-            <View className="flex-1 flex-row justify-between items-center content-center px-8">
-                <IconButton icon={<Icon name="arrow-left" size={32} color="black"/>} onPress={() => navigation.goBack()}/>
-                <Text className="text-secondary text-xl font-extrabold text-center">{chat.name}</Text>
-                <IconButton icon={<Icon name="gear" size={32} color="black"/>} onPress={() => setModalVisible(true)}/>
-            </View>
-            <View className="bg-primary rounded-t-3xl h-4/5">
+            <SafeAreaView className="bg-gray-400">
+                <View className="flex-row justify-between items-center content-center p-4 ">
+                    <IconButton icon={<Icon name="arrow-left" size={32} color="white"/>} onPress={() => navigation.goBack()}/>
+                    <Text className="text-primary text-xl font-extrabold text-center">{chat.name}</Text>
+                    <IconButton icon={<Icon name="gear" size={32} color="white"/>} onPress={() => setModalVisible(true)}/>
+                </View>
+            </SafeAreaView>
+            <View className="bg-primary rounded-t-3xl flex-grow">
                 <ScrollView className="p-2">
                     <View className="flex flex-col justify-center items-center">
                         {
@@ -60,6 +62,15 @@ const ChatScreen = ({route, navigation}) => {
                     </View>
                 </ScrollView>
             </View>
+            <SafeAreaView className="flex flex-col z-40 bg-gray-400 w-full ">
+                <View className="flex flex-row justify-between items-center content-center p-4">
+                    <TextInput
+                        placeholder="Type a message..."
+                        className="flex-grow p-4 mx-2 bg-white rounded-xl"
+                    />
+                    <IconButton icon={<Icon name="paper-plane" size={32} color="white"/>} onPress={() => {}}/>
+                </View>
+            </SafeAreaView>
             <SlidingModal modalVisible={modalVisible} setModalVisible={setModalVisible}>
                 <View className="m-8">
                     <TextButton onPress={() => handleLeaveChat} title="Leave Chat"/>
