@@ -40,8 +40,8 @@ const ContactScreen = ({navigation}) => {
                 </View>
             </SafeAreaView>
             <View className="flex flex-col flex-grow bg-primary rounded-t-3xl">
-                <ScrollView className="p-2">
-                    <View className="flex flex-col gap-y-2 justify-center items-center">
+                <ScrollView className="p-2 flex-1">
+                    <View className="flex flex-col gap-y-2 justify-center items-center pb-16">
                         {
                             contactData.map((chat) => (
                                 <TouchableOpacity key={chat.id} className="flex flex-row w-full p-4 content-center items-center border-b border-gray-200">
