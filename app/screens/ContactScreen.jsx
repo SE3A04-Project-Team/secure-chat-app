@@ -15,6 +15,11 @@ const ContactScreen = ({navigation}) => {
         {id: 8, name: "Frank"},
         {id: 9, name: "Grace"},
         {id: 10, name: "Henry"},
+        {id: 11, name: "Ivy"},
+        {id: 12, name: "Jack"},
+        {id: 13, name: "Kathy"},
+        {id: 14, name: "Liam"},
+        {id: 15, name: "Mia"},
     ]
 
     // function to sort contactData by name in ascending order (this should be handled by server later)
