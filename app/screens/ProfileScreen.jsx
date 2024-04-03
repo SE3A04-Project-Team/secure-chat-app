@@ -24,7 +24,7 @@ const ProfileScreen = ({navigation}) => {
                 <Icon name="user" size={96} color="white"/>
             </View>
             <View className="bg-primary rounded-t-3xl h-3/5 p-7 gap-y-4 flex flex-col">
-                <Text className="text-secondary font-bold text-4xl text-center">Profile</Text>
+                <Text className="text-secondary font-bold text-4xl text-center">{profileData.name}</Text>
                 <View className="flex flex-col flex-grow">
                     {
                         Object.keys(profileData).map((key, index) => (
