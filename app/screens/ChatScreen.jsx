@@ -40,14 +40,14 @@ const ChatScreen = ({route, navigation}) => {
 
     return (
         <View className="flex-1 min-h-screen bg-primary justify-start">
-            <SafeAreaView className="bg-gray-300">
+            <SafeAreaView className="bg-gray-100">
                 <View className="flex-row justify-between items-start content-center p-4 ">
-                    <IconButton icon={<Icon name="arrow-left" size={32} color="white"/>} onPress={() => navigation.goBack()}/>
+                    <IconButton icon={<Icon name="arrow-left" size={32} color="#86efac"/>} onPress={() => navigation.goBack()}/>
                     <View className="flex flex-col justify-center items-center">
                         <InitialIcon name={chat.name}/>
-                        <Text className="text-primary text-md font-medium text-center">{chat.name}</Text>
+                        <Text className="text-black text-md text-center">{chat.name}</Text>
                     </View>
-                    <IconButton icon={<Icon name="gear" size={32} color="white"/>} onPress={() => setModalVisible(true)}/>
+                    <IconButton icon={<Icon name="gear" size={32} color="#86efac"/>} onPress={() => setModalVisible(true)}/>
                 </View>
             </SafeAreaView>
             <View className="bg-primary rounded-t-3xl flex-grow">
@@ -57,9 +57,11 @@ const ChatScreen = ({route, navigation}) => {
                             chatMessages.map((message) => (
                                 <View
                                     key={message.messageID}
-                                    className={`p-4 my-2 rounded-2xl max-w-3/4 ${message.senderID === currentUserID ? 'bg-green-300 self-end' : 'bg-gray-300 self-start'}`}
+                                    className={`p-4 my-2 rounded-2xl max-w-3/4 ${message.senderID === currentUserID ? 'bg-green-300 self-end' : 'bg-gray-200 self-start'}`}
                                 >
-                                    <Text className="text-primary text-md font-medium">{message.message}</Text>
+                                    <Text
+                                        className={`text-primary text-md font-normal ${message.senderID === currentUserID ? 'text-white' : 'text-black'}`}
+                                    >{message.message}</Text>
                                 </View>
                             ))
                         }
@@ -67,7 +69,7 @@ const ChatScreen = ({route, navigation}) => {
                 </ScrollView>
             </View>
             {/*TODO: Fix message input field, it currently gets covered by keyboard*/}
-            <SafeAreaView className="flex flex-col z-40 w-full ">
+            <SafeAreaView className="flex flex-col z-40 w-full bg-gray-100">
                 <View className="flex flex-row justify-between items-center content-center px-4 pt-2">
                     <TextInput
                         placeholder="Message"
