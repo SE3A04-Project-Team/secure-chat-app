@@ -1,4 +1,4 @@
-import {ScrollView, Text, TouchableOpacity, View} from "react-native";
+import {SafeAreaView, ScrollView, Text, TouchableOpacity, View} from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconButton from "../components/IconButton";
 
@@ -151,12 +151,14 @@ const ChatSelectionScreen = ({ navigation }) => {
 
     return (
         <View className="flex-1 min-h-screen bg-accent justify-start">
-            <View className="flex-1 flex-row justify-between items-center content-center px-8">
-                <IconButton icon={<Icon name="address-book" size={32} color="white"/>} onPress={() => navigation.navigate("ContactScreen")}/>
-                <Text className="text-primary text-xl font-extrabold text-center">Chats</Text>
-                <IconButton icon={<Icon name="user" size={32} color="white"/>} onPress={() => navigation.navigate("ProfileScreen")}/>
-            </View>
-            <View className="bg-primary rounded-t-3xl h-4/5">
+            <SafeAreaView className="">
+                <View className="flex-row justify-between items-center content-center p-8">
+                    <IconButton icon={<Icon name="address-book" size={32} color="white"/>} onPress={() => navigation.navigate("ContactScreen")}/>
+                    <Text className="text-primary text-xl font-extrabold text-center">Chats</Text>
+                    <IconButton icon={<Icon name="user" size={32} color="white"/>} onPress={() => navigation.navigate("ProfileScreen")}/>
+                </View>
+            </SafeAreaView>
+            <View className="flex flex-col flex-grow bg-primary rounded-t-3xl">
                 <ScrollView className="p-2">
                     <View className="flex flex-col gap-y-2 justify-center items-center">
                         {
