@@ -190,8 +190,8 @@ const ChatScreen = ({route, navigation}) => {
                     <IconButton icon={<Icon name="gear" size={32} color="#86efac"/>} onPress={() => setModalVisible(true)}/>
                 </View>
             </SafeAreaView>
-            <SafeAreaView>
-                <ScrollView className="px-3 ">
+            <View className="flex flex-col flex-grow bg-primary rounded-t-3xl">
+                <ScrollView className="px-3 flex-1 mb-28">
                     <View className="flex flex-col items-center">
                         {/*TODO: Chat messages render off the bottom of the screen*/}
                         {
@@ -208,7 +208,7 @@ const ChatScreen = ({route, navigation}) => {
                         }
                     </View>
                 </ScrollView>
-            </SafeAreaView>
+            </View>
             {/*TODO: Fix message input field, it currently gets covered by keyboard*/}
             <SafeAreaView className="absolute bottom-0 flex-col z-40 w-full bg-gray-100">
                 <View className="flex flex-row justify-between items-center content-center px-4 pt-2">
