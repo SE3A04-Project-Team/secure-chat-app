@@ -6,6 +6,7 @@ import TextButton from "../components/TextButton";
 import IconButton from "../components/IconButton";
 
 const ChatScreen = ({route, navigation}) => {
+    // Specific chat id and name passed as route params
     const {chat} = route.params;
 
     // Sample chat messages data
