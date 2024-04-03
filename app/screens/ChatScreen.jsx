@@ -4,6 +4,7 @@ import SlidingModal from "../components/SlidingModal";
 import {useState} from "react";
 import TextButton from "../components/TextButton";
 import IconButton from "../components/IconButton";
+import InitialIcon from "../components/InitialIcon";
 
 const ChatScreen = ({route, navigation}) => {
     // Specific chat id and name passed as route params
@@ -39,10 +40,13 @@ const ChatScreen = ({route, navigation}) => {
 
     return (
         <View className="flex-1 min-h-screen bg-primary justify-start">
-            <SafeAreaView className="bg-gray-400">
-                <View className="flex-row justify-between items-center content-center p-4 ">
+            <SafeAreaView className="bg-gray-300">
+                <View className="flex-row justify-between items-start content-center p-4 ">
                     <IconButton icon={<Icon name="arrow-left" size={32} color="white"/>} onPress={() => navigation.goBack()}/>
-                    <Text className="text-primary text-xl font-extrabold text-center">{chat.name}</Text>
+                    <View className="flex flex-col justify-center items-center">
+                        <InitialIcon name={chat.name}/>
+                        <Text className="text-primary text-md font-medium text-center">{chat.name}</Text>
+                    </View>
                     <IconButton icon={<Icon name="gear" size={32} color="white"/>} onPress={() => setModalVisible(true)}/>
                 </View>
             </SafeAreaView>
@@ -53,7 +57,7 @@ const ChatScreen = ({route, navigation}) => {
                             chatMessages.map((message) => (
                                 <View
                                     key={message.messageID}
-                                    className={`p-4 my-2 rounded-xl max-w-3/4 ${message.senderID === currentUserID ? 'bg-gray-700 self-end' : 'bg-indigo-700 self-start'}`}
+                                    className={`p-4 my-2 rounded-xl max-w-3/4 ${message.senderID === currentUserID ? 'bg-green-300 self-end' : 'bg-gray-300 self-start'}`}
                                 >
                                     <Text className="text-primary text-md font-medium">{message.message}</Text>
                                 </View>
@@ -63,13 +67,12 @@ const ChatScreen = ({route, navigation}) => {
                 </ScrollView>
             </View>
             {/*TODO: Fix message input field, it currently gets covered by keyboard*/}
-            <SafeAreaView className="flex flex-col z-40 bg-gray-400 w-full ">
-                <View className="flex flex-row justify-between items-center content-center p-4">
+            <SafeAreaView className="flex flex-col z-40 w-full ">
+                <View className="flex flex-row justify-between items-center content-center px-4 pt-2">
                     <TextInput
-                        placeholder="Type a message..."
-                        className="flex-grow p-4 mx-2 bg-white rounded-xl"
+                        placeholder="Message"
+                        className="flex-grow p-3 mx-2 bg-white border-2 border-gray-300 rounded-full"
                     />
-                    <IconButton icon={<Icon name="paper-plane" size={32} color="white"/>} onPress={() => {}}/>
                 </View>
             </SafeAreaView>
             <SlidingModal modalVisible={modalVisible} setModalVisible={setModalVisible}>

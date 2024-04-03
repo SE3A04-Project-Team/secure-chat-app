@@ -3,6 +3,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import IconButton from "../components/IconButton";
 import formatDate from "../utils/dateUtils";
 import getInitials from "../utils/stringUtils";
+import InitialIcon from "../components/InitialIcon";
 
 const ChatSelectionScreen = ({ navigation }) => {
 
@@ -129,9 +130,7 @@ const ChatSelectionScreen = ({ navigation }) => {
 
                                 return (
                                 <TouchableOpacity key={chat.id} onPress={() => handleChatSelection(chat)} className="flex flex-row w-full p-4 content-center items-center justify-center">
-                                    <View className="w-10 h-10 rounded-full flex justify-center items-center bg-gray-400">
-                                        <Text className="text-xl font-bold text-primary">{getInitials(chat.name)}</Text>
-                                    </View>
+                                    <InitialIcon name={chat.name}/>
                                     <View className="flex flex-col flex-grow">
                                         <View className="flex flex-row justify-between items-center content-center mx-2">
                                             <Text className="text-lg flex-grow font-semibold">{chat.name}</Text>
