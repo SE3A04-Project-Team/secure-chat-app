@@ -2,7 +2,6 @@ import {SafeAreaView, ScrollView, Text, TouchableOpacity, View} from "react-nati
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconButton from "../components/IconButton";
 import formatDate from "../utils/dateUtils";
-import getInitials from "../utils/stringUtils";
 import InitialIcon from "../components/InitialIcon";
 
 const ChatSelectionScreen = ({ navigation }) => {
