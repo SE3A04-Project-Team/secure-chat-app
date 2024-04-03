@@ -1,7 +1,7 @@
 import {SafeAreaView, ScrollView, Text, TextInput, View} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import SlidingModal from "../components/SlidingModal";
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import TextButton from "../components/TextButton";
 import IconButton from "../components/IconButton";
 import InitialIcon from "../components/InitialIcon";
@@ -178,6 +178,15 @@ const ChatScreen = ({route, navigation}) => {
         // TODO: Implement leave chat functionality
     }
 
+    const scrollViewRef = useRef(null);
+
+    useEffect(() => {
+        // Scrolls to the bottom of the ScrollView when it's initially rendered
+        if (scrollViewRef.current) {
+            scrollViewRef.current.scrollToEnd({ animated: false });
+        }
+    }, []);
+
     return (
         <View className="flex-1 min-h-screen bg-primary justify-start">
             <SafeAreaView className="bg-gray-100">
@@ -191,7 +200,14 @@ const ChatScreen = ({route, navigation}) => {
                 </View>
             </SafeAreaView>
             <View className="flex flex-col flex-grow bg-primary rounded-t-3xl">
-                <ScrollView className="px-3 flex-1">
+                <ScrollView
+                    className="px-3 flex-1 flex-end"
+                    ref={scrollViewRef}
+                    onLayout={() => {
+                        // Scrolls to the bottom of the ScrollView when it's initially rendered
+                        scrollViewRef.current.scrollToEnd({ animated: false });
+                    }}
+                >
                     <View className="flex flex-col items-center pb-28">
                         {/*TODO: Chat messages render off the bottom of the screen*/}
                         {
