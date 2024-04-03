@@ -30,7 +30,7 @@ const UserLoginScreen = ({navigation}) => {
                 <Icon name="lock" size={64} color="white"/>
                 <Text className="text-primary text-6xl font-bold text-center">Chat App</Text>
             </View>
-            <SafeAreaView testID="login-page" className="bg-white rounded-t-3xl">
+            <SafeAreaView className="bg-white rounded-t-3xl">
                 <View className="flex justify-center py-8 gap-y-8">
                     <Text className="text-secondary font-bold text-4xl text-center py-4">User Login</Text>
                     <View className="flex flex-col gap-y-2 m-7">
