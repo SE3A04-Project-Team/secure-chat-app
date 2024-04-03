@@ -4,7 +4,6 @@ import IconButton from "../components/IconButton";
 import formatDate from "../utils/dateUtils";
 import InitialIcon from "../components/InitialIcon";
 import {useState} from "react";
-import TextButton from "../components/TextButton";
 import SlidingModal from "../components/SlidingModal";
 
 const ChatSelectionScreen = ({ navigation }) => {
