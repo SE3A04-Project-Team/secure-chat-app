@@ -1,10 +1,12 @@
-import {TouchableOpacity} from "react-native";
+import {TouchableOpacity, View} from "react-native";
 
-const IconButton = ({ icon, onPress }) => {
+const IconButton = ({ icon, onPress, opacityStyle, containerStyle }) => {
     return (
-        <TouchableOpacity onPress={onPress}>
-            {icon}
-        </TouchableOpacity>
+        <View className={containerStyle}>
+            <TouchableOpacity onPress={onPress} className={opacityStyle}>
+                {icon}
+            </TouchableOpacity>
+        </View>
     );
 };
 

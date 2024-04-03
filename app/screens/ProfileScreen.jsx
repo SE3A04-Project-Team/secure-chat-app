@@ -1,6 +1,7 @@
-import {Text, View} from "react-native";
+import {SafeAreaView, Text, View} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import TextButton from "../components/TextButton";
+import IconButton from "../components/IconButton";
 
 const ProfileScreen = ({navigation}) => {
 
@@ -20,6 +21,11 @@ const ProfileScreen = ({navigation}) => {
 
     return (
         <View className="flex-1 min-h-screen bg-accent justify-start">
+            <IconButton
+                icon={<Icon name="arrow-left" size={32} color="white"/>}
+                containerStyle={"absolute top-0 left-5 z-40 h-1/5 flex justify-center"}
+                onPress={() => navigation.goBack()}
+            />
             <View className="flex-1 flex-row justify-center items-center content-center">
                 <Icon name="user" size={96} color="white"/>
             </View>
