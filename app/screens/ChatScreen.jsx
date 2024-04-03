@@ -27,6 +27,146 @@ const ChatScreen = ({route, navigation}) => {
             senderID: 1,
             message: 'That\'s great to hear!',
         },
+        {
+            messageID: 4,
+            senderID: 2,
+            message: 'How are you doing?',
+        },
+        {
+            messageID: 5,
+            senderID: 1,
+            message: 'I am doing well, thank you!',
+        },
+        {
+            messageID: 6,
+            senderID: 2,
+            message: 'Good to hear!',
+        },
+        {
+            messageID: 7,
+            senderID: 1,
+            message: 'Hi there!',
+        },
+        {
+            messageID: 8,
+            senderID: 2,
+            message: 'Hello!',
+        },
+        {
+            messageID: 9,
+            senderID: 1,
+            message: 'How are you doing?',
+        },
+        {
+            messageID: 10,
+            senderID: 2,
+            message: 'I am doing well, thank you!',
+        },
+        {
+            messageID: 11,
+            senderID: 1,
+            message: 'Good to hear!',
+        },
+        {
+            messageID: 12,
+            senderID: 2,
+            message: 'Hi there!',
+        },
+        {
+            messageID: 13,
+            senderID: 1,
+            message: 'Hello!',
+        },
+        {
+            messageID: 14,
+            senderID: 2,
+            message: 'How are you doing?',
+        },
+        {
+            messageID: 15,
+            senderID: 1,
+            message: 'I am doing well, thank you!',
+        },
+        {
+            messageID: 16,
+            senderID: 2,
+            message: 'Good to hear!',
+        },
+        {
+            messageID: 17,
+            senderID: 1,
+            message: 'Hi there!',
+        },
+        {
+            messageID: 18,
+            senderID: 2,
+            message: 'Hello!',
+        },
+        {
+            messageID: 19,
+            senderID: 1,
+            message: 'How are you doing?',
+        },
+        {
+            messageID: 20,
+            senderID: 2,
+            message: 'I am doing well, thank you!',
+        },
+        {
+            messageID: 21,
+            senderID: 1,
+            message: 'Good to hear!',
+        },
+        {
+            messageID: 22,
+            senderID: 2,
+            message: 'Hi there!',
+        },
+        {
+            messageID: 23,
+            senderID: 1,
+            message: 'Hello!',
+        },
+        {
+            messageID: 24,
+            senderID: 2,
+            message: 'How are you doing?',
+        },
+        {
+            messageID: 25,
+            senderID: 1,
+            message: 'I am doing well, thank you!',
+        },
+        {
+            messageID: 26,
+            senderID: 2,
+            message: 'Good to hear!',
+        },
+        {
+            messageID: 27,
+            senderID: 1,
+            message: 'Hi there!',
+        },
+        {
+            messageID: 28,
+            senderID: 2,
+            message: 'Hello!',
+        },
+        {
+            messageID: 29,
+            senderID: 1,
+            message: 'How are you doing?',
+        },
+        {
+            messageID: 30,
+            senderID: 2,
+            message: 'I am doing well, thank you!',
+        },
+        {
+            messageID: 31,
+            senderID: 1,
+            message: 'Good to hear!',
+        },
     ]; // TODO: Query chat messages from backend using chat.id
 
     // Sample current user ID, this is used for determining the message sender for styling
@@ -50,7 +190,7 @@ const ChatScreen = ({route, navigation}) => {
                     <IconButton icon={<Icon name="gear" size={32} color="#86efac"/>} onPress={() => setModalVisible(true)}/>
                 </View>
             </SafeAreaView>
-            <View className="bg-primary rounded-t-3xl flex-grow">
+            <View className="bg-primary rounded-t-3xl">
                 <ScrollView className="p-2">
                     <View className="flex flex-col justify-center items-center">
                         {
