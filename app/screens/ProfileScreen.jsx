@@ -27,7 +27,7 @@ const ProfileScreen = ({navigation}) => {
                 </View>
             </SafeAreaView>
             <View className="flex-1 flex-row justify-center items-center content-center">
-                <Icon name="user" size={96} color="white"/>
+                <Icon name="user-o" size={96} color="white"/>
             </View>
             <View className="bg-primary rounded-t-3xl h-3/5 p-7 gap-y-4 flex flex-col">
                 <Text className="text-secondary font-bold text-4xl text-center">{profileData.name}</Text>

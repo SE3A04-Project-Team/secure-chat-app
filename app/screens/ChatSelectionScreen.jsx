@@ -115,9 +115,9 @@ const ChatSelectionScreen = ({ navigation }) => {
         <View className="flex-1 min-h-screen bg-accent justify-start">
             <SafeAreaView className="">
                 <View className="flex-row justify-between items-center content-center p-8">
-                    <IconButton icon={<Icon name="address-book" size={32} color="white"/>} onPress={() => navigation.navigate("ContactScreen")}/>
+                    <IconButton icon={<Icon name="address-book-o" size={32} color="white"/>} onPress={() => navigation.navigate("ContactScreen")}/>
                     <Text className="text-primary text-xl font-extrabold text-center">Chats</Text>
-                    <IconButton icon={<Icon name="user" size={32} color="white"/>} onPress={() => navigation.navigate("ProfileScreen")}/>
+                    <IconButton icon={<Icon name="pencil-square-o" size={32} color="white"/>} onPress={() => navigation.navigate("ProfileScreen")}/>
                 </View>
             </SafeAreaView>
             <View className="flex flex-col flex-grow bg-primary rounded-t-3xl">

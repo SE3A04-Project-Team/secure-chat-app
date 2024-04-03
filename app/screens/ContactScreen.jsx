@@ -36,7 +36,7 @@ const ContactScreen = ({navigation}) => {
                 <View className="flex-row justify-between items-center content-center p-8">
                     <IconButton icon={<Icon name="arrow-left" size={32} color="white"/>} onPress={() => navigation.goBack()}/>
                     <Text className="text-white text-xl font-extrabold text-center">Contacts</Text>
-                    <IconButton icon={<Icon name="user" size={32} color="white"/>} onPress={() => navigation.navigate("ProfileScreen")}/>
+                    <IconButton icon={<Icon name="user-o" size={32} color="white"/>} onPress={() => navigation.navigate("ProfileScreen")}/>
                 </View>
             </SafeAreaView>
             <View className="flex flex-col flex-grow bg-primary rounded-t-3xl">
