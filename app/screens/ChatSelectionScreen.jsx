@@ -11,17 +11,17 @@ const ChatSelectionScreen = ({ navigation }) => {
         {
             id: 1,
             name: 'John Doe',
-            timeOfLastMessage: '2012-04-23T18:25:43.511Z', // ISO 8601 format
+            timeOfLastMessage: '2024-04-03T18:25:43.511Z', // ISO 8601 format
         },
         {
             id: 2,
             name: 'Jane Doe',
-            timeOfLastMessage: '2024-03-21T14:25:43.511Z',
+            timeOfLastMessage: '2024-02-21T14:25:43.511Z',
         },
         {
             id: 3,
             name: 'Alice',
-            timeOfLastMessage: '2024-04-03T13:25:43.511Z',
+            timeOfLastMessage: '2024-04-02T13:25:43.511Z',
         },
         {
             id: 4,
@@ -106,7 +106,12 @@ const ChatSelectionScreen = ({ navigation }) => {
 
         // Check if the date is within the current day (0-24h)
         if (dateObject.getDate() === currentDate.getDate() && dateObject.getMonth() === currentDate.getMonth() && dateObject.getFullYear() === currentDate.getFullYear()) {
-            return `${dateObject.getHours().toString().padStart(2, '0')}:${dateObject.getMinutes().toString().padStart(2, '0')}:${dateObject.getSeconds().toString().padStart(2, '0')}`;
+            // Format time in 12-hour AM/PM format
+            let hours = dateObject.getHours();
+            const amPm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            const minutes = dateObject.getMinutes().toString().padStart(2, '0');
+            return `${hours}:${minutes} ${amPm}`;
         }
 
         // Check if the date was yesterday
