@@ -202,7 +202,6 @@ const ChatScreen = ({route, navigation}) => {
             style={{ flex: 1 }}
             behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View className="flex-1 bg-primary justify-start">
                 <SafeAreaView className="bg-gray-100">
                     <View className="flex-row justify-between items-start content-center p-4 ">
@@ -239,14 +238,23 @@ const ChatScreen = ({route, navigation}) => {
                         </View>
                     </ScrollView>
                 </View>
-                {/*TODO: Fix message input field, it currently gets covered by keyboard*/}
                 <SafeAreaView className="absolute bottom-0 flex-col z-40 w-full bg-gray-100">
                     <View className="flex flex-row justify-between items-center content-center px-4 pt-2">
-                        <TextInput
-                            placeholder="Message"
-                            multiline={true}
-                            className="flex-grow p-3 mx-2 bg-white border border-gray-300 rounded-3xl"
-                        />
+                        <View className="flex flex-row justify justify-between flex-grow p-3 mx-2 bg-white border border-gray-300 rounded-3xl max-w-full">
+                            <TextInput
+                                placeholder="Message"
+                                multiline={true}
+                                className="flex-1 text-black text-md bg-transparent pr-8"
+                            />
+                            <View className="absolute right-4 bottom-1/2">
+                                <IconButton
+                                    icon={<Icon name="send" size={24} color="#86efac" />}
+                                    onPress={() => {
+                                        // Handle send message functionality here
+                                    }}
+                                />
+                            </View>
+                        </View>
                     </View>
                 </SafeAreaView>
                 <SlidingModal modalVisible={modalVisible} setModalVisible={setModalVisible} height={0.3}>
@@ -256,7 +264,6 @@ const ChatScreen = ({route, navigation}) => {
                     </View>
                 </SlidingModal>
             </View>
-        </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
     );
 };
