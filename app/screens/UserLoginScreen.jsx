@@ -52,12 +52,6 @@ const UserLoginScreen = ({navigation}) => {
                     <View className="space-y-4 mx-7">
                         <TextButton onPress={handleLogin} title={"Login"} testID="login-button"/>
                     </View>
-                    <View className="flex flex-row justify-center text-lg font-semibold">
-                        <Text>Admin Member? </Text>
-                        <TouchableOpacity onPress={() => navigation.navigate("AdminLoginScreen")}>
-                            <Text className="text-accent">Login here</Text>
-                        </TouchableOpacity>
-                    </View>
                 </View>
             </SafeAreaView>
         </View>

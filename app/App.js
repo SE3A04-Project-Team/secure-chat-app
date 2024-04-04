@@ -5,7 +5,6 @@ import ChatSelectionScreen from "./screens/ChatSelectionScreen";
 import ChatScreen from "./screens/ChatScreen";
 import ContactScreen from "./screens/ContactScreen";
 import ProfileScreen from "./screens/ProfileScreen";
-import AdminLoginScreen from "./screens/AdminLoginScreen";
 import GenerateReportScreen from "./screens/GenerateReportScreen";
 
 const Stack = createNativeStackNavigator();
@@ -41,7 +40,6 @@ const AllScreens = () => {
             <Stack.Screen name="ChatScreen" component={ChatScreen}/>
             <Stack.Screen name="ContactScreen" component={ContactScreen}/>
             <Stack.Screen name="ProfileScreen" component={ProfileScreen}/>
-            <Stack.Screen name="AdminLoginScreen" component={AdminLoginScreen}/>
             <Stack.Screen name="GenerateReportScreen" component={GenerateReportScreen}/>
         </Stack.Navigator>
     );
