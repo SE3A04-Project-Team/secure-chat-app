@@ -26,8 +26,7 @@ const UserLoginScreen = ({navigation}) => {
 
     return (
         <View className="flex-1 min-h-screen bg-accent justify-end">
-            <View className="flex-1 flex-row justify-evenly items-center content-center">
-                <Icon name="lock" size={64} color="white"/>
+            <View className="flex-1 flex-col justify-evenly items-center content-center">
                 <Text className="text-primary text-6xl font-bold text-center">Chat App</Text>
                 <TextButton title="Generate Report Screen" onPress={() => navigation.navigate("GenerateReportScreen")}/>
             </View>
