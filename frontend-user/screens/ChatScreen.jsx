@@ -1,4 +1,14 @@
-import {SafeAreaView, ScrollView, Text, TextInput, View} from "react-native";
+import {
+    Keyboard,
+    KeyboardAvoidingView,
+    Platform,
+    SafeAreaView,
+    ScrollView,
+    Text,
+    TextInput,
+    TouchableWithoutFeedback,
+    View
+} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import SlidingModal from "../components/SlidingModal";
 import {useEffect, useRef, useState} from "react";
@@ -188,58 +198,65 @@ const ChatScreen = ({route, navigation}) => {
     }, []);
 
     return (
-        <View className="flex-1 min-h-screen bg-primary justify-start">
-            <SafeAreaView className="bg-gray-100">
-                <View className="flex-row justify-between items-start content-center p-4 ">
-                    <IconButton icon={<Icon name="arrow-left" size={32} color="#86efac"/>} onPress={() => navigation.goBack()}/>
-                    <View className="flex flex-col justify-center items-center">
-                        <InitialIcon name={chat.name}/>
-                        <Text className="text-black text-md text-center">{chat.name}</Text>
+        <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View className="flex-1 bg-primary justify-start">
+                <SafeAreaView className="bg-gray-100">
+                    <View className="flex-row justify-between items-start content-center p-4 ">
+                        <IconButton icon={<Icon name="arrow-left" size={32} color="#86efac"/>} onPress={() => navigation.goBack()}/>
+                        <View className="flex flex-col justify-center items-center">
+                            <InitialIcon name={chat.name}/>
+                            <Text className="text-black text-md text-center">{chat.name}</Text>
+                        </View>
+                        <IconButton icon={<Icon name="gear" size={32} color="#86efac"/>} onPress={() => setModalVisible(true)}/>
                     </View>
-                    <IconButton icon={<Icon name="gear" size={32} color="#86efac"/>} onPress={() => setModalVisible(true)}/>
+                </SafeAreaView>
+                <View className="flex flex-col flex-grow bg-primary rounded-t-3xl">
+                    <ScrollView
+                        className="px-3 flex-1 flex-end"
+                        ref={scrollViewRef}
+                        onLayout={() => {
+                            // Scrolls to the bottom of the ScrollView when it's initially rendered
+                            scrollViewRef.current.scrollToEnd({ animated: false });
+                        }}
+                    >
+                        <View className="flex flex-col items-center pb-28">
+                            {
+                                chatMessages.map((message) => (
+                                    <View
+                                        key={message.messageID}
+                                        className={`py-2 px-3 my-2 rounded-2xl max-w-3/4 ${message.senderID === currentUserID ? 'bg-green-300 self-end' : 'bg-gray-200 self-start'}`}
+                                    >
+                                        <Text
+                                            className={`text-primary text-md font-normal ${message.senderID === currentUserID ? 'text-white' : 'text-black'}`}
+                                        >{message.message}</Text>
+                                    </View>
+                                ))
+                            }
+                        </View>
+                    </ScrollView>
                 </View>
-            </SafeAreaView>
-            <View className="flex flex-col flex-grow bg-primary rounded-t-3xl">
-                <ScrollView
-                    className="px-3 flex-1 flex-end"
-                    ref={scrollViewRef}
-                    onLayout={() => {
-                        // Scrolls to the bottom of the ScrollView when it's initially rendered
-                        scrollViewRef.current.scrollToEnd({ animated: false });
-                    }}
-                >
-                    <View className="flex flex-col items-center pb-28">
-                        {
-                            chatMessages.map((message) => (
-                                <View
-                                    key={message.messageID}
-                                    className={`py-2 px-3 my-2 rounded-2xl max-w-3/4 ${message.senderID === currentUserID ? 'bg-green-300 self-end' : 'bg-gray-200 self-start'}`}
-                                >
-                                    <Text
-                                        className={`text-primary text-md font-normal ${message.senderID === currentUserID ? 'text-white' : 'text-black'}`}
-                                    >{message.message}</Text>
-                                </View>
-                            ))
-                        }
+                {/*TODO: Fix message input field, it currently gets covered by keyboard*/}
+                <SafeAreaView className="absolute bottom-0 flex-col z-40 w-full bg-gray-100">
+                    <View className="flex flex-row justify-between items-center content-center px-4 pt-2">
+                        <TextInput
+                            placeholder="Message"
+                            className="flex-grow p-3 mx-2 bg-white border border-gray-300 rounded-full"
+                        />
                     </View>
-                </ScrollView>
+                </SafeAreaView>
+                <SlidingModal modalVisible={modalVisible} setModalVisible={setModalVisible} height={0.3}>
+                    <View className="flex flex-col p-8">
+                        <TextButton title="Generate Report Screen" onPress={() => navigation.navigate("GenerateReportScreen")}/>
+                        <TextButton onPress={() => handleLeaveChat} title="Leave Chat"/>
+                    </View>
+                </SlidingModal>
             </View>
-            {/*TODO: Fix message input field, it currently gets covered by keyboard*/}
-            <SafeAreaView className="absolute bottom-0 flex-col z-40 w-full bg-gray-100">
-                <View className="flex flex-row justify-between items-center content-center px-4 pt-2">
-                    <TextInput
-                        placeholder="Message"
-                        className="flex-grow p-3 mx-2 bg-white border border-gray-300 rounded-full"
-                    />
-                </View>
-            </SafeAreaView>
-            <SlidingModal modalVisible={modalVisible} setModalVisible={setModalVisible} height={0.3}>
-                <View className="flex flex-col p-8">
-                    <TextButton title="Generate Report Screen" onPress={() => navigation.navigate("GenerateReportScreen")}/>
-                    <TextButton onPress={() => handleLeaveChat} title="Leave Chat"/>
-                </View>
-            </SlidingModal>
-        </View>
+        </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     );
 };
 
