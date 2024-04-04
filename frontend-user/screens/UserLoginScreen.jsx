@@ -76,7 +76,6 @@ const UserLoginScreen = ({navigation}) => {
                                 className="p-4 text-secondary rounded-2xl bg-input_field"
                                 placeholder="Email"
                                 value={formData.email}
-                                textContentType="emailAddress"
                                 onChangeText={(text) => handleInputChange('email', text)}
                             />
                             <TextInput
