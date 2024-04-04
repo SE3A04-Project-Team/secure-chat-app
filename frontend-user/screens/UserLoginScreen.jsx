@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
     SafeAreaView,
     Text,
@@ -31,29 +31,6 @@ const UserLoginScreen = ({navigation}) => {
         navigation.navigate("ChatSelectionScreen");
     };
 
-    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-
-    useEffect(() => {
-        const keyboardDidShowListener = Keyboard.addListener(
-            'keyboardDidShow',
-            () => {
-                setKeyboardVisible(true); // Keyboard is visible
-            }
-        );
-        const keyboardDidHideListener = Keyboard.addListener(
-            'keyboardDidHide',
-            () => {
-                setKeyboardVisible(false); // Keyboard is hidden
-            }
-        );
-
-        // Cleanup function
-        return () => {
-            keyboardDidShowListener.remove();
-            keyboardDidHideListener.remove();
-        };
-    }, []);
-
     return (
         <KeyboardAvoidingView
             style={{ flex: 1 }}
@@ -61,16 +38,13 @@ const UserLoginScreen = ({navigation}) => {
         >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View className="flex-1 bg-accent justify-end">
-                {
-                    !isKeyboardVisible &&
-                    <SafeAreaView className="flex-1 flex-col justify-evenly items-center content-center">
-                        <Text className="text-primary text-6xl font-bold text-center">Chat App</Text>
-                    </SafeAreaView>
-                }
+                <SafeAreaView className="flex-1 flex-col justify-evenly items-center content-center">
+                    <Text className="text-primary text-6xl font-bold text-center">Chat App</Text>
+                </SafeAreaView>
                 <SafeAreaView className="bg-white rounded-t-3xl">
-                    <View className="flex justify-center py-8 gap-y-8">
-                        <Text className="text-secondary font-bold text-4xl text-center py-4">User Login</Text>
-                        <View className="flex flex-col gap-y-2 m-7">
+                    <View className="flex justify-center p-8 gap-y-8">
+                        <Text className="text-secondary font-bold text-4xl text-center">User Login</Text>
+                        <View className="flex flex-col gap-y-2">
                             <TextInput
                                 className="p-4 text-secondary rounded-2xl bg-input_field"
                                 placeholder="Email"
@@ -84,7 +58,7 @@ const UserLoginScreen = ({navigation}) => {
                                 onChangeText={(text) => handleInputChange('password', text)}
                             />
                         </View>
-                        <View className="space-y-4 mx-7">
+                        <View className="">
                             <TextButton onPress={handleLogin} title={"Login"} testID="login-button"/>
                         </View>
                     </View>
