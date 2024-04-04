@@ -9,7 +9,6 @@ import {
     TouchableWithoutFeedback, Keyboard
 } from 'react-native';
 import TextButton from '../components/TextButton';
-import Icon from "react-native-vector-icons/FontAwesome";
 
 const UserLoginScreen = ({navigation}) => {
 
