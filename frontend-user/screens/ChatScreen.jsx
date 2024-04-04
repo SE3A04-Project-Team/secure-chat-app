@@ -213,47 +213,43 @@ const ChatScreen = ({route, navigation}) => {
                         <IconButton icon={<Icon name="gear" size={32} color="#86efac"/>} onPress={() => setModalVisible(true)}/>
                     </View>
                 </SafeAreaView>
-                <View className="flex flex-col flex-grow bg-primary rounded-t-3xl">
-                    <ScrollView
-                        className="px-3 flex-1 flex-end"
-                        ref={scrollViewRef}
-                        onLayout={() => {
-                            // Scrolls to the bottom of the ScrollView when it's initially rendered
-                            scrollViewRef.current.scrollToEnd({ animated: false });
-                        }}
-                    >
-                        <View className="flex flex-col items-center pb-28">
-                            {
-                                chatMessages.map((message) => (
-                                    <View
-                                        key={message.messageID}
-                                        className={`py-2 px-3 my-2 rounded-2xl max-w-3/4 ${message.senderID === currentUserID ? 'bg-green-300 self-end' : 'bg-gray-200 self-start'}`}
-                                    >
-                                        <Text
-                                            className={`text-primary text-md font-normal ${message.senderID === currentUserID ? 'text-white' : 'text-black'}`}
-                                        >{message.message}</Text>
-                                    </View>
-                                ))
-                            }
-                        </View>
-                    </ScrollView>
-                </View>
-                <SafeAreaView className="absolute bottom-0 flex-col z-40 w-full bg-gray-100">
-                    <View className="flex flex-row justify-between items-center content-center px-4 pt-2">
-                        <View className="flex flex-row justify justify-between flex-grow p-3 mx-2 bg-white border border-gray-300 rounded-3xl max-w-full">
-                            <TextInput
-                                placeholder="Message"
-                                multiline={true}
-                                className="flex-1 text-black text-md bg-transparent pr-8"
+                <ScrollView
+                    className="px-3"
+                    ref={scrollViewRef}
+                    onLayout={() => {
+                        // Scrolls to the bottom of the ScrollView when it's initially rendered
+                        scrollViewRef.current.scrollToEnd({ animated: false });
+                    }}
+                >
+                    <View className="flex flex-col items-center">
+                        {
+                            chatMessages.map((message) => (
+                                <View
+                                    key={message.messageID}
+                                    className={`py-2 px-3 my-2 rounded-2xl max-w-3/4 ${message.senderID === currentUserID ? 'bg-green-300 self-end' : 'bg-gray-200 self-start'}`}
+                                >
+                                    <Text
+                                        className={`text-primary text-md font-normal ${message.senderID === currentUserID ? 'text-white' : 'text-black'}`}
+                                    >{message.message}</Text>
+                                </View>
+                            ))
+                        }
+                    </View>
+                </ScrollView>
+                <SafeAreaView className="flex flex-row justify-between items-center content-center bg-gray-100">
+                    <View className="flex flex-row justify justify-between flex-grow p-3 mx-6 my-2 bg-white border border-gray-300 rounded-3xl max-w-full">
+                        <TextInput
+                            placeholder="Message"
+                            multiline={true}
+                            className="flex-1 text-black text-md bg-transparent pr-8"
+                        />
+                        <View className="absolute right-4 bottom-1/2">
+                            <IconButton
+                                icon={<Icon name="send" size={24} color="#86efac" />}
+                                onPress={() => {
+                                    // Handle send message functionality here
+                                }}
                             />
-                            <View className="absolute right-4 bottom-1/2">
-                                <IconButton
-                                    icon={<Icon name="send" size={24} color="#86efac" />}
-                                    onPress={() => {
-                                        // Handle send message functionality here
-                                    }}
-                                />
-                            </View>
                         </View>
                     </View>
                 </SafeAreaView>
