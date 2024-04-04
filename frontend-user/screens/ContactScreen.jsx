@@ -22,13 +22,13 @@ const ContactScreen = ({navigation}) => {
         {id: 15, name: "Mia"},
     ]
 
-    // function to sort contactData by name in ascending order (this should be handled by server later)
+    // function to sort contactData by name in ascending order (this should be handled by backend later)
     const sortContacts = () => {
         contactData.sort((a, b) => a.name.localeCompare(b.name))
     }
     sortContacts()
 
-    // TODO: Query contact data from server (contact list should be sorted by name)
+    // TODO: Query contact data from backend (contact list should be sorted by name)
 
     return (
         <View className="flex-1 min-h-screen bg-accent justify-start">
