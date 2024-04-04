@@ -15,7 +15,6 @@ const SERVER_URL = 'http://flask-address:port'; // Update with your server URL
 export default function App() {
 
     useEffect(() => {
-        console.log("Connecting to server...");
         const socket = io(SERVER_URL);
 
         socket.on('connect', () => {
