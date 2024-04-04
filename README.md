@@ -1,4 +1,4 @@
-# Secure Chat App
+# Secure Chat Application
 
 ## Contributors
 - [Aidan Froggatt](https://github.com/aidanfroggatt)
