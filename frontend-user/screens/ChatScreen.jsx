@@ -244,7 +244,8 @@ const ChatScreen = ({route, navigation}) => {
                     <View className="flex flex-row justify-between items-center content-center px-4 pt-2">
                         <TextInput
                             placeholder="Message"
-                            className="flex-grow p-3 mx-2 bg-white border border-gray-300 rounded-full"
+                            multiline={true}
+                            className="flex-grow p-3 mx-2 bg-white border border-gray-300 rounded-3xl"
                         />
                     </View>
                 </SafeAreaView>
