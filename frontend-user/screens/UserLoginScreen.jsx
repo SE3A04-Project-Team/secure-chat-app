@@ -75,14 +75,13 @@ const UserLoginScreen = ({navigation}) => {
                             <TextInput
                                 className="p-4 text-secondary rounded-2xl bg-input_field"
                                 placeholder="Email"
-                                keyboardType="email-address"
                                 value={formData.email}
+                                textContentType="emailAddress"
                                 onChangeText={(text) => handleInputChange('email', text)}
                             />
                             <TextInput
                                 className="p-4 text-secondary rounded-2xl bg-input_field"
                                 placeholder="Password"
-                                secureTextEntry={true}
                                 value={formData.password}
                                 onChangeText={(text) => handleInputChange('password', text)}
                             />
