@@ -6,50 +6,37 @@ import ChatScreen from "./screens/ChatScreen";
 import ContactScreen from "./screens/ContactScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import GenerateReportScreen from "./screens/GenerateReportScreen";
+import io from 'socket.io-client';
+import {useEffect} from "react";
 
 const Stack = createNativeStackNavigator();
-
-// Navigation stack for authenticated users
-const AuthenticatedApp = () => {
-    return (
-        <Stack.Navigator screenOptions={{headerShown: false}}>
-            <Stack.Screen name="ChatSelectionScreen" component={ChatSelectionScreen}/>
-            <Stack.Screen name="ChatScreen" component={ChatScreen}/>
-            <Stack.Screen name="ContactScreen" component={ContactScreen}/>
-            <Stack.Screen name="ProfileScreen" component={ProfileScreen}/>
-        </Stack.Navigator>
-    );
-};
-
-// Navigation stack for unauthenticated users
-const UnauthenticatedApp = () => {
-    return (
-        <Stack.Navigator screenOptions={{headerShown: false}}>
-            <Stack.Screen name="UserLoginScreen" component={UserLoginScreen}/>
-            <Stack.Screen name="AdminLoginScreen" component={AdminLoginScreen}/>
-        </Stack.Navigator>
-    );
-};
-
-// Testing stack for all screens
-const AllScreens = () => {
-    return (
-        <Stack.Navigator screenOptions={{headerShown: false}}>
-            <Stack.Screen name="UserLoginScreen" component={UserLoginScreen}/>
-            <Stack.Screen name="ChatSelectionScreen" component={ChatSelectionScreen}/>
-            <Stack.Screen name="ChatScreen" component={ChatScreen}/>
-            <Stack.Screen name="ContactScreen" component={ContactScreen}/>
-            <Stack.Screen name="ProfileScreen" component={ProfileScreen}/>
-            <Stack.Screen name="GenerateReportScreen" component={GenerateReportScreen}/>
-        </Stack.Navigator>
-    );
-};
+const SERVER_URL = 'http://192.168.2.100:3000'; // Update with your server URL
 
 export default function App() {
 
+    useEffect(() => {
+        console.log("Connecting to server...");
+        const socket = io(SERVER_URL);
+
+        socket.on('connect', () => {
+            console.log('Connected to server!');
+        });
+
+        return () => {
+            socket.disconnect();
+        };
+    }, []);
+
     return (
         <NavigationContainer>
-            <AllScreens/>
+            <Stack.Navigator screenOptions={{headerShown: false}}>
+                <Stack.Screen name="UserLoginScreen" component={UserLoginScreen}/>
+                <Stack.Screen name="ChatSelectionScreen" component={ChatSelectionScreen}/>
+                <Stack.Screen name="ChatScreen" component={ChatScreen}/>
+                <Stack.Screen name="ContactScreen" component={ContactScreen}/>
+                <Stack.Screen name="ProfileScreen" component={ProfileScreen}/>
+                <Stack.Screen name="GenerateReportScreen" component={GenerateReportScreen}/>
+            </Stack.Navigator>
         </NavigationContainer>
     );
 };
