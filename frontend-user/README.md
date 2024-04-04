@@ -1,4 +1,4 @@
-# Secure Chat Application
+# Secure Chat Application (User)
 
 ## Technologies
 ![React Native](https://img.shields.io/badge/-React%20Native-61DAFB?logo=react&logoColor=white&style=flat)
@@ -22,6 +22,6 @@
 
 ## Usage
 - Clone the repository
-- Run `npm install` in the root directory
-- Run `npx expo start` in the root directory
+- Run `npm install` in the \frontend-user directory
+- Run `npx expo start` in the \frontend-user directory
 - Scan the QR code with Expo Go (Android) or the Camera app (iOS)
