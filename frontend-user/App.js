@@ -10,7 +10,7 @@ import io from 'socket.io-client';
 import {useEffect} from "react";
 
 const Stack = createNativeStackNavigator();
-const SERVER_URL = 'http://192.168.2.100:3000'; // Update with your server URL
+const SERVER_URL = 'http://flask-address:port'; // Update with your server URL
 
 export default function App() {
 
@@ -20,6 +20,10 @@ export default function App() {
 
         socket.on('connect', () => {
             console.log('Connected to server!');
+        });
+
+        socket.io.on('disconnect', () => {
+            console.log('Disconnected from server!');
         });
 
         return () => {
