@@ -1,5 +1,13 @@
-import React, {useState} from 'react';
-import {SafeAreaView, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {
+    SafeAreaView,
+    Text,
+    TextInput,
+    View,
+    KeyboardAvoidingView,
+    Platform,
+    TouchableWithoutFeedback, Keyboard
+} from 'react-native';
 import TextButton from '../components/TextButton';
 import Icon from "react-native-vector-icons/FontAwesome";
 
@@ -24,12 +32,43 @@ const UserLoginScreen = ({navigation}) => {
         navigation.navigate("ChatSelectionScreen");
     };
 
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            () => {
+                setKeyboardVisible(true); // Keyboard is visible
+            }
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                setKeyboardVisible(false); // Keyboard is hidden
+            }
+        );
+
+        // Cleanup function
+        return () => {
+            keyboardDidShowListener.remove();
+            keyboardDidHideListener.remove();
+        };
+    }, []);
+
     return (
-        <View className="flex-1 min-h-screen bg-accent justify-end">
-            <View className="flex-1 flex-col justify-evenly items-center content-center">
-                <Text className="text-primary text-6xl font-bold text-center">Chat App</Text>
-                <TextButton title="Generate Report Screen" onPress={() => navigation.navigate("GenerateReportScreen")}/>
-            </View>
+        <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View className="flex-1 bg-accent justify-end">
+            {
+                !isKeyboardVisible &&
+                <View className="flex-1 flex-col justify-evenly items-center content-center">
+                    <Text className="text-primary text-6xl font-bold text-center">Chat App</Text>
+                    {/*<TextButton title="Generate Report Screen" onPress={() => navigation.navigate("GenerateReportScreen")}/>*/}
+                </View>
+            }
             <SafeAreaView className="bg-white rounded-t-3xl">
                 <View className="flex justify-center py-8 gap-y-8">
                     <Text className="text-secondary font-bold text-4xl text-center py-4">User Login</Text>
@@ -55,6 +94,8 @@ const UserLoginScreen = ({navigation}) => {
                 </View>
             </SafeAreaView>
         </View>
+        </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     );
 };
 
