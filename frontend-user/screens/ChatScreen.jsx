@@ -238,12 +238,12 @@ const ChatScreen = ({route, navigation}) => {
                         scrollViewRef.current.scrollToEnd({ animated: false });
                     }}
                 >
-                    <View className="flex flex-col items-center">
+                    <View className="flex flex-col items-center mb-3">
                         {
-                            chatMessages.map((message) => (
+                            chatMessages.map((message, index) => (
                                 <View
                                     key={message.messageID}
-                                    className={`py-2 px-3 my-2 rounded-2xl max-w-3/4 ${message.senderID === currentUserID ? 'bg-green-300 self-end' : 'bg-gray-200 self-start'}`}
+                                    className={`py-2 px-3 rounded-2xl max-w-3/4 ${message.senderID === currentUserID ? 'bg-green-300 self-end' : 'bg-gray-200 self-start'} ${index > 0 && chatMessages[index - 1].senderID === message.senderID ? 'mt-0.5' : 'mt-3'}`}
                                 >
                                     <Text
                                         className={`text-primary text-md font-normal ${message.senderID === currentUserID ? 'text-white' : 'text-black'}`}
