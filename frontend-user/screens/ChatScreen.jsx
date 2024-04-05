@@ -250,12 +250,12 @@ const ChatScreen = ({route, navigation}) => {
                         }
                     </View>
                 </ScrollView>
-                <SafeAreaView className="flex flex-row justify-between items-center content-center bg-gray-100">
-                    <View className="flex flex-row justify justify-between flex-grow p-3 mx-6 my-2 bg-white border border-gray-300 rounded-3xl max-w-full">
+                <SafeAreaView className="flex-row justify-between items-center content-center bg-gray-100">
+                    <View className="flex-row justify-between flex-grow p-3 mx-6 my-2 bg-white border border-gray-300 rounded-3xl max-h-40">
                         <TextInput
                             placeholder="Message"
                             multiline={true}
-                            className="flex-1 text-black text-md bg-transparent pr-8"
+                            className="flex-1 text-black text-md bg-transparent mr-8"
                             value={message}
                             onChangeText={(text) => setMessage(text)}
                         />
