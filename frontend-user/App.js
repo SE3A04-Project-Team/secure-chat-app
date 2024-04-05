@@ -6,6 +6,7 @@ import ChatScreen from "./screens/ChatScreen";
 import ContactScreen from "./screens/ContactScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import axios from "axios";
+import {decryptAES, encryptAES} from "./utils/encryptionUtils";
 
 const Stack = createNativeStackNavigator();
 const SERVER_URL = process.env.SERVER_URL
@@ -26,6 +27,13 @@ export default function App() {
     };
 
     testServer();
+
+    const testMessage = "Hello, World!"
+    const testKey = "12345678901234567890123456789012"
+    const encryptedMessage = encryptAES(testMessage, testKey);
+    console.log(`Encrypted message: ${encryptedMessage}`);
+    const decryptedMessage = decryptAES(encryptedMessage, testKey);
+    console.log(`Decrypted message: ${decryptedMessage}`);
 
     return (
         <NavigationContainer>
