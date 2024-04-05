@@ -31,11 +31,13 @@ class MessageDeliveryServer(CommunicatingAgent):
         """
         self.serverID = serverID
         self.communicationManager = communicationManager
-        self.event_names = [
+        self.rooms = dict[str, list[str]]
 
+        self.event_names = [
+            "join_room"
         ]
         self.event_functions = [
-
+            self.join_room
         ]
         self.endpoint_names = [
             "create_room"
@@ -66,6 +68,7 @@ class MessageDeliveryServer(CommunicatingAgent):
         }
         """
 
+
     def create_room(self, roomID: str):
         """
         creates new room for messaging
@@ -76,10 +79,23 @@ class MessageDeliveryServer(CommunicatingAgent):
         deletes room only if there are no more users registered to that room
         """
 
-    def join_room(self, clientID: str, roomID: str):
+    def join_room(self, *args):
         """
         adds a client to a room
         """
+        print(args)
+        # add create room function
+        return f"joined room"
+        if roomID not in self.rooms.keys:
+            self.create_room(roomID)
+        
+        if clientID not in self.rooms.get(roomID):
+            self.rooms.get(roomID).append(clientID)
+
+        # get old messages
+        
+        return f"joined room {roomID}"
+
     
     def leave_room(self, clientID: str, roomID: str):
         """

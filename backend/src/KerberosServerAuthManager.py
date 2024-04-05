@@ -33,3 +33,4 @@ class KerberosServerAuthManager(AuthenticationManager):
             EncryptionKey: to be used with the requesting agent
             return message: to be sent back to requesting agent
         """
+        return "auth_Manager"

@@ -32,6 +32,10 @@ class FlaskRequestBroker(RequestBroker):
         self.socketio = SocketIO(self.app)
 
 
+    
+    def connect(self) -> str:
+        return "connected"
+
     def add_endpoint(self, endpoint: str, name: str, handler: callable, allowed_methods: list[str]):
         """
         Add API endpoint for HTTP requests to the server
@@ -52,11 +56,16 @@ class FlaskRequestBroker(RequestBroker):
         print(f"registered {event_name}")
 
 
-    def start(self, host:str='0.0.0.0', ):
+    def start(self, host:str='0.0.0.0', port:int=5050):
         """
         Host Server
         """
-        self.socketio.run(self.app, host=host)
+        self.socketio.run(self.app, host=host, port=port)
+
+    
+
+
+
 
 
 class EndpointAction(object):
@@ -66,11 +75,13 @@ class EndpointAction(object):
         self.response = Response(status=200, headers={})
 
     def __call__(self, *args):
+        print("Received args:", args)
         # Unpack args if needed, and pass them individually
         # Access JSON data from Flask request object
         json_data = request.json
         print("Received JSON data:", json_data)
         resp = self.action(json_data)
-
-        self.response.set_data(json.dumps(json_data))
+        print(resp)
+        self.response.set_data(resp) # set to a string to return
+        print(self.response)
         return self.response

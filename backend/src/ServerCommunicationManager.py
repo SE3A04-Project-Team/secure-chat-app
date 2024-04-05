@@ -99,11 +99,12 @@ class ServerCommunicationManager(CommunicationManager):
         Remove all session keys on event of refresh
         """
 
-    def authenticateUser(self, message: json) -> json:
+    def authenticateUser(self, message: str) -> str:
         """
         authenticates user for communication with the server
         """
-        print(message)
+        #print(message)
+        return self.authenticationManager.authenticateUser(message)
       
 
 
