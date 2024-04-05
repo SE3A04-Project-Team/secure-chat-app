@@ -259,15 +259,15 @@ const ChatScreen = ({route, navigation}) => {
                             value={message}
                             onChangeText={(text) => setMessage(text)}
                         />
-                            {
-                                !(message === '') &&
-                                <IconButton
-                                    icon={<Icon name="send" size={20} color="#FFFFFF"/>}
-                                    onPress={handleSendMessage}
-                                    opacityStyle={"p-2 bg-accent rounded-full"}
-                                    containerStyle={"flex justify-center p-1"}
-                                />
-                            }
+                        {
+                            !(message === '') &&
+                            <IconButton
+                                icon={<Icon name="send" size={20} color="#FFFFFF"/>}
+                                onPress={handleSendMessage}
+                                opacityStyle={"p-2 bg-accent rounded-full"}
+                                containerStyle={"flex justify-end p-1.5"}
+                            />
+                        }
                     </View>
                 </SafeAreaView>
                 <SlidingModal modalVisible={modalVisible} setModalVisible={setModalVisible} height={0.3}>
