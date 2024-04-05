@@ -251,23 +251,23 @@ const ChatScreen = ({route, navigation}) => {
                     </View>
                 </ScrollView>
                 <SafeAreaView className="flex-row justify-between items-center content-center bg-gray-100">
-                    <View className="flex-row justify-between flex-grow p-3 mx-6 my-2 bg-white border border-gray-300 rounded-3xl max-h-40">
+                    <View className="flex-row justify-between flex-grow mx-6 my-2 bg-white border border-gray-300 rounded-3xl max-h-40">
                         <TextInput
                             placeholder="Message"
                             multiline={true}
-                            className="flex-1 text-black text-md bg-transparent mr-8"
+                            className="flex-1 text-black text-md bg-transparent mr-8 p-4"
                             value={message}
                             onChangeText={(text) => setMessage(text)}
                         />
-                        <View className="absolute right-4 bottom-1/2">
                             {
                                 !(message === '') &&
                                 <IconButton
-                                    icon={<Icon name="send" size={24} color="#86efac" />}
+                                    icon={<Icon name="send" size={20} color="#FFFFFF"/>}
                                     onPress={handleSendMessage}
+                                    opacityStyle={"p-2 bg-accent rounded-full"}
+                                    containerStyle={"flex justify-center p-1"}
                                 />
                             }
-                        </View>
                     </View>
                 </SafeAreaView>
                 <SlidingModal modalVisible={modalVisible} setModalVisible={setModalVisible} height={0.3}>
