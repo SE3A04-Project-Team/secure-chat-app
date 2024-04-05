@@ -216,7 +216,7 @@ const ChatScreen = ({route, navigation}) => {
             message: 'Good to hear!',
             timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
-    ]; // TODO: Query chat messages from backend using chat.id
+    ];
 
     // Sample current user ID
     const currentUserID = 1; // TODO: Get the current user's ID from the authentication context
@@ -238,7 +238,18 @@ const ChatScreen = ({route, navigation}) => {
     // Function to handle sending a message
     const handleSendMessage = () => {
         // TODO: Implement send message functionality
-
+        const sendMessage = async () => {
+            try {
+                const response = await axios.post(`${SERVER_URL}/message_server/sendMessage`, {
+                    roomID: '12345', // Room ID for which message to be sent
+                    message: message,
+                });
+                console.log(response.data);
+                return response.data; // Returning data for further processing if needed
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
         // Clear the message input after sending the message
         setMessage('');
     }
