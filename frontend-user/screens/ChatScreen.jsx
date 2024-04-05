@@ -274,8 +274,7 @@ const ChatScreen = ({route, navigation}) => {
                     </View>
                 </SafeAreaView>
                 <SlidingModal modalVisible={modalVisible} setModalVisible={setModalVisible} height={0.3}>
-                    <SafeAreaView className="flex flex-col m-8 justify-evenly h-full">
-                        <TextButton title="Generate Report Screen" onPress={() => navigation.navigate("GenerateReportScreen")}/>
+                    <SafeAreaView className="flex flex-col m-8 justify-start h-full">
                         <TextButton onPress={handleLeaveChat} title="Leave Chat"/>
                     </SafeAreaView>
                 </SlidingModal>
