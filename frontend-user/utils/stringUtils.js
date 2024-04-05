@@ -7,4 +7,4 @@ const getInitials = (name) => {
 };
 
 // Export the getInitials function
-module.exports = getInitials;
+export {getInitials};
