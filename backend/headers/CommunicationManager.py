@@ -15,8 +15,9 @@ from headers.RequestBroker import RequestBroker
 from headers.Serializer import Serializer
 from headers.AuthenticationManager import AuthenticationManager
 
-import json
 from abc import ABC, abstractmethod
+from typing import Callable
+import json
 
 
 class CommunicationManager(ABC):
@@ -33,7 +34,13 @@ class CommunicationManager(ABC):
         """
 
     @abstractmethod
-    def registerActions(self, endpoints: list[str], names: list[str], handlers: list[function]):
+    def processData(self, data: bytes, handler: Callable) -> bytes:
+        """
+        prepares incoming data before passing to server for processing
+        """
+
+    @abstractmethod
+    def registerActions(self, endpoint_names: list[str], endpoint_handlers: list[Callable], event_names: list[str], event_handlers: list[Callable]):
         """
         registers actions with the broker so that requests can be forwarded correctly.
 
@@ -55,7 +62,7 @@ class CommunicationManager(ABC):
         """
 
     @abstractmethod
-    def authenticateUser(self, message: object) -> object:
+    def authenticateUser(self, message: json) -> json:
         """
         authenticates user for communication with the server
         """

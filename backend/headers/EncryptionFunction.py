@@ -11,11 +11,12 @@ TODO:
 """
 from headers.EncryptionKey import EncryptionKey
 
-from abc import ABC, abstractstaticmethod
+from abc import ABC, abstractmethod
 
 class EncryptionFunction(ABC):
 
-    @abstractstaticmethod
+    @staticmethod 
+    @abstractmethod
     def encrypt(data: bytes, key: EncryptionKey) -> bytes:
         """
         encrypt bytes
@@ -29,7 +30,8 @@ class EncryptionFunction(ABC):
 
         """
 
-    @abstractstaticmethod
+    @staticmethod 
+    @abstractmethod
     def decrypt(data: bytes, key: EncryptionKey) -> bytes:
         """
         decrypt bytes

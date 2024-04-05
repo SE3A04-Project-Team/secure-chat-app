@@ -22,7 +22,7 @@ from flask_socketio import SocketIO, emit
 
 class FlaskRequestBroker(RequestBroker):
     
-    def initialize(self):
+    def __init__(self):
         """
         Initialize class to prepare for communication
         """
@@ -39,6 +39,7 @@ class FlaskRequestBroker(RequestBroker):
         Args:  
         """
         self.app.add_url_rule(endpoint, name, handler)
+        print(f"registered {endpoint}")
 
 
     def add_event(self, event_name: str, handler: callable):
@@ -48,9 +49,10 @@ class FlaskRequestBroker(RequestBroker):
         Args:
         """
         self.socketio.on_event(event_name, handler)
+        print(f"registered {event_name}")
 
 
-    def run(self):
+    def start(self):
         """
         Host Server
         """

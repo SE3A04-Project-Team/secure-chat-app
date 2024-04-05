@@ -31,22 +31,26 @@ class MessageDeliveryServer(CommunicatingAgent):
         """
         self.serverID = serverID
         self.communicationManager = communicationManager
-        self.action_endpoints = [
+        self.event_names = [
 
         ]
-        self.action_names = [
+        self.event_functions = [
 
         ]
-        self.action_funcitons = [
-
+        self.endpoint_names = [
+            "create_room"
         ]
+        self.endpoint_functions = [
+            self.create_room
+        ]
+        self.registerActions()
 
     def registerActions(self):
         """
         registers actions with the communication manager so that requests can be forwarded correctly.
         """
-        self.communicationManager.registerActions(self.action_endpoints, self.action_names, self.action_funcitons)
-        
+        self.communicationManager.registerActions(self.endpoint_names, self.endpoint_functions, self.event_names, self.event_functions)
+
 
     def handle_message(self, message: json):
         """
