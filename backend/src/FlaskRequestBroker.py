@@ -52,11 +52,11 @@ class FlaskRequestBroker(RequestBroker):
         print(f"registered {event_name}")
 
 
-    def start(self):
+    def start(self, host:str='0.0.0.0', ):
         """
         Host Server
         """
-        self.socketio.run(self.app)
+        self.socketio.run(self.app, host=host)
 
 
 class EndpointAction(object):
