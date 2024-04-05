@@ -22,6 +22,7 @@
     "nativewind": "^2.0.11",
     "react": "18.2.0",
     "react-native": "0.73.6",
+    "react-native-crypto-js": "^1.0.0",
     "react-native-vector-icons": "^10.0.3",
     "socket.io-client": "^4.7.5"
   },
