@@ -6,10 +6,27 @@ import TextButton from "../components/TextButton";
 import IconButton from "../components/IconButton";
 import InitialIcon from "../components/InitialIcon";
 import formatDate from "../utils/dateUtils";
+import axios from "axios";
 
 const ChatScreen = ({route, navigation}) => {
     // Specific chat id and name passed as route params
     const {chat} = route.params;
+
+    // TODO: Query chat messages from backend using chat.id
+    const SERVER_URL = process.env.SERVER_URL;
+    const getRoomData = async () => {
+        try {
+            const response = await axios.get(`${SERVER_URL}/message_server/room`, {
+                params: {
+                    roomID: '12345', // Room ID for which data to be fetched
+                }
+            });
+            console.log(response.data);
+            return response.data; // Returning data for further processing if needed
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
 
     // Sample chat messages data
     const chatMessages = [

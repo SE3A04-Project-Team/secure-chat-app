@@ -2,15 +2,32 @@ import {SafeAreaView, Text, View} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import TextButton from "../components/TextButton";
 import IconButton from "../components/IconButton";
+import axios from "axios";
 
 const ProfileScreen = ({navigation}) => {
+
+    //TODO: Query current user profile data from backend
+    const SERVER_URL = process.env.SERVER_URL
+    const getProfileData = async () => {
+        try {
+            const response = await axios.get(`${SERVER_URL}/message_server/profile`, {
+                params: {
+                    userID: '12345', // User ID for which chats are to be fetched
+                }
+            });
+            console.log(response.data);
+            return response.data; // Returning data for further processing if needed
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
 
     // Sample profile data
     const profileData = {
         name: 'John Doe',
         email: 'johndoe@gmail.com',
         phone: '+1234567890',
-    }; //TODO: Query current user profile data from backend
+    };
 
     const handleLogout = () => {
         //TODO: add logic to logout user, clear session, etc.

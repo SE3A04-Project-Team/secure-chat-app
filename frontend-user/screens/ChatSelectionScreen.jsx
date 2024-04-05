@@ -5,10 +5,25 @@ import formatDate from "../utils/dateUtils";
 import InitialIcon from "../components/InitialIcon";
 import {useState} from "react";
 import SlidingModal from "../components/SlidingModal";
+import axios from "axios";
 
 const ChatSelectionScreen = ({ navigation }) => {
 
-    // TODO: Query chat data from backend
+    // TODO: Query chat data from backend server
+    const SERVER_URL = process.env.SERVER_URL;
+    const getRoomsData = async () => {
+        try {
+            const response = await axios.get(`${SERVER_URL}/message_server/rooms`, {
+                params: {
+                    userID: '12345', // User ID for which chats are to be fetched
+                }
+                });
+            console.log(response.data);
+            return response.data; // Returning data for further processing if needed
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
 
     // Sample JSON data for chat selection
     const chatData = [
