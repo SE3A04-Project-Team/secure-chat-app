@@ -191,6 +191,9 @@ const ChatScreen = ({route, navigation}) => {
     // Function to handle leaving the chat
     const handleLeaveChat = () => {
         // TODO: Implement leave chat functionality
+
+        // Navigate back to the chat selection screen
+        navigation.goBack();
     }
 
     // Function to handle sending a message
@@ -273,7 +276,7 @@ const ChatScreen = ({route, navigation}) => {
                 <SlidingModal modalVisible={modalVisible} setModalVisible={setModalVisible} height={0.3}>
                     <View className="flex flex-col p-8">
                         <TextButton title="Generate Report Screen" onPress={() => navigation.navigate("GenerateReportScreen")}/>
-                        <TextButton onPress={() => handleLeaveChat} title="Leave Chat"/>
+                        <TextButton onPress={handleLeaveChat} title="Leave Chat"/>
                     </View>
                 </SlidingModal>
             </View>
