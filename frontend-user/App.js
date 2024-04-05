@@ -5,29 +5,27 @@ import ChatSelectionScreen from "./screens/ChatSelectionScreen";
 import ChatScreen from "./screens/ChatScreen";
 import ContactScreen from "./screens/ContactScreen";
 import ProfileScreen from "./screens/ProfileScreen";
-import io from 'socket.io-client';
-import {useEffect} from "react";
+import axios from "axios";
 
 const Stack = createNativeStackNavigator();
-const SERVER_URL = 'http://flask-address:port'; // Update with your server URL
+const SERVER_URL = process.env.SERVER_URL
 
 export default function App() {
 
-    useEffect(() => {
-        const socket = io(SERVER_URL);
+    const testServer = async () => {
+        try {
+            const response = await axios.post(`${SERVER_URL}/message_server/auth`, {
+                key1: 'value1',
+                key2: 'value2',
+            });
+            console.log(response.data);
+            return response.data; // Returning data for further processing if needed
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 
-        socket.on('connect', () => {
-            console.log('Connected to server!');
-        });
-
-        socket.io.on('disconnect', () => {
-            console.log('Disconnected from server!');
-        });
-
-        return () => {
-            socket.disconnect();
-        };
-    }, []);
+    testServer();
 
     return (
         <NavigationContainer>
