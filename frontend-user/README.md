@@ -24,4 +24,6 @@
 - Clone the repository
 - Run `npm install` in the \frontend-user directory
 - Run `npx expo start` in the \frontend-user directory
+- Run `npm install react-native-dropdown-select-list`
+- Run `yarn add react-native-drop-down-select-list`
 - Scan the QR code with Expo Go (Android) or the Camera app (iOS)
