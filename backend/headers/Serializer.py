@@ -8,11 +8,12 @@ ATTRIBUTES:
 
 """
 
-from abc import ABC, abstractstaticmethod
+from abc import ABC, abstractmethod
 
 class Serializer(ABC):
 
-    @abstractstaticmethod
+    @abstractmethod
+    @staticmethod
     def serialize(data: object) -> bytes:
         """
         Convert object to bytes
@@ -25,7 +26,8 @@ class Serializer(ABC):
 
         """
         
-    @abstractstaticmethod
+    @abstractmethod
+    @staticmethod
     def deserialize(data: bytes) -> object:
         """
         Convert bytes to object

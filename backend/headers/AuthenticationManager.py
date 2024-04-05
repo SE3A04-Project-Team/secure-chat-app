@@ -11,7 +11,7 @@ TODO:
 from headers.EncryptionKey import EncryptionKey
 
 from abc import ABC, abstractmethod
-import json
+
 
 class AuthenticationManager(ABC):
     
@@ -23,7 +23,11 @@ class AuthenticationManager(ABC):
         """
 
     @abstractmethod
-    def authenticateUser(self, message: json) -> json:
+    def authenticateUser(self, message: object) -> tuple[EncryptionKey, object]:
         """
         authenticates user for communication with the server
+
+        RETURN:
+            EncryptionKey: to be used with the requesting agent
+            return message: to be sent back to requesting agent
         """

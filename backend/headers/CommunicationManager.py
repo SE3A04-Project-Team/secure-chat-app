@@ -33,7 +33,7 @@ class CommunicationManager(ABC):
         """
 
     @abstractmethod
-    def registerActions(self, names: str, handlers: list[function]):
+    def registerActions(self, endpoints: list[str], names: list[str], handlers: list[function]):
         """
         registers actions with the broker so that requests can be forwarded correctly.
 
@@ -49,7 +49,13 @@ class CommunicationManager(ABC):
         """
 
     @abstractmethod
-    def authenticateUser(self, message: json) -> json:
+    def dump_keys(self):
+        """
+        Remove all session keys on event of refresh
+        """
+
+    @abstractmethod
+    def authenticateUser(self, message: object) -> object:
         """
         authenticates user for communication with the server
         """

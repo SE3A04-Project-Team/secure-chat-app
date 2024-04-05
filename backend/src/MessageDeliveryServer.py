@@ -13,92 +13,68 @@ finish set up
 
 """
 from headers.CommunicatingAgent import CommunicatingAgent
-from headers.EncryptionKey import EncryptionKey
 from headers.CommunicationManager import CommunicationManager
 
 from src.ServerCommunicationManager import ServerCommunicationManager
 
+import json
+
 
 class MessageDeliveryServer(CommunicatingAgent):
 
-    communication_manager: CommunicationManager
+    
 
-    def __init__(self, address: str):
+    def __init__(self, serverID: str, communicationManager: CommunicationManager):
         """
-        Initialize class to prepare for communication.
-
-        Args:
-            address: network address of communicating agent. In IP:port format.
-        """
-        self.communication_manager = ServerCommunicationManager(self, address)
-
-
-    def updateKey(self, serviceID: str, key: EncryptionKey):
-        """
-        Update encryptionkey for use with other agents
-
-        Args:
-            ServiceID: ID of service associated with encryptionKey
-        """
-
-
-    def getKey(self, serviceID: str) -> EncryptionKey:
-        """
-        returns EncryptionKey stored for a given service
-
-        Args:
-            ServiceID: ID of service associated with encryptionKey
-        """
-
-
-    def sendData(self, address: str, data: object, key: EncryptionKey):
-        """
-        Send data to indicated address
-
-        Args:
-            address: network address of recipient In IP:port format.
-            data: data to send to recipient
-            key: encryption key used to encrypt data
+        initialize server
 
         """
+        self.serverID = serverID
+        self.communicationManager = communicationManager
+        self.action_endpoints = [
 
-    def recvData(self, data:object):
+        ]
+        self.action_names = [
+
+        ]
+        self.action_funcitons = [
+
+        ]
+
+    def registerActions(self):
         """
-        Recv data from indicated address
-
-        Args:
-            address: network address of sending agent In IP:port format.
-            data: recved object
-
-        Return:
-            
+        registers actions with the communication manager so that requests can be forwarded correctly.
         """
-        print(data)
-        sender,targets,content = self.__parse_string_message(data)
-        self.sendMessage(content, sender, targets)
-
-    def __parse_string_message(self, msg: str):
-        sender = msg.split(";")[0]
-        targets = msg.split(";")[1].strip('[]').replace("\'", "").split(", ")
-        content = msg.split(";")[2]
-        return [sender,targets,content]
-
-    def sendMessage(self, message:object, sender: str, targets: list[str]):
-        """
-        Route message to intended recipients
-
-        Args:
-            message: message received by sender to send to targets
-            sender: clientID of sender
-            targets: clientIDs of receivers
-        Return:
-            
-        """
-
-        # store message
-        for target in targets:
-            if sender != target:
-                self.communication_manager.sendData(target, f"({sender}):{message}")
-
-
+        self.communicationManager.registerActions(self.action_endpoints, self.action_names, self.action_funcitons)
         
+
+    def handle_message(self, message: json):
+        """
+        handles the storing and forwarding of messages in the following format
+        {
+	        “SenderID”: str,
+	        “ChatID”: str,
+	        “Timestamp”: str,
+	        “Message”: str,
+        }
+        """
+
+    def create_room(self, roomID: str):
+        """
+        creates new room for messaging
+        """
+
+    def remove_room(self, roomID: str):
+        """
+        deletes room only if there are no more users registered to that room
+        """
+
+    def join_room(self, clientID: str, roomID: str):
+        """
+        adds a client to a room
+        """
+    
+    def leave_room(self, clientID: str, roomID: str):
+        """
+        removes a client from a room
+        """
