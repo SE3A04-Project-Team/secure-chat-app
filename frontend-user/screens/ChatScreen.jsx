@@ -179,23 +179,37 @@ const ChatScreen = ({route, navigation}) => {
         },
     ]; // TODO: Query chat messages from backend using chat.id
 
-    // Sample current user ID, this is used for determining the message sender for styling
+    // Sample current user ID
     const currentUserID = 1; // TODO: Get the current user's ID from the authentication context
 
+    // Modal visibility state
     const [modalVisible, setModalVisible] = useState(false);
 
+    // Message input state
+    const [message, setMessage] = useState('');
+
+    // Function to handle leaving the chat
     const handleLeaveChat = () => {
         // TODO: Implement leave chat functionality
     }
 
-    const scrollViewRef = useRef(null);
+    // Function to handle sending a message
+    const handleSendMessage = () => {
+        // TODO: Implement send message functionality
 
+        // Clear the message input after sending the message
+        setMessage('');
+    }
+
+    // ScrollView starts with most recent messages (at the bottom)
+    const scrollViewRef = useRef(null);
     useEffect(() => {
         // Scrolls to the bottom of the ScrollView when it's initially rendered
         if (scrollViewRef.current) {
             scrollViewRef.current.scrollToEnd({ animated: false });
         }
     }, []);
+
 
     return (
         <KeyboardAvoidingView
@@ -242,14 +256,17 @@ const ChatScreen = ({route, navigation}) => {
                             placeholder="Message"
                             multiline={true}
                             className="flex-1 text-black text-md bg-transparent pr-8"
+                            value={message}
+                            onChangeText={(text) => setMessage(text)}
                         />
                         <View className="absolute right-4 bottom-1/2">
-                            <IconButton
-                                icon={<Icon name="send" size={24} color="#86efac" />}
-                                onPress={() => {
-                                    // Handle send message functionality here
-                                }}
-                            />
+                            {
+                                !(message === '') &&
+                                <IconButton
+                                    icon={<Icon name="send" size={24} color="#86efac" />}
+                                    onPress={handleSendMessage}
+                                />
+                            }
                         </View>
                     </View>
                 </SafeAreaView>
