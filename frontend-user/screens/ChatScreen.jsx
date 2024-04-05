@@ -5,6 +5,7 @@ import {useEffect, useRef, useState} from "react";
 import TextButton from "../components/TextButton";
 import IconButton from "../components/IconButton";
 import InitialIcon from "../components/InitialIcon";
+import formatDate from "../utils/dateUtils";
 
 const ChatScreen = ({route, navigation}) => {
     // Specific chat id and name passed as route params
@@ -16,156 +17,187 @@ const ChatScreen = ({route, navigation}) => {
             messageID: 1,
             senderID: 1,
             message: 'Hello, how are you?',
+            timeStamp: '2024-04-03T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 2,
             senderID: 2,
             message: 'I am good, thank you!',
+            timeStamp: '2024-04-01T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 3,
             senderID: 2,
             message: 'Ayo!',
+            timeStamp: '2024-04-03T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 4,
             senderID: 2,
             message: 'How are you doing?',
+            timeStamp: '2024-04-03T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 5,
             senderID: 1,
             message: 'I am doing well, thank you!\nTesting multiline message.',
+            timeStamp: '2024-04-03T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 6,
             senderID: 2,
             message: 'Good to hear!',
+            timeStamp: '2024-04-01T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 7,
             senderID: 1,
             message: 'Hi there!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 8,
             senderID: 2,
             message: 'Hello!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 9,
             senderID: 1,
             message: 'How are you doing?',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 10,
             senderID: 2,
             message: 'I am doing well, thank you!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 11,
             senderID: 1,
             message: 'Good to hear!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 12,
             senderID: 2,
             message: 'Hi there!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 13,
             senderID: 1,
             message: 'Hello!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 14,
             senderID: 2,
             message: 'How are you doing?',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 15,
             senderID: 1,
             message: 'I am doing well, thank you!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 16,
             senderID: 2,
             message: 'Good to hear!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 17,
             senderID: 1,
             message: 'Hi there!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 18,
             senderID: 2,
             message: 'Hello!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 19,
             senderID: 1,
             message: 'How are you doing?',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 20,
             senderID: 2,
             message: 'I am doing well, thank you!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 21,
             senderID: 1,
             message: 'Good to hear!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 22,
             senderID: 2,
             message: 'Hi there!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 23,
             senderID: 1,
             message: 'Hello!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 24,
             senderID: 2,
             message: 'How are you doing?',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 25,
             senderID: 1,
             message: 'I am doing well, thank you!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 26,
             senderID: 2,
             message: 'Good to hear!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 27,
             senderID: 1,
             message: 'Hi there!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 28,
             senderID: 2,
             message: 'Hello!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 29,
             senderID: 1,
             message: 'How are you doing?',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 30,
             senderID: 2,
             message: 'I am doing well, thank you!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 31,
             senderID: 1,
             message: 'Good to hear!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
     ]; // TODO: Query chat messages from backend using chat.id
 
@@ -229,19 +261,27 @@ const ChatScreen = ({route, navigation}) => {
                     }}
                 >
                     <View className="flex flex-col items-center mb-3">
-                        {
-                            chatMessages.map((message, index) => (
+                        {chatMessages.map((message, index) => (
+                            <View
+                                key={message.messageID}
+                                className={`flex flex-col max-w-3/4 ${message.senderID === currentUserID ? 'self-end' : 'self-start'} ${index > 0 && chatMessages[index - 1].senderID === message.senderID ? 'mt-0.5' : 'mt-3'}`}
+                            >
                                 <View
-                                    key={message.messageID}
-                                    className={`py-2 px-3 rounded-2xl max-w-3/4 ${message.senderID === currentUserID ? 'bg-green-300 self-end' : 'bg-gray-200 self-start'} ${index > 0 && chatMessages[index - 1].senderID === message.senderID ? 'mt-0.5' : 'mt-3'}`}
+                                    className={`flex py-2 px-3 rounded-2xl max-w-fit ${message.senderID === currentUserID ? 'bg-green-300' : 'bg-gray-200'}`}
                                 >
                                     <Text
                                         className={`text-primary text-md font-normal ${message.senderID === currentUserID ? 'text-white' : 'text-black'}`}
-                                    >{message.message}</Text>
+                                    >
+                                        {message.message}
+                                    </Text>
                                 </View>
-                            ))
-                        }
+                                {/*<Text className={`text-gray-500 text-xs mt-0.5 ${message.senderID === currentUserID ? 'self-end' : 'self-start'}`}>*/}
+                                {/*    {(message.timeStamp)}*/}
+                                {/*</Text>*/}
+                            </View>
+                        ))}
                     </View>
+
                 </ScrollView>
                 <SafeAreaView className="flex-row justify-between items-center content-center bg-gray-100">
                     <View className="flex-row justify-between flex-grow mx-6 my-2 bg-white border border-gray-300 rounded-3xl max-h-40">
