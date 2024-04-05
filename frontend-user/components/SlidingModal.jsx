@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {Animated, Dimensions, Modal, TouchableOpacity} from "react-native";
-import TextButton from "./TextButton";
 
 const SlidingModal = ({ children, modalVisible, setModalVisible, height }) => {
     const [backgroundAnimation] = useState(new Animated.Value(0));
