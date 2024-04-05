@@ -1,8 +1,25 @@
 import {SafeAreaView, ScrollView, Text, TouchableOpacity, View} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import IconButton from "../components/IconButton";
+import axios from "axios";
 
 const ContactScreen = ({navigation}) => {
+
+    // TODO: Query contact data from backend (contact list should be sorted by name)
+    const SERVER_URL = process.env.SERVER_URL
+    const getContactData = async () => {
+        try {
+            const response = await axios.get(`${SERVER_URL}/message_server/contacts`, {
+                params: {
+                    userID: '12345', // User ID for which chats are to be fetched
+                }
+            });
+            console.log(response.data);
+            return response.data; // Returning data for further processing if needed
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
 
     const contactData = [
         {id: 1, name: "John Doe"},
@@ -22,13 +39,7 @@ const ContactScreen = ({navigation}) => {
         {id: 15, name: "Mia"},
     ]
 
-    // function to sort contactData by name in ascending order (this should be handled by backend later)
-    const sortContacts = () => {
-        contactData.sort((a, b) => a.name.localeCompare(b.name))
-    }
-    sortContacts()
-
-    // TODO: Query contact data from backend (contact list should be sorted by name)
+    contactData.sort((a, b) => a.name.localeCompare(b.name))
 
     return (
         <View className="flex-1 min-h-screen bg-accent justify-start">
