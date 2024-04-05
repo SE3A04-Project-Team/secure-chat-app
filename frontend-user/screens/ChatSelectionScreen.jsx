@@ -1,7 +1,7 @@
 import {SafeAreaView, ScrollView, Text, TouchableOpacity, View} from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconButton from "../components/IconButton";
-import formatDate from "../utils/dateUtils";
+import {formatDate} from "../utils/dateUtils";
 import InitialIcon from "../components/InitialIcon";
 import {useState} from "react";
 import SlidingModal from "../components/SlidingModal";
