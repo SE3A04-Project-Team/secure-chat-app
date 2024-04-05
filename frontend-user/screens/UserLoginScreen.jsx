@@ -10,14 +10,20 @@ import {
     View
 } from 'react-native';
 import TextButton from '../components/TextButton';
+import axios from "axios";
 
 const UserLoginScreen = ({navigation}) => {
 
+    // Server URL
+    const SERVER_URL = process.env.SERVER_URL;
+
+    // Login credentials
     const [formData, setFormData] = useState({
         email: '',
         password: '',
     });
 
+    // Handle login input field change
     const handleInputChange = (name, value) => {
         setFormData({
             ...formData,
@@ -25,9 +31,24 @@ const UserLoginScreen = ({navigation}) => {
         });
     };
 
+    // Handle login button press
     const handleLogin = () => {
+        // TODO: Add login logic here
         // Here you can perform login logic using formData
         // For example, you can send formData to your backend for authentication
+        const auth = async () => {
+            try {
+                const response = await axios.post(`${SERVER_URL}/message_server/auth`, {
+                    email: formData.email,
+                    password: formData.password,
+                });
+                console.log(response.data);
+                return response.data; // Returning data for further processing if needed
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
         // After successful login, you can navigate to the next screen
         navigation.navigate("ChatSelectionScreen");
     };

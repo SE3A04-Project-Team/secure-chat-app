@@ -5,15 +5,16 @@ import {useEffect, useRef, useState} from "react";
 import TextButton from "../components/TextButton";
 import IconButton from "../components/IconButton";
 import InitialIcon from "../components/InitialIcon";
-import formatDate from "../utils/dateUtils";
 import axios from "axios";
 
 const ChatScreen = ({route, navigation}) => {
     // Specific chat id and name passed as route params
     const {chat} = route.params;
 
-    // TODO: Query chat messages from backend using chat.id
+    // Server URL
     const SERVER_URL = process.env.SERVER_URL;
+
+    // TODO: Query chat messages from backend using chat.id
     const getRoomData = async () => {
         try {
             const response = await axios.get(`${SERVER_URL}/message_server/room`, {
