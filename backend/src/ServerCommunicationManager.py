@@ -20,7 +20,7 @@ from headers.EncryptionFunction import EncryptionFunction
 from headers.Serializer import Serializer
 from headers.CommunicatingAgent import CommunicatingAgent
 
-from src.TCPServerCommunicationProtocol import TCPServerCommunicationProtocol
+from backend.src.FlaskRequestBroker import HTTPServerCommunicationProtocol
 from src.NoneEncryptor import NoneEncryptor
 
 
@@ -45,7 +45,7 @@ class ServerCommunicationManager(CommunicationManager):
         """
         self.agent = agent
 
-        self.protocol = TCPServerCommunicationProtocol()
+        self.protocol = HTTPServerCommunicationProtocol()
         self.encryptor = NoneEncryptor()
         
 
