@@ -5,7 +5,6 @@ import ChatSelectionScreen from "./screens/ChatSelectionScreen";
 import ChatScreen from "./screens/ChatScreen";
 import ContactScreen from "./screens/ContactScreen";
 import ProfileScreen from "./screens/ProfileScreen";
-import GenerateReportScreen from "./screens/GenerateReportScreen";
 import io from 'socket.io-client';
 import {useEffect} from "react";
 
@@ -38,7 +37,6 @@ export default function App() {
                 <Stack.Screen name="ChatScreen" component={ChatScreen}/>
                 <Stack.Screen name="ContactScreen" component={ContactScreen}/>
                 <Stack.Screen name="ProfileScreen" component={ProfileScreen}/>
-                <Stack.Screen name="GenerateReportScreen" component={GenerateReportScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
