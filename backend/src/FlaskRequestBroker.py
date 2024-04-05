@@ -15,9 +15,9 @@ Develop functions
 """
 from headers.RequestBroker import RequestBroker
 
-
-from flask import Flask
+from flask import Flask, Response, request
 from flask_socketio import SocketIO, emit
+import json
 
 
 class FlaskRequestBroker(RequestBroker):
@@ -32,13 +32,13 @@ class FlaskRequestBroker(RequestBroker):
         self.socketio = SocketIO(self.app)
 
 
-    def add_endpoint(self, endpoint: str, name: str, handler: callable):
+    def add_endpoint(self, endpoint: str, name: str, handler: callable, allowed_methods: list[str]):
         """
         Add API endpoint for HTTP requests to the server
 
         Args:  
         """
-        self.app.add_url_rule(endpoint, name, handler)
+        self.app.add_url_rule(endpoint, name, EndpointAction(handler), methods=allowed_methods)
         print(f"registered {endpoint}")
 
 
@@ -58,17 +58,19 @@ class FlaskRequestBroker(RequestBroker):
         """
         self.socketio.run(self.app)
 
-'''
 
+class EndpointAction(object):
 
-    def index(self):
-        return "index_test"
-    
-    def message_server(self):
-        return "Message"
+    def __init__(self, action):
+        self.action = action
+        self.response = Response(status=200, headers={})
 
-    def handle_message(self, message):
-        # self.manager.recvData(message)
-        emit('message', message)
+    def __call__(self, *args):
+        # Unpack args if needed, and pass them individually
+        # Access JSON data from Flask request object
+        json_data = request.json
+        print("Received JSON data:", json_data)
+        resp = self.action(json_data)
 
-'''
+        self.response.set_data(json.dumps(json_data))
+        return self.response

@@ -40,7 +40,7 @@ class CommunicationManager(ABC):
         """
 
     @abstractmethod
-    def registerActions(self, endpoint_names: list[str], endpoint_handlers: list[Callable], event_names: list[str], event_handlers: list[Callable]):
+    def registerActions(self, endpoint_names: list[str], endpoint_handlers: list[Callable], endpoint_methods:list[str], event_names: list[str], event_handlers: list[Callable]):
         """
         registers actions with the broker so that requests can be forwarded correctly.
 

@@ -21,7 +21,7 @@ class RequestBroker(ABC):
         """
 
     @abstractmethod
-    def add_endpoint(self, endpoint: str, name: str, handler: callable):
+    def add_endpoint(self, endpoint: str, name: str, handler: callable, allowed_methods: list[str]):
         """
         Add API endpoint for HTTP requests to the server
         """

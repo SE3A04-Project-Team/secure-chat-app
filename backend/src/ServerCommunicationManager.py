@@ -69,15 +69,15 @@ class ServerCommunicationManager(CommunicationManager):
         return encrypted_response
 
 
-    def registerActions(self, endpoint_names: list[str], endpoint_handlers: list[Callable], event_names: list[str], event_handlers: list[Callable]):
+    def registerActions(self, endpoint_names: list[str], endpoint_handlers: list[Callable], endpoint_methods:list[str], event_names: list[str], event_handlers: list[Callable]):
         """
         registers actions with the broker so that requests can be forwarded correctly.
 
         """
-        self.broker.add_endpoint(f'/{self.serverName}/auth', 'authentication', self.authenticateUser)
+        self.broker.add_endpoint(f'/{self.serverName}/auth', 'authentication', self.authenticateUser, ["GET", "POST"])
 
         for i, endpoint in enumerate(endpoint_names):
-            self.broker.add_endpoint(f'/{self.serverName}/{endpoint}', endpoint, endpoint_handlers[i])
+            self.broker.add_endpoint(f'/{self.serverName}/{endpoint}', endpoint, endpoint_handlers[i], endpoint_methods[i])
             
         
         for i, event in enumerate(event_names):
@@ -103,6 +103,7 @@ class ServerCommunicationManager(CommunicationManager):
         """
         authenticates user for communication with the server
         """
+        print(message)
       
 
 

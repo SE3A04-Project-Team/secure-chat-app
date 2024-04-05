@@ -43,13 +43,16 @@ class MessageDeliveryServer(CommunicatingAgent):
         self.endpoint_functions = [
             self.create_room
         ]
+        self.endpoint_methods = [
+            ["POST"]
+        ]
         self.registerActions()
 
     def registerActions(self):
         """
         registers actions with the communication manager so that requests can be forwarded correctly.
         """
-        self.communicationManager.registerActions(self.endpoint_names, self.endpoint_functions, self.event_names, self.event_functions)
+        self.communicationManager.registerActions(self.endpoint_names, self.endpoint_functions, self.endpoint_methods, self.event_names, self.event_functions)
 
 
     def handle_message(self, message: json):
