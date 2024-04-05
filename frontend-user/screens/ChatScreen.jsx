@@ -1,14 +1,4 @@
-import {
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableWithoutFeedback,
-    View
-} from "react-native";
+import {KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Text, TextInput, View} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import SlidingModal from "../components/SlidingModal";
 import {useEffect, useRef, useState} from "react";

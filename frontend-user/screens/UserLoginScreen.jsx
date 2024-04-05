@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
 import {
+    Keyboard,
+    KeyboardAvoidingView,
+    Platform,
     SafeAreaView,
     Text,
     TextInput,
-    View,
-    KeyboardAvoidingView,
-    Platform,
-    TouchableWithoutFeedback, Keyboard
+    TouchableWithoutFeedback,
+    View
 } from 'react-native';
 import TextButton from '../components/TextButton';
 
