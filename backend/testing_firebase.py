@@ -191,6 +191,7 @@ def send_message():
     return jsonify({"message": "Message sent successfully"})
 
 # Route to create a new room
+# body format: {"userIds": ["user_id_1", "user_id_2", ...]}
 @app.route('/create_room', methods=['POST'])
 def create_room():
     # Get data from the request body
@@ -228,6 +229,38 @@ def create_room():
         user_rooms_ref.add({'room': room_ref})
 
     return jsonify({"message": "Room created successfully"})
+
+# Route to create a new user
+# body format: {"name": "user_name", "password": "user_password", "email": "user_email"}
+@app.route('/create_user', methods=['POST'])
+def create_user():
+    # Get data from the request body
+    data = request.json
+    name = data.get('name')
+    password = data.get('password')
+    email = data.get('email')
+    
+    # Validate request data
+    if not name or not password or not email:
+        return jsonify({"error": "Missing required data"}), 400
+
+    # Check if the user with the provided email already exists
+    users_ref = firestore.client().collection('users')
+    query = users_ref.where('email', '==', email).limit(1)
+    existing_users = query.stream()
+    if any(existing_users):
+        return jsonify({"error": "User with this email already exists"}), 409
+
+    # Create the user document
+    user_data = {
+        'name': name,
+        'password': password,
+        'email': email
+    }
+    user_ref = users_ref.document()
+    user_ref.set(user_data)
+
+    return jsonify({"message": "User created successfully"})
 
 if __name__ == '__main__':
     app.run(debug=True)
