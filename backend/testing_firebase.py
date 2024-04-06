@@ -262,5 +262,52 @@ def create_user():
 
     return jsonify({"message": "User created successfully"})
 
+# Route to add a contact between two users
+# body format: {"userId1": "user_id_1", "userId2": "user_id_2"}
+@app.route('/add_contact', methods=['POST'])
+def add_contact():
+    # Get data from the request body
+    data = request.json
+    user_id1 = data.get('userId1')
+    user_id2 = data.get('userId2')
+    
+    # Validate request data
+    if not user_id1 or not user_id2:
+        return jsonify({"error": "Missing required data"}), 400
+    
+    if user_id1 == user_id2:
+        return jsonify({"error": "Both user IDs are the same"}), 400
+
+    # Check if the contact already exists for user_id1
+    user1_contacts_ref = firestore.client().collection('users').document(user_id1).collection('contacts')
+    contact_query = user1_contacts_ref.where('userId', '==', user_id2).limit(1)
+    existing_contacts = contact_query.stream()
+    if any(existing_contacts):
+        return jsonify({"message": "Contact already exists"}), 200
+
+    # Add contact for user_id1
+    user1_contact_data = {
+        'userId': user_id2,
+        'userRef': firestore.client().collection('users').document(user_id2)
+    }
+    user1_contacts_ref.add(user1_contact_data)
+
+    # Check if the contact already exists for user_id2
+    user2_contacts_ref = firestore.client().collection('users').document(user_id2).collection('contacts')
+    contact_query = user2_contacts_ref.where('userId', '==', user_id1).limit(1)
+    existing_contacts = contact_query.stream()
+    if any(existing_contacts):
+        return jsonify({"message": "Contact already exists"}), 200
+
+    # Add contact for user_id2
+    user2_contact_data = {
+        'userId': user_id1,
+        'userRef': firestore.client().collection('users').document(user_id1)
+    }
+    user2_contacts_ref.add(user2_contact_data)
+
+    return jsonify({"message": "Contact added successfully"}), 201
+
+
 if __name__ == '__main__':
     app.run(debug=True)
