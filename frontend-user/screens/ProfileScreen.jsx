@@ -5,14 +5,14 @@ import IconButton from "../components/IconButton";
 import axios from "axios";
 
 const ProfileScreen = ({navigation}) => {
-
+    const currentUserId = '12345'; // User ID of the current user
     //TODO: Query current user profile data from backend
     const SERVER_URL = process.env.SERVER_URL
     const getProfileData = async () => {
         try {
-            const response = await axios.get(`${SERVER_URL}/message_server/profile`, {
+            const response = await axios.get(`${SERVER_URL}/data/profile`, {
                 params: {
-                    userID: '12345', // User ID for which chats are to be fetched
+                    userID: currentUserId
                 }
             });
             console.log(response.data);

@@ -13,7 +13,7 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-    const serverUrl = process.env.EXPO_PUBLIC_SERVER_URL;
+    // const serverUrl = process.env.EXPO_PUBLIC_SERVER_URL;
 
     // Sample code to connect to the socket server
     // useEffect(() => {

@@ -4,18 +4,18 @@ import IconButton from "../components/IconButton";
 import axios from "axios";
 
 const ContactScreen = ({navigation}) => {
-
+    const currentUserId = '12345'; // User ID of the current user
     // TODO: Query contact data from backend (contact list should be sorted by name)
     const SERVER_URL = process.env.SERVER_URL
     const getContactData = async () => {
         try {
-            const response = await axios.get(`${SERVER_URL}/message_server/contacts`, {
+            const response = await axios.get(`${SERVER_URL}/data/contacts`, {
                 params: {
-                    userID: '12345', // User ID for which chats are to be fetched
+                    userID: currentUserId
                 }
             });
             console.log(response.data);
-            return response.data; // Returning data for further processing if needed
+            return response.data;
         } catch (error) {
             console.error('Error:', error);
         }
