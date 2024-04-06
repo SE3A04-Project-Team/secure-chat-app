@@ -10,55 +10,39 @@ TODO:
 
 """
 from headers.EncryptionKey import EncryptionKey
-# from headers.CommunicatingAgent import CommunicatingAgent
-
+from headers.EncryptionFunction import EncryptionFunction
+from headers.RequestBroker import RequestBroker
+from headers.Serializer import Serializer
+from headers.AuthenticationManager import AuthenticationManager
 
 from abc import ABC, abstractmethod
+from typing import Callable
+import json
+
 
 class CommunicationManager(ABC):
-        
-
-    @abstractmethod
-    def sendData(self, address: str, data: object):
-        """
-        Send data to indicated address. For security, data should be encrypted before sending
-
-        Args:
-            address: network address of recipient In IP:port format.
-            data: data to send to recipient
-            key: encryption key used to encrypt data
-
-        """
     
     @abstractmethod
-    def registerAgent(self, clientID: str):
+    def __init__(self, 
+                 broker: RequestBroker, 
+                 encryptionFunction: EncryptionFunction,
+                 serializer: Serializer,
+                 authenticationManager: AuthenticationManager):
         """
-        Add agent to list of currently connected agents
+        initialize manager
 
-        Args:
-            address: network address of communicating agent. In IP:port format. 
-        """
-        
-    @abstractmethod
-    def unregisterAgent(self, clientID: str):
-        """
-        remove agent from list of currently connected agents
-
-        Args:
-            address: network address of communicating agent. In IP:port format. 
         """
 
     @abstractmethod
-    def recvData(self, address: str, data:bytes):
+    def processData(self, data: bytes, handler: Callable) -> bytes:
         """
-        Recv data from indicated address
+        prepares incoming data before passing to server for processing
+        """
 
-        Args:
-            address: network address of sending agent In IP:port format.
-            size: size of data to accept in bytes
-
-        Return:
-            returns received object
+    @abstractmethod
+    def registerActions(self, endpoint_names: list[str], endpoint_handlers: list[Callable], endpoint_methods:list[str], event_names: list[str], event_handlers: list[Callable]):
+        """
+        registers actions with the broker so that requests can be forwarded correctly.
 
         """
 
@@ -70,4 +54,15 @@ class CommunicationManager(ABC):
         Args:
             ServiceID: ID of service associated with encryptionKey
         """
-        
+
+    @abstractmethod
+    def dump_keys(self):
+        """
+        Remove all session keys on event of refresh
+        """
+
+    @abstractmethod
+    def authenticateUser(self, message: json) -> json:
+        """
+        authenticates user for communication with the server
+        """

@@ -1,20 +1,24 @@
 """
-Responsible for converting objects to bytes and back again.
+Weakest Serializer for testing and dev purposes
 
 @Author: Kyle McMaster
 @Date: 2024-04-02
 
 ATTRIBUTES:
 
+TODO:
+Complete Doc-string
+Develop functions
+
 """
+from headers.Serializer import Serializer
 
-from abc import ABC, abstractmethod
+import json
 
-class Serializer(ABC):
+class JSONSerializer(Serializer):
 
 
     @staticmethod
-    @abstractmethod
     def serialize(data: object) -> bytes:
         """
         Convert object to bytes
@@ -26,9 +30,12 @@ class Serializer(ABC):
             returns bytes representing object
 
         """
+        data = json.dumps(data)
+        data = bytes(data, 'utf-8')
+        return  data
+        
 
-    @staticmethod 
-    @abstractmethod
+    @staticmethod
     def deserialize(data: bytes) -> object:
         """
         Convert bytes to object
@@ -40,3 +47,5 @@ class Serializer(ABC):
             returns object obtained from bytes
 
         """
+        data = str(data, 'utf-8')
+        return json.loads(data)

@@ -17,7 +17,7 @@ from headers.EncryptionKey import EncryptionKey
 
 class NoneEncryptor(EncryptionFunction):
 
-
+    @staticmethod
     def encrypt(data: bytes, key: EncryptionKey) -> bytes:
         """
         encrypt bytes
@@ -32,7 +32,7 @@ class NoneEncryptor(EncryptionFunction):
         """
         return data
 
-
+    @staticmethod
     def decrypt(data: bytes, key: EncryptionKey) -> bytes:
         """
         decrypt bytes
