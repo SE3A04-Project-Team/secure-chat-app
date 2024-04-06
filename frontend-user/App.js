@@ -10,10 +10,10 @@ import React, {useEffect} from "react";
 import io from "socket.io-client";
 
 const Stack = createNativeStackNavigator();
-const SERVER_URL = '127.0.0.1:5000'; // Replace 'server-url' with the actual server URL
 
 export default function App() {
 
+    const serverUrl = process.env.EXPO_PUBLIC_SERVER_URL;
 
     // Sample code to connect to the socket server
     // useEffect(() => {
