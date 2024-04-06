@@ -6,34 +6,29 @@ import ChatScreen from "./screens/ChatScreen";
 import ContactScreen from "./screens/ContactScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import axios from "axios";
-import {decryptAES, encryptAES} from "./utils/encryptionUtils";
+import React, {useEffect} from "react";
+import io from "socket.io-client";
 
 const Stack = createNativeStackNavigator();
-const SERVER_URL = process.env.SERVER_URL
+const SERVER_URL = '127.0.0.1:5000'; // Replace 'server-url' with the actual server URL
 
 export default function App() {
 
-    const testServer = async () => {
-        try {
-            const response = await axios.post(`${SERVER_URL}/message_server/auth`, {
-                key1: 'value1',
-                key2: 'value2',
-            });
-            console.log(response.data);
-            return response.data; // Returning data for further processing if needed
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
 
-    testServer();
+    // Sample code to connect to the socket server
+    // useEffect(() => {
 
-    const testMessage = "Hello, World!"
-    const testKey = "12345678901234567890123456789012"
-    const encryptedMessage = encryptAES(testMessage, testKey);
-    console.log(`Encrypted message: ${encryptedMessage}`);
-    const decryptedMessage = decryptAES(encryptedMessage, testKey);
-    console.log(`Decrypted message: ${decryptedMessage}`);
+    //     // Connect to the socket server
+    //     const socket = io(SERVER_URL);
+
+    //     // Emit the 'join_room' event with message 'Hello, World!'
+    //     socket.emit('join_room', { roomId: 'your-room-id', message: 'Hello, World!' });
+
+    //     // Cleanup the socket connection when component unmounts
+    //     return () => {
+    //         socket.disconnect();
+    //     };
+    // }, []);
 
     return (
         <NavigationContainer>
