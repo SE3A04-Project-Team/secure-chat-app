@@ -10,12 +10,12 @@ import axios from "axios";
 const ChatSelectionScreen = ({ navigation }) => {
 
     // TODO: Query chat data from backend server
-    const SERVER_URL = process.env.SERVER_URL;
+    const SERVER_URL = 'http://127.0.0.1:5000'; // Replace 'server-url' with the actual server URL
     const getRoomsData = async () => {
         try {
-            const response = await axios.get(`${SERVER_URL}/message_server/rooms`, {
+            const response = await axios.get(`${SERVER_URL}/data/rooms`, {
                 params: {
-                    userID: '12345', // User ID for which chats are to be fetched
+                    userId: '1', // User ID for which chats are to be fetched
                 }
                 });
             console.log(response.data);
