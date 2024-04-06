@@ -6,6 +6,7 @@ import TextButton from "../components/TextButton";
 import IconButton from "../components/IconButton";
 import InitialIcon from "../components/InitialIcon";
 import axios from "axios";
+import {encryptAES} from "../utils/encryptionUtils";
 
 const ChatScreen = ({route, navigation}) => {
     // Server URL
@@ -14,6 +15,8 @@ const ChatScreen = ({route, navigation}) => {
     const {chat} = route.params;
     // Sample current user ID
     const currentUserID = 1;
+    // Sample key for encryption
+    const key = '12345678901234567890123456789012';
 
     // Fetch chat messages data from the server
     useEffect(() => {
@@ -239,6 +242,10 @@ const ChatScreen = ({route, navigation}) => {
 
     // Function to handle sending a message
     const handleSendMessage = () => {
+        // Encrypt the message using AES encryption
+        setMessage(encryptAES(message, key));
+
+        // Send the message to the server
         const sendMessage = async () => {
             try {
                 const response = await axios.post(`${SERVER_URL}/sendMessage`, {
@@ -252,6 +259,7 @@ const ChatScreen = ({route, navigation}) => {
                 console.error('Error:', error);
             }
         }
+        // Call the sendMessage function
         sendMessage();
         // Clear the message input after sending the message
         setMessage('');
