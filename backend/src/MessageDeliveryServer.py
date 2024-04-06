@@ -18,6 +18,7 @@ from headers.CommunicationManager import CommunicationManager
 from src.ServerCommunicationManager import ServerCommunicationManager
 
 import json
+from flask_socketio import SocketIO, join_room, emit
 
 
 class MessageDeliveryServer(CommunicatingAgent):
@@ -69,21 +70,33 @@ class MessageDeliveryServer(CommunicatingAgent):
         """
 
 
-    def create_room(self, roomID: str):
+    def create_room(self, data: str) -> str:
         """
         creates new room for messaging
+        Args: roomID
         """
+        print(f"RECEIVED ARGS BY SERVER: {data}")
+        room = "14"
+        return f"created room: {room}"
 
     def remove_room(self, roomID: str):
         """
+        SOCKET EVENT
         deletes room only if there are no more users registered to that room
         """
 
-    def join_room(self, *args):
+    def join_room(self, data) -> str:
         """
+        SOCKET EVENT
         adds a client to a room
         """
-        print(args)
+        data = json.dumps(data)
+        print(f"RECEIVED ARGS BY SERVER: {data}")
+        
+        room = "14"
+        join_room("14")
+        emit("send_message", f"Welcome")
+        return f"joined room: {room}"
         # add create room function
         return f"joined room"
         if roomID not in self.rooms.keys:

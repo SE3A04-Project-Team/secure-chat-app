@@ -16,7 +16,7 @@ Develop functions
 from headers.RequestBroker import RequestBroker
 
 from flask import Flask, Response, request
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO
 import json
 
 
@@ -30,11 +30,8 @@ class FlaskRequestBroker(RequestBroker):
         self.app = Flask(__name__)
         self.app.config['SECRET_KEY'] = 'secret!'
         self.socketio = SocketIO(self.app)
+        
 
-
-    
-    def connect(self) -> str:
-        return "connected"
 
     def add_endpoint(self, endpoint: str, name: str, handler: callable, allowed_methods: list[str]):
         """
@@ -52,7 +49,7 @@ class FlaskRequestBroker(RequestBroker):
 
         Args:
         """
-        self.socketio.on_event(event_name, handler)
+        self.socketio.on_event(event_name, EventAction(handler))
         print(f"registered {event_name}")
 
 
@@ -62,10 +59,23 @@ class FlaskRequestBroker(RequestBroker):
         """
         self.socketio.run(self.app, host=host, port=port)
 
+    def on_join(self, data):
+        user = data["user"]
+        room = data["room"]
+        print(f"client {user} wants to join: {room}")
+        SocketIO.emit("room_message", f"Welcome to {room}, {user}", room=room)
     
 
+class EventAction(object):
+    def __init__(self, action):
 
-
+        self.action = action
+        
+    def __call__(self, *args):
+        # JANKY - should fix
+        print(args)
+        self.action(args)
+        
 
 
 class EndpointAction(object):
@@ -75,13 +85,13 @@ class EndpointAction(object):
         self.response = Response(status=200, headers={})
 
     def __call__(self, *args):
-        print("Received args:", args)
+        print("Received args by endpoint:", args)
         # Unpack args if needed, and pass them individually
         # Access JSON data from Flask request object
         json_data = request.json
-        print("Received JSON data:", json_data)
+        print("Received JSON data by endpoint:", json_data)
         resp = self.action(json_data)
-        print(resp)
+        print(f"Response recv by broker:{resp}") #consider jsonifying
         self.response.set_data(resp) # set to a string to return
         print(self.response)
         return self.response
