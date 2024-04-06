@@ -309,5 +309,43 @@ def add_contact():
     return jsonify({"message": "Contact added successfully"}), 201
 
 
+
+# ********************************************************************************************************************
+# DELETE requests
+
+# Route to remove a contact between two users
+# format: {"userId1": "user_id_1", "userId2": "user_id_2"}
+@app.route('/remove_contact', methods=['DELETE'])
+def remove_contact():
+    # Get data from the request body
+    data = request.json
+    user_id1 = data.get('userId1')
+    user_id2 = data.get('userId2')
+    
+    # Validate request data
+    if not user_id1 or not user_id2:
+        return jsonify({"error": "Missing required data"}), 400
+    
+    if user_id1 == user_id2:
+        return jsonify({"error": "Both user IDs are the same"}), 400
+
+    # Remove contact for user_id1
+    user1_contacts_ref = firestore.client().collection('users').document(user_id1).collection('contacts')
+    contact_query = user1_contacts_ref.where('userId', '==', user_id2).limit(1)
+    existing_contacts = list(contact_query.stream())
+    if existing_contacts:
+        user1_contacts_ref.document(existing_contacts[0].id).delete()
+
+    # Remove contact for user_id2
+    user2_contacts_ref = firestore.client().collection('users').document(user_id2).collection('contacts')
+    contact_query = user2_contacts_ref.where('userId', '==', user_id1).limit(1)
+    existing_contacts = list(contact_query.stream())
+    if existing_contacts:
+        user2_contacts_ref.document(existing_contacts[0].id).delete()
+
+    return jsonify({"message": "Contact removed successfully"}), 200
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
