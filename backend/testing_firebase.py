@@ -10,6 +10,14 @@ cred = credentials.Certificate("./firebase.json")
 firebase_admin.initialize_app(cred)
 
 
+if __name__ == '__main__':
+    app.run(host='0.0.0.0')
+
+# ********************************************************************************************************************
+# Test endpoints
+@app.route('/helloworld', methods=['GET'])
+def hello_world():
+    return jsonify({"message": "Hello, World!"})
 
 # ********************************************************************************************************************
 # GET requests
@@ -362,8 +370,3 @@ def remove_contact():
         user2_contacts_ref.document(existing_contacts[0].id).delete()
 
     return jsonify({"message": "Contact removed successfully"}), 200
-
-
-
-if __name__ == '__main__':
-    app.run(debug=True)

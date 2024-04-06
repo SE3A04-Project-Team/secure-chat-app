@@ -3,27 +3,33 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import IconButton from "../components/IconButton";
 import {formatDate} from "../utils/dateUtils";
 import InitialIcon from "../components/InitialIcon";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import SlidingModal from "../components/SlidingModal";
 import axios from "axios";
 
 const ChatSelectionScreen = ({ navigation }) => {
 
-    // TODO: Query chat data from backend server
-    const SERVER_URL = 'http://127.0.0.1:5000'; // Replace 'server-url' with the actual server URL
-    const getRoomsData = async () => {
-        try {
-            const response = await axios.get(`${SERVER_URL}/user_rooms`, {
-                params: {
-                    userId: '1', // User ID for which chats are to be fetched
-                }
-                });
-            console.log(response.data);
-            return response.data; // Returning data for further processing if needed
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
+    const serverUrl = process.env.EXPO_PUBLIC_SERVER_URL;
+    const currentUserId = '1fPITEfiegat5F0xwXR9'; // User ID for which chats are to be fetched
+    useEffect(() => {
+        const getRoomsData = async () => {
+            try {
+                const response = await axios.get(`${serverUrl}/data/chat_selection`, {
+                    params: {
+                        userId: currentUserId, // User ID for which chats are to be fetched
+                    }
+                    });
+                console.log(response.data);
+                return response.data; // Returning data for further processing if needed
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        getRoomsData();
+
+    }, []);
+
 
     // Sample JSON data for chat selection
     const chatData = [

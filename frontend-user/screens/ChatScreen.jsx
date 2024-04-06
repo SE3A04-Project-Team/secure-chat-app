@@ -8,26 +8,30 @@ import InitialIcon from "../components/InitialIcon";
 import axios from "axios";
 
 const ChatScreen = ({route, navigation}) => {
-    // Specific chat id and name passed as route params
-    const {chat} = route.params;
-
     // Server URL
-    const SERVER_URL = process.env.SERVER_URL;
+    const serverUrl = process.env.EXPO_PUBLIC_SERVER_URL;
+    // Specific chat id and name passed as route params, used to fetch chat messages
+    const {chat} = route.params;
+    // Sample current user ID
+    const currentUserID = 1;
 
-    // TODO: Query chat messages from backend using chat.id
-    const getRoomData = async () => {
-        try {
-            const response = await axios.get(`${SERVER_URL}/message_server/room`, {
-                params: {
-                    roomID: '12345', // Room ID for which data to be fetched
-                }
-            });
-            console.log(response.data);
-            return response.data; // Returning data for further processing if needed
-        } catch (error) {
-            console.error('Error:', error);
+    // Fetch chat messages data from the server
+    useEffect(() => {
+        const getRoomData = async () => {
+            try {
+                const response = await axios.get(`${serverUrl}/data/chat_screen`, {
+                    params: {
+                        roomId: chat.roomId, // Room ID for which data to be fetched
+                    }
+                });
+                console.log(response.data);
+                return response.data; // Returning data for further processing if needed
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
-    }
+        getRoomData();
+    } , [])
 
     // Sample chat messages data
     const chatMessages = [
@@ -219,9 +223,6 @@ const ChatScreen = ({route, navigation}) => {
         },
     ];
 
-    // Sample current user ID
-    const currentUserID = 1; // TODO: Get the current user's ID from the authentication context
-
     // Modal visibility state
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -238,19 +239,20 @@ const ChatScreen = ({route, navigation}) => {
 
     // Function to handle sending a message
     const handleSendMessage = () => {
-        // TODO: Implement send message functionality
         const sendMessage = async () => {
             try {
-                const response = await axios.post(`${SERVER_URL}/message_server/sendMessage`, {
-                    roomID: '12345', // Room ID for which message to be sent
+                const response = await axios.post(`${SERVER_URL}/sendMessage`, {
+                    userId: currentUserID,
+                    roomId: chat.roomID,
                     message: message,
                 });
                 console.log(response.data);
-                return response.data; // Returning data for further processing if needed
+                return response.data;
             } catch (error) {
                 console.error('Error:', error);
             }
         }
+        sendMessage();
         // Clear the message input after sending the message
         setMessage('');
     }
