@@ -1,12 +1,18 @@
 from flask import Flask, jsonify, request
 import firebase_admin
 from firebase_admin import credentials, firestore
+from datetime import datetime
 
 app = Flask(__name__)
 
 # Initialize Firebase Admin SDK
 cred = credentials.Certificate("./firebase.json")
 firebase_admin.initialize_app(cred)
+
+
+
+# ********************************************************************************************************************
+# GET requests
 
 # Function to recursively fetch data from Firestore
 def get_data_with_subcollections(doc_ref):
@@ -153,6 +159,36 @@ def get_user_profile():
         return jsonify({"error": "User not found"}), 404
     
     return jsonify(user_data)
+
+# ********************************************************************************************************************
+# POST requests
+
+# Route to send a message to a room
+# body format: {"roomId": "room_id", "userId": "user_id", "messageContent": "message_content"}
+@app.route('/send_message', methods=['POST'])
+def send_message():
+    # Get data from the request body
+    data = request.json
+    room_id = data.get('roomId')
+    user_id = data.get('userId')
+    message_content = data.get('messageContent')
+    
+    # Validate request data
+    if not room_id or not user_id or not message_content:
+        return jsonify({"error": "Missing required data"}), 400
+
+    # Construct message data
+    message_data = {
+        'timestamp': datetime.now(),
+        'content': message_content,
+        'sender': firestore.client().collection('users').document(user_id)
+    }
+    
+    # Add message to the room's messages subcollection
+    room_ref = firestore.client().collection('rooms').document(room_id)
+    room_ref.collection('messages').add(message_data)
+
+    return jsonify({"message": "Message sent successfully"})
 
 if __name__ == '__main__':
     app.run(debug=True)
