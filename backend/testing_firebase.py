@@ -114,6 +114,35 @@ def get_chat_selection():
     
     return jsonify(chat_selection_data)
 
+# Route to fetch data for a chat screen
+@app.route('/data/chat_screen', methods=['GET'])
+def get_chat_screen():
+    room_id = request.args.get('roomId')  # Get room ID from request parameters
+    room_ref = firestore.client().collection('rooms').document(room_id)
+    room_data = room_ref.get().to_dict()
+    if room_data is None:
+        return jsonify({"error": "Room not found"}), 404
+    
+    # Fetch all messages for the room
+    messages_ref = room_ref.collection('messages').order_by('timestamp', direction=firestore.Query.ASCENDING).stream()
+    messages_data = []
+    for msg in messages_ref:
+        msg_data = msg.to_dict()
+        # Fetch data from the referenced sender document
+        sender_ref = msg_data['sender']
+        sender_data = sender_ref.get().to_dict()
+        msg_data['sender'] = sender_data
+        messages_data.append(msg_data)
+    
+    # Construct the response data
+    chat_screen_data = {
+        'room_id': room_id,
+        'room_name': room_data.get('name'),
+        'messages': messages_data
+    }
+    
+    return jsonify(chat_screen_data)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
