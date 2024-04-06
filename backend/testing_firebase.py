@@ -53,5 +53,67 @@ def get_user_rooms():
         rooms_data.append(room_doc)  # Append full room data
     return jsonify(rooms_data)
 
+# Route to fetch the most recent message from a room
+@app.route('/room_recent_message', methods=['GET'])
+def get_room_recent_message():
+    room_id = request.args.get('roomId')  # Get room ID from request parameters
+    room_ref = firestore.client().collection('rooms').document(room_id)
+    room_data = room_ref.get().to_dict()
+    if room_data is None:
+        return jsonify({"error": "Room not found"}), 404
+    
+    # Query the messages subcollection for the most recent message
+    messages_ref = room_ref.collection('messages').order_by('timestamp', direction=firestore.Query.DESCENDING).limit(1)
+    recent_messages = messages_ref.stream()
+    if not recent_messages:
+        return jsonify({"error": "No messages in the room"}), 404
+    
+    # Extract data from the most recent message document
+    recent_message_data = None
+    for msg in recent_messages:
+        recent_message_data = msg.to_dict()
+        # Fetch data from the referenced sender document
+        sender_ref = recent_message_data['sender']
+        sender_data = sender_ref.get().to_dict()
+        recent_message_data['sender'] = sender_data
+    
+    return jsonify(recent_message_data)
+
+# Route to fetch data for chat selection
+@app.route('/data/chat_selection', methods=['GET'])
+def get_chat_selection():
+    user_id = request.args.get('userId')  # Get user ID from request parameters
+    user_ref = firestore.client().collection('users').document(user_id)
+    user_data = user_ref.get().to_dict()
+    if user_data is None:
+        return jsonify({"error": "User not found"}), 404
+    
+    rooms_ref = user_ref.collection('rooms').stream()
+    chat_selection_data = []
+    for room_ref in rooms_ref:
+        room_data = room_ref.to_dict()
+        room_doc = room_data['room']
+        
+        # Fetch the most recent message for the room
+        messages_ref = room_doc.collection('messages').order_by('timestamp', direction=firestore.Query.DESCENDING).limit(1)
+        recent_messages = messages_ref.stream()
+        
+        recent_message_data = None
+        for msg in recent_messages:
+            recent_message_data = msg.to_dict()
+        
+        # Append room data along with the most recent message content and timestamp
+        chat_selection_data.append({
+            'room_id': room_doc.id,
+            'room_name': room_doc.get().to_dict()['name'],
+            'recent_message': {
+                'content': recent_message_data['content'] if recent_message_data else None,
+                'timestamp': recent_message_data['timestamp'] if recent_message_data else None
+            }
+        })
+    
+    return jsonify(chat_selection_data)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
