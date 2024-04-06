@@ -13,7 +13,7 @@ const ChatSelectionScreen = ({ navigation }) => {
     const SERVER_URL = 'http://127.0.0.1:5000'; // Replace 'server-url' with the actual server URL
     const getRoomsData = async () => {
         try {
-            const response = await axios.get(`${SERVER_URL}/data/rooms`, {
+            const response = await axios.get(`${SERVER_URL}/user_rooms`, {
                 params: {
                     userId: '1', // User ID for which chats are to be fetched
                 }
