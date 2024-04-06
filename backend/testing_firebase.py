@@ -190,5 +190,44 @@ def send_message():
 
     return jsonify({"message": "Message sent successfully"})
 
+# Route to create a new room
+@app.route('/create_room', methods=['POST'])
+def create_room():
+    # Get data from the request body
+    data = request.json
+    user_ids = data.get('userIds')
+    
+    # Validate request data
+    if not user_ids:
+        return jsonify({"error": "Missing required data"}), 400
+
+    # Retrieve user names
+    user_names = []
+    for user_id in user_ids:
+        user_ref = firestore.client().collection('users').document(user_id)
+        user_data = user_ref.get().to_dict()
+        if user_data:
+            user_names.append(user_data.get('name', ''))
+    
+    # Construct the room name
+    room_name = ", ".join(user_names)  # Combining user names
+    
+    # Create the room document
+    room_ref = firestore.client().collection('rooms').document()
+    room_data = {'name': room_name}  # Room name as a combination of user names
+    room_ref.set(room_data)
+
+    # Add references to users in the room's 'users' subcollection
+    users_collection_ref = room_ref.collection('users')
+    for user_id in user_ids:
+        user_ref = firestore.client().collection('users').document(user_id)
+        users_collection_ref.add({'user': user_ref})
+
+        # Add the newly created room as a reference to the user's 'rooms' subcollection
+        user_rooms_ref = user_ref.collection('rooms')
+        user_rooms_ref.add({'room': room_ref})
+
+    return jsonify({"message": "Room created successfully"})
+
 if __name__ == '__main__':
     app.run(debug=True)
