@@ -143,6 +143,16 @@ def get_chat_screen():
     
     return jsonify(chat_screen_data)
 
+# Route to fetch user profile data
+@app.route('/data/profile', methods=['GET'])
+def get_user_profile():
+    user_id = request.args.get('userId')  # Get user ID from request parameters
+    user_ref = firestore.client().collection('users').document(user_id)
+    user_data = user_ref.get().to_dict()
+    if user_data is None:
+        return jsonify({"error": "User not found"}), 404
+    
+    return jsonify(user_data)
 
 if __name__ == '__main__':
     app.run(debug=True)
