@@ -313,6 +313,24 @@ def add_contact():
 # ********************************************************************************************************************
 # DELETE requests
 
+# Route to delete a user
+# format: /delete_user?userId=user_id
+@app.route('/delete_user', methods=['DELETE'])
+def delete_user():
+    # Get user ID from request parameters
+    user_id = request.args.get('userId')
+    
+    # Validate request data
+    if not user_id:
+        return jsonify({"error": "Missing user ID"}), 400
+
+    # Delete the user document
+    user_ref = firestore.client().collection('users').document(user_id)
+    user_ref.delete()
+
+    return jsonify({"message": "User deleted successfully"}), 200
+
+
 # Route to remove a contact between two users
 # format: {"userId1": "user_id_1", "userId2": "user_id_2"}
 @app.route('/remove_contact', methods=['DELETE'])
