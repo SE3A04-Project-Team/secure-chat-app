@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Animated, Dimensions, Modal, TouchableOpacity} from "react-native";
 import TextButton from "./TextButton";
 
-const SlidingModal = ({ children, modalVisible, setModalVisible, height }) => {
+const SlidingModal = ({ children, modalVisible, setModalVisible, height, dismissHandler }) => {
     const [backgroundAnimation] = useState(new Animated.Value(0));
     const [contentAnimation] = useState(new Animated.Value(0));
 
@@ -65,6 +65,9 @@ const SlidingModal = ({ children, modalVisible, setModalVisible, height }) => {
     });
 
     const handleBackgroundPress = () => {
+
+        if (dismissHandler){dismissHandler()}
+
         // Trigger closing animation
         Animated.parallel([
             Animated.timing(backgroundAnimation, {

@@ -1,11 +1,13 @@
-import {SafeAreaView, ScrollView, Text, TouchableOpacity, View, FlatList} from "react-native";
+import {SafeAreaView, ScrollView, Text, TouchableOpacity, View, FlatList, Button} from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconButton from "../components/IconButton";
 import formatDate from "../utils/dateUtils";
 import InitialIcon from "../components/InitialIcon";
-import {useState} from "react";
+import {useRef, useState} from "react";
 import SlidingModal from "../components/SlidingModal";
 import { text } from "@fortawesome/fontawesome-svg-core";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+import TextButton from "../components/TextButton";
 
 const ChatSelectionScreen = ({ navigation }) => {
 
@@ -116,6 +118,16 @@ const ChatSelectionScreen = ({ navigation }) => {
 
     const [modalVisible, setModalVisible] = useState(false);
 
+    const [selectedUser, setSelectedUser] = useState(new Set());
+    
+    const handleChatCreation = () => {
+        console.log(selectedUser);
+    }
+
+    const handleUserSelection = (isChecked, item) => {
+        selectedUser.has(item.id) ? selectedUser.delete(item.id) : selectedUser.add(item.id)
+    }
+
     return (
         <View className="flex-1 min-h-screen bg-accent justify-start">
             <SafeAreaView className="">
@@ -125,7 +137,7 @@ const ChatSelectionScreen = ({ navigation }) => {
                     <IconButton icon={<Icon name="pencil-square-o" size={32} color="white"/>} onPress={() => setModalVisible(true)}/>
                 </View>
             </SafeAreaView>
-            <View className="flex flex-col flex-grow bg-primary rounded-t-3xl">
+            <View className="flex flex-col flex-grow bg-primary rounded-t-3xl" >
                 <ScrollView className="p-2 flex-1">
                     <View className="flex flex-col gap-y-2 justify-center items-center pb-12">
                         {
@@ -150,19 +162,23 @@ const ChatSelectionScreen = ({ navigation }) => {
                     </View>
                 </ScrollView>
             </View>
-            <SlidingModal modalVisible={modalVisible} setModalVisible={setModalVisible} height={0.85}>
+            <SlidingModal modalVisible={modalVisible} setModalVisible={setModalVisible} height={0.85} dismissHandler={() => setSelectedUser(new Set([]))}>
                 <View className="m-8">
                 {/* TODO: Add contents of create new chat modal, similar design to iMessage */}
-                <FlatList
+                <TouchableOpacity className="flex h-16 border justify-center items-center mb-8 rounded-full border-green-600" onPress={handleChatCreation}>
+                    <Text className = "font-bold text-2xl text-green-600">Create</Text>
+                </TouchableOpacity>
+                <FlatList className = "h-4/5"
                     keyExtractor = {(item) => item.id}
                     data = {chatData}
                     renderItem = {({item}) => (
-                        <TouchableOpacity>
-                            <View className = "flex-1 flex-row items-center p-4 border border-y-zinc-100 border-l-0 border-r-0"> 
+                        <View>
+                            <View className = "flex flex-row items-center p-4 border border-y-zinc-100 border-l-0 border-r-0"> 
                                 <InitialIcon name={item.name}/>
-                                <Text className = "text-md p-3">{item.name}</Text>
+                                <Text className = "grow text-md p-4">{item.name}</Text>
+                                <BouncyCheckbox onPress={(isChecked) =>         handleUserSelection(isChecked, item)}/>
                             </View>
-                        </TouchableOpacity>
+                        </View>
                     )}
                 />
                 </View>
