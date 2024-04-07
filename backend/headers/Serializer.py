@@ -10,8 +10,8 @@ ATTRIBUTES:
 
 from abc import ABC, abstractmethod
 
-class Serializer(ABC):
 
+class Serializer(ABC):
 
     @staticmethod
     @abstractmethod
@@ -27,7 +27,7 @@ class Serializer(ABC):
 
         """
 
-    @staticmethod 
+    @staticmethod
     @abstractmethod
     def deserialize(data: bytes) -> object:
         """
