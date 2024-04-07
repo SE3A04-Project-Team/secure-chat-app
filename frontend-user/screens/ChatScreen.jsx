@@ -14,20 +14,22 @@ const ChatScreen = ({route, navigation}) => {
     // Specific chat id and name passed as route params, used to fetch chat messages
     const {chat} = route.params;
     // Sample current user ID
-    const currentUserID = 1;
+    const currentUserID = '1fPITEfiegat5F0xwXR9';
     // Sample key for encryption
     const key = '12345678901234567890123456789012';
+
+
+    const [chatInfo, setChatInfo] = useState([]);
 
     // Fetch chat messages data from the server
     useEffect(() => {
         const getRoomData = async () => {
             try {
-                const response = await axios.get(`${serverUrl}/data/chat_screen`, {
-                    params: {
-                        roomId: chat.roomId, // Room ID for which data to be fetched
-                    }
+                const response = await axios.get(`${serverUrl}/message_server/message_history`, {
+                    roomID: chat.roomID,
                 });
                 console.log(response.data);
+                setChatInfo(response.data);
                 return response.data; // Returning data for further processing if needed
             } catch (error) {
                 console.error('Error:', error);
