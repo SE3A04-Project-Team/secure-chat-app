@@ -48,14 +48,17 @@ class MessageDeliveryServer(CommunicatingAgent):
             
         ]
         self.endpoint_names = [
+            "get_rooms",
             "create_room",
-            "get_rooms"
+            "message_history"
         ]
         self.endpoint_functions = [
-            self.create_room,
             self.get_rooms,
+            self.create_room,
+            self.get_message_history
         ]
         self.endpoint_methods = [
+            ["POST"],
             ["POST"],
             ["POST"]
         ]
@@ -110,6 +113,15 @@ class MessageDeliveryServer(CommunicatingAgent):
             )
 
 
+    def get_message_history(self, data: json) ->str:
+        try:
+            roomID = data['roomID']
+            print(roomID)
+        except KeyError:
+            return "Bad Request: args: (roomID)"
+        
+        msg_history = self.databaseManager.get_message_history(roomID)
+        return json.dumps(msg_history)
 
 
     def get_rooms(self, data: json) -> str:
@@ -134,11 +146,15 @@ class MessageDeliveryServer(CommunicatingAgent):
     def create_room(self, data: json) -> str:
         """
         creates new room for messaging
-        Args: roomID
+        Args: list of clientIDs
         """
-        print(f"RECEIVED ARGS BY SERVER: {data}")
-        room = "14"
-        return f"created room: {room}"
+        try:
+            data['clientIDs']
+        except KeyError:
+            return "Bad Request: args: (clientIDs)"
+        
+        return self.databaseManager.create_room(data)
+
 
     def remove_room(self, roomID: json):
         """
