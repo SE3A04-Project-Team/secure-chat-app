@@ -262,3 +262,36 @@ class FirebaseMessageDatabase(MessageDatabase):
     def get_contacts(self, user_id: str):
         # TODO: Implement this function
         pass
+
+    def get_chat_selection(self, user_id: str):
+        
+        user_ref = firestore.client().collection('users').document(user_id)
+        user_data = user_ref.get().to_dict()
+        if user_data is None:
+            return jsonify({"error": "User not found"}), 404
+        
+        rooms_ref = user_ref.collection('rooms').stream()
+        chat_selection_data = []
+        for room_ref in rooms_ref:
+            room_data = room_ref.to_dict()
+            room_doc = room_data['room']
+            
+            # Fetch the most recent message for the room
+            messages_ref = room_doc.collection('messages').order_by('timestamp', direction=firestore.Query.DESCENDING).limit(1)
+            recent_messages = messages_ref.stream()
+            
+            recent_message_data = None
+            for msg in recent_messages:
+                recent_message_data = msg.to_dict()
+            
+            # Append room data along with the most recent message content and timestamp
+            chat_selection_data.append({
+                'room_id': room_doc.id,
+                'room_name': room_doc.get().to_dict()['name'],
+                'recent_message': {
+                    'content': recent_message_data['content'] if recent_message_data else None,
+                    'timestamp': recent_message_data['timestamp'] if recent_message_data else None
+                }
+            })
+        
+        return chat_selection_data

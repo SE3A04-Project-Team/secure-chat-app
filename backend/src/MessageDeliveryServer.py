@@ -76,6 +76,9 @@ class MessageDeliveryServer(CommunicatingAgent):
 	        “Message”: str,
         }
         """
+        
+
+
 
     def get_rooms(self, data: json) -> str:
         try:
@@ -84,18 +87,14 @@ class MessageDeliveryServer(CommunicatingAgent):
         except KeyError:
             return "Bad Request"
         
-        rooms = self.databaseManager.get_rooms(clientID)
-        print(f"rooms: {rooms}")
-        last_message = []
-        if rooms:
-            for room in rooms:
-                self.databaseManager.get_message_history(room)
+        rooms = self.databaseManager.get_chat_selection(clientID)
+        # rooms_obj = json.loads(rooms)
+        print(f"result: {rooms}")
 
-        return json.dumps(
-            {"rooms": rooms,
-             "message": last_message
-             }
-        )
+        return_msg = {
+            "rooms": rooms
+        }
+        return json.dumps(return_msg)
 
 
     def create_room(self, data: json) -> str:

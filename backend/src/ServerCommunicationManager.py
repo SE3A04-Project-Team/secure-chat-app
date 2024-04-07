@@ -134,7 +134,7 @@ class ProxyMethod(object):
     def __call__(self, data: json):
         print("Received args by proxy:", data)
         # Unpack args if needed, and pass them individually
-        # Access JSON data from Flask request object
+
         resp = self.action(data)
         print(f"Response recv by proxy:{resp}") #consider jsonifying
         return resp
@@ -146,7 +146,7 @@ class ProxyEvent(object):
     def __call__(self, data: json):
         print("Received args by proxy:", data)
         # Unpack args if needed, and pass them individually
-        # Access JSON data from Flask request object
+
         resp = self.action(data)
         print(f"Response recv by proxy:{resp}") #consider jsonifying
         return resp
