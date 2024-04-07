@@ -102,7 +102,7 @@ class ServerCommunicationManager(CommunicationManager):
         Remove all session keys on event of refresh
         """
 
-    def authenticateUser(self, message: str) -> str:
+    def authenticateUser(self, message: json) -> str:
         """
         authenticates user for communication with the server
         """
@@ -131,10 +131,10 @@ class ProxyMethod(object):
     def __init__(self, action: Callable):
         self.action = action
 
-    def __call__(self, data):
+    def __call__(self, data: json):
         print("Received args by proxy:", data)
         # Unpack args if needed, and pass them individually
-        # Access JSON data from Flask request object
+
         resp = self.action(data)
         print(f"Response recv by proxy:{resp}") #consider jsonifying
         return resp
@@ -143,10 +143,10 @@ class ProxyEvent(object):
     def __init__(self, action: Callable):
         self.action = action
 
-    def __call__(self, data):
+    def __call__(self, data: json):
         print("Received args by proxy:", data)
         # Unpack args if needed, and pass them individually
-        # Access JSON data from Flask request object
+
         resp = self.action(data)
         print(f"Response recv by proxy:{resp}") #consider jsonifying
         return resp

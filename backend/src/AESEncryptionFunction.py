@@ -6,9 +6,9 @@ Responsible for encrypting and decrypting incoming bytes. Implements the Encrypt
 
 """
 
-from backend.headers.EncryptionKey import EncryptionKey
-from backend.headers.EncryptionFunction import EncryptionFunction
-from backend.src.PythonSerializer import PythonSerializer
+from headers.EncryptionKey import EncryptionKey
+from headers.EncryptionFunction import EncryptionFunction
+from src.PythonSerializer import PythonSerializer
 
 from Crypto.Cipher import AES
 

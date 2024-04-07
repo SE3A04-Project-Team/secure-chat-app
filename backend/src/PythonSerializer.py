@@ -8,7 +8,7 @@ ATTRIBUTES:
 
 """
 
-from backend.headers.Serializer import Serializer
+from headers.Serializer import Serializer
 import pickle
 
 

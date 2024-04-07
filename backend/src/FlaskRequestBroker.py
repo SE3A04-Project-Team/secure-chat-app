@@ -15,7 +15,7 @@ Develop functions
 """
 from headers.RequestBroker import RequestBroker
 
-from flask import Flask, Response, request
+from flask import Flask, Response, request, jsonify
 from flask_socketio import SocketIO
 import json
 
@@ -88,7 +88,7 @@ class EndpointAction(object):
 
         resp = self.action(json_data)
 
-        print(f"Response recv by broker:{resp}") #consider jsonifying
-        self.response.set_data(resp) # set to a string to return
-        print(self.response)
+        print(f"Response recv by broker: {resp}") #consider jsonifying
+        self.response.set_data(resp)# set to a string to return
+        print(self.response.get_data())
         return self.response

@@ -7,7 +7,7 @@ Responible for hashing data to 32 bit hash
 ATTRIBUTES:
 
 """
-from Hasher import Hasher
+from headers.Hasher import Hasher
 from Crypto.Hash import SHA256
 
 class Hashin32Bit(Hasher):
