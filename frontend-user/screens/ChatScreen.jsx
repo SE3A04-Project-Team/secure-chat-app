@@ -7,6 +7,7 @@ import IconButton from "../components/IconButton";
 import InitialIcon from "../components/InitialIcon";
 import axios from "axios";
 import {encryptAES} from "../utils/encryptionUtils";
+import {formatPythonTimeString} from "../utils/dateUtils";
 
 const ChatScreen = ({route, navigation}) => {
     // Server URL
@@ -18,10 +19,7 @@ const ChatScreen = ({route, navigation}) => {
     // Sample key for encryption
     const key = '12345678901234567890123456789012';
 
-
     const [chatInfo, setChatInfo] = useState({
-        room_id: "",
-        room_name: "",
         messages: [
           {
             content: "",
@@ -50,196 +48,6 @@ const ChatScreen = ({route, navigation}) => {
         }
         getRoomData();
     } , [])
-
-    // Sample chat messages data
-    const chatMessages = [
-        {
-            messageID: 1,
-            senderID: 1,
-            message: 'Hello, how are you?',
-            timeStamp: '2024-04-03T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 2,
-            senderID: 2,
-            message: 'I am good, thank you!',
-            timeStamp: '2024-04-01T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 3,
-            senderID: 2,
-            message: 'Ayo!',
-            timeStamp: '2024-04-03T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 4,
-            senderID: 2,
-            message: 'How are you doing?',
-            timeStamp: '2024-04-03T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 5,
-            senderID: 1,
-            message: 'I am doing well, thank you!\nTesting multiline message.',
-            timeStamp: '2024-04-03T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 6,
-            senderID: 2,
-            message: 'Good to hear!',
-            timeStamp: '2024-04-01T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 7,
-            senderID: 1,
-            message: 'Hi there!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 8,
-            senderID: 2,
-            message: 'Hello!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 9,
-            senderID: 1,
-            message: 'How are you doing?',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 10,
-            senderID: 2,
-            message: 'I am doing well, thank you!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 11,
-            senderID: 1,
-            message: 'Good to hear!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 12,
-            senderID: 2,
-            message: 'Hi there!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 13,
-            senderID: 1,
-            message: 'Hello!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 14,
-            senderID: 2,
-            message: 'How are you doing?',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 15,
-            senderID: 1,
-            message: 'I am doing well, thank you!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 16,
-            senderID: 2,
-            message: 'Good to hear!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 17,
-            senderID: 1,
-            message: 'Hi there!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 18,
-            senderID: 2,
-            message: 'Hello!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 19,
-            senderID: 1,
-            message: 'How are you doing?',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 20,
-            senderID: 2,
-            message: 'I am doing well, thank you!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 21,
-            senderID: 1,
-            message: 'Good to hear!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 22,
-            senderID: 2,
-            message: 'Hi there!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 23,
-            senderID: 1,
-            message: 'Hello!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 24,
-            senderID: 2,
-            message: 'How are you doing?',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 25,
-            senderID: 1,
-            message: 'I am doing well, thank you!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 26,
-            senderID: 2,
-            message: 'Good to hear!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 27,
-            senderID: 1,
-            message: 'Hi there!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 28,
-            senderID: 2,
-            message: 'Hello!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 29,
-            senderID: 1,
-            message: 'How are you doing?',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 30,
-            senderID: 2,
-            message: 'I am doing well, thank you!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 31,
-            senderID: 1,
-            message: 'Good to hear!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-    ];
 
     // Modal visibility state
     const [modalVisible, setModalVisible] = useState(false);
@@ -330,9 +138,9 @@ const ChatScreen = ({route, navigation}) => {
                                 </Text>
                                 </View>
                                 {/* Uncomment below section when timeStamp is available */}
-                                {/* <Text className={`text-gray-500 text-xs mt-0.5 ${message.sender.userID === currentUserID ? 'self-end' : 'self-start'}`}>
-                                    {message.timestamp}
-                                    </Text> */}
+                                <Text className={`text-gray-500 text-xs mt-0.5 ${message.sender.userID === currentUserID ? 'self-end' : 'self-start'}`}>
+                                    {formatPythonTimeString(message.timestamp)}
+                                    </Text>
                             </View>
                             ))
                         }
