@@ -4,8 +4,15 @@ from src.ServerCommunicationManager import ServerCommunicationManager
 from src.NoneEncryptor import NoneEncryptor
 from src.JSONSerializer import JSONSerializer
 from src.KerberosServerAuthManager import KerberosServerAuthManager
+from src.KerberosAuthServer import KerberosAuthServer
 
-import sys
+import json
+
+s = KerberosAuthServer("t", None)
+data = dict({"clientIDs": "sample"})
+json_data = json.dumps(data)
+
+print(s.login(json_data))
 
 
 broker = FlaskRequestBroker()

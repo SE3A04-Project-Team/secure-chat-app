@@ -15,7 +15,6 @@ finish set up
 from headers.CommunicatingAgent import CommunicatingAgent
 from headers.CommunicationManager import CommunicationManager
 
-from src.ServerCommunicationManager import ServerCommunicationManager
 
 import json
 from flask_socketio import SocketIO, join_room, emit
