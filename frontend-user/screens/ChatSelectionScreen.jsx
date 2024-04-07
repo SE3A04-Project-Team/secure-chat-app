@@ -1,4 +1,4 @@
-import {SafeAreaView, ScrollView, Text, TouchableOpacity, View, FlatList, Button} from "react-native";
+import {SafeAreaView, ScrollView, Text, TouchableOpacity, View, FlatList} from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconButton from "../components/IconButton";
 import {formatDate} from "../utils/dateUtils";
@@ -6,12 +6,7 @@ import InitialIcon from "../components/InitialIcon";
 import {useEffect, useState} from "react";
 import SlidingModal from "../components/SlidingModal";
 import axios from "axios";
-import {useEffect, useRef, useState} from "react";
-import SlidingModal from "../components/SlidingModal";
-import axios from "axios";
-import { text } from "@fortawesome/fontawesome-svg-core";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import TextButton from "../components/TextButton";
 
 
 const ChatSelectionScreen = ({ navigation }) => {
