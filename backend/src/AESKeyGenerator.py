@@ -6,9 +6,9 @@ Responsible for generating AES encryption keys. Implements the KeyGenerator
 
 """
 
-from backend.headers.EncryptionKey import EncryptionKey
-from backend.headers.KeyGenerator import KeyGenerator
-from backend.src.Crypto.Random import get_random_bytes
+from headers.EncryptionKey import EncryptionKey
+from headers.KeyGenerator import KeyGenerator
+from src.Crypto.Random import get_random_bytes
 
 
 class AESKeyGenerator(KeyGenerator):

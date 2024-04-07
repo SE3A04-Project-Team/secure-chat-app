@@ -29,11 +29,11 @@ class FirebaseMessageDatabase(MessageDatabase):
 
         """
         # Get data from the request body
-        user_ids = room.get('userIds')
+        user_ids = room.get('clientIDs')
         
         # Validate request data
         if not user_ids:
-            return "error: Missing required data"
+            return "error: Missing required data (clientIDs)"
 
         # Retrieve user names
         user_names = []
