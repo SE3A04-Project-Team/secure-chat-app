@@ -64,24 +64,27 @@ class FirebaseMessageDatabase(MessageDatabase):
         return f"message: Room {room_name} created successfully"
     
 
-    def get_rooms(self, user_id: str) -> list[str, list[str]]:
+    def get_rooms(self, user_id: str) -> str:
            
             user_ref = firestore.client().collection('users').document(user_id)
             user_data = user_ref.get().to_dict()
             if user_data is None:
-                return jsonify({"error": "User not found"}), 404
+                return "error: User not found"
            
             rooms_ref = user_ref.collection('rooms').stream()
             rooms_data = []
             for room_ref in rooms_ref:
                 room_data = room_ref.to_dict()
                 room_doc = room_data['room'].get().to_dict()  # Fetch data from referenced room document
-                rooms_data.append(room_doc)  # Append full room data
+                 # Fetch data from the referenced sender document
+                room_ref = room_data['room']
+                room_data['room'] = {'room_name': room_doc['name'], 'roomID': room_ref.id}
+                rooms_data.append(room_data)
 
             rooms = {
                 "rooms": rooms_data
             }
-            print(json.dumps(rooms))
+            # print(json.dumps(rooms))
             return json.dumps(rooms)
         
 
@@ -119,8 +122,6 @@ class FirebaseMessageDatabase(MessageDatabase):
         
         # Construct the response data
         chat_screen_data = {
-            'room_id': room_id,
-            'room_name': room_data.get('name'),
             'messages': messages_data
         }
         
