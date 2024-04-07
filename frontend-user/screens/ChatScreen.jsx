@@ -12,21 +12,34 @@ const ChatScreen = ({route, navigation}) => {
     // Server URL
     const serverUrl = process.env.EXPO_PUBLIC_SERVER_URL;
     // Specific chat id and name passed as route params, used to fetch chat messages
-    const {chat} = route.params;
+    const {room_id, room_name} = route.params;
     // Sample current user ID
     const currentUserID = '1fPITEfiegat5F0xwXR9';
     // Sample key for encryption
     const key = '12345678901234567890123456789012';
 
 
-    const [chatInfo, setChatInfo] = useState([]);
+    const [chatInfo, setChatInfo] = useState({
+        room_id: "",
+        room_name: "",
+        messages: [
+          {
+            content: "",
+            sender: {
+              name: { name: "" },
+              userID: ""
+            },
+            timestamp: 0
+          }
+        ]
+      });
 
     // Fetch chat messages data from the server
     useEffect(() => {
         const getRoomData = async () => {
             try {
-                const response = await axios.get(`${serverUrl}/message_server/message_history`, {
-                    roomID: chat.roomID,
+                const response = await axios.post(`${serverUrl}/message_server/message_history`, {
+                    roomID: room_id,
                 });
                 console.log(response.data);
                 setChatInfo(response.data);
@@ -287,8 +300,8 @@ const ChatScreen = ({route, navigation}) => {
                     <View className="flex-row justify-between items-start content-center p-4 ">
                         <IconButton icon={<Icon name="arrow-left" size={32} color="#86efac"/>} onPress={() => navigation.goBack()}/>
                         <View className="flex flex-col justify-center items-center">
-                            <InitialIcon name={chat.name}/>
-                            <Text className="text-black text-md text-center">{chat.name}</Text>
+                            <InitialIcon name={room_name}/>
+                            <Text className="text-black text-md text-center">{room_name}</Text>
                         </View>
                         <IconButton icon={<Icon name="gear" size={32} color="#86efac"/>} onPress={() => setModalVisible(true)}/>
                     </View>
@@ -302,25 +315,27 @@ const ChatScreen = ({route, navigation}) => {
                     }}
                 >
                     <View className="flex flex-col items-center mb-3">
-                        {chatMessages.map((message, index) => (
+                        {chatInfo.messages.map((message, index) => (
                             <View
-                                key={message.messageID}
-                                className={`flex flex-col max-w-3/4 ${message.senderID === currentUserID ? 'self-end' : 'self-start'} ${index > 0 && chatMessages[index - 1].senderID === message.senderID ? 'mt-0.5' : 'mt-3'}`}
+                                key={index} // You can use index as key if messageID is not unique
+                                className={`flex flex-col max-w-3/4 ${message.sender.userID === currentUserID ? 'self-end' : 'self-start'} ${index > 0 && chatInfo.messages[index - 1].sender.userID === message.sender.userID ? 'mt-0.5' : 'mt-3'}`}
                             >
                                 <View
-                                    className={`flex py-2 px-3 rounded-2xl max-w-fit ${message.senderID === currentUserID ? 'bg-green-300' : 'bg-gray-200'}`}
+                                className={`flex py-2 px-3 rounded-2xl max-w-fit ${message.sender.userID === currentUserID ? 'bg-green-300' : 'bg-gray-200'}`}
                                 >
-                                    <Text
-                                        className={`text-primary text-md font-normal ${message.senderID === currentUserID ? 'text-white' : 'text-black'}`}
-                                    >
-                                        {message.message}
-                                    </Text>
+                                <Text
+                                    className={`text-primary text-md font-normal ${message.sender.userID === currentUserID ? 'text-white' : 'text-black'}`}
+                                >
+                                    {message.content}
+                                </Text>
                                 </View>
-                                {/*<Text className={`text-gray-500 text-xs mt-0.5 ${message.senderID === currentUserID ? 'self-end' : 'self-start'}`}>*/}
-                                {/*    {(message.timeStamp)}*/}
-                                {/*</Text>*/}
+                                {/* Uncomment below section when timeStamp is available */}
+                                {/* <Text className={`text-gray-500 text-xs mt-0.5 ${message.sender.userID === currentUserID ? 'self-end' : 'self-start'}`}>
+                                    {message.timestamp}
+                                    </Text> */}
                             </View>
-                        ))}
+                            ))
+                        }
                     </View>
 
                 </ScrollView>
