@@ -15,10 +15,9 @@ finish set up
 from headers.CommunicatingAgent import CommunicatingAgent
 from headers.CommunicationManager import CommunicationManager
 
-from src.ServerCommunicationManager import ServerCommunicationManager
 
 import json
-from flask_socketio import SocketIO, join_room, emit
+from flask_socketio import join_room, emit
 
 
 class MessageDeliveryServer(CommunicatingAgent):
@@ -33,6 +32,7 @@ class MessageDeliveryServer(CommunicatingAgent):
         self.serverID = serverID
         self.communicationManager = communicationManager
         self.rooms = dict[str, list[str]]
+
 
         self.event_names = [
             "join_room"
@@ -70,7 +70,7 @@ class MessageDeliveryServer(CommunicatingAgent):
         """
 
 
-    def create_room(self, data: str) -> str:
+    def create_room(self, data: json) -> str:
         """
         creates new room for messaging
         Args: roomID
@@ -79,7 +79,7 @@ class MessageDeliveryServer(CommunicatingAgent):
         room = "14"
         return f"created room: {room}"
 
-    def remove_room(self, roomID: str):
+    def remove_room(self, roomID: json):
         """
         SOCKET EVENT
         deletes room only if there are no more users registered to that room
@@ -95,7 +95,7 @@ class MessageDeliveryServer(CommunicatingAgent):
         
         room = "14"
         join_room("14")
-        emit("send_message", f"Welcome")
+        emit("send_message", f"Welcome", room=room)
         return f"joined room: {room}"
         # add create room function
         return f"joined room"
