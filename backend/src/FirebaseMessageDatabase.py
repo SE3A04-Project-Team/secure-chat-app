@@ -121,15 +121,15 @@ class FirebaseMessageDatabase(MessageDatabase):
         return jsonify(chat_screen_data)
     
   
-    def store_message(self, room_id: str, user_id, message_content: str):
+    def store_message(self, room_id: str, user_id, message_content: str, timestamp: int):
         
         # Validate request data
-        if not room_id or not user_id or not message_content:
-            return jsonify({"error": "Missing required data"}), 400
+        if not room_id or not user_id or not message_content or not timestamp:
+            return "error: Missing required data"
 
         # Construct message data
         message_data = {
-            'timestamp': datetime.now(),
+            'timestamp': timestamp,
             'content': message_content,
             'sender': firestore.client().collection('users').document(user_id)
         }
@@ -138,7 +138,7 @@ class FirebaseMessageDatabase(MessageDatabase):
         room_ref = firestore.client().collection('rooms').document(room_id)
         room_ref.collection('messages').add(message_data)
 
-        return jsonify({"message": "Message sent successfully"})
+        return "message: Message sent successfully"
 
 
 

@@ -39,10 +39,12 @@ class MessageDeliveryServer(CommunicatingAgent):
 
         self.event_names = [
             "join_room",
+            "send_message"
 
         ]
         self.event_functions = [
             self.join_room,
+            self.handle_message
             
         ]
         self.endpoint_names = [
@@ -66,17 +68,47 @@ class MessageDeliveryServer(CommunicatingAgent):
         self.communicationManager.registerActions(self.endpoint_names, self.endpoint_functions, self.endpoint_methods, self.event_names, self.event_functions)
 
 
-    def handle_message(self, message: json):
+    def handle_message(self, args: json):
         """
         handles the storing and forwarding of messages in the following format
         {
 	        “SenderID”: str,
 	        “ChatID”: str,
-	        “Timestamp”: str,
+	        “Timestamp”: int,
 	        “Message”: str,
         }
+        arg1: senderID
+        arg2: roomID,
+        arg3: timestamp
+        arg4: message
         """
+        print(args)
+        if len(args) < 4:
+            raise ValueError("Bad Message Format")
         
+        senderID = args[0]
+        roomID = args[1]
+        timestamp = args[2]
+        message = args[3]
+        
+        # store message
+        self.databaseManager.store_message(
+            user_id=senderID,
+            room_id=roomID,
+            timestamp=timestamp,
+            message_content=message
+        )
+
+        # emit to connected clients
+        # TODO: add room=roomID when rooms are set up
+        emit('receive_message', 
+             {
+            "senderID": senderID, 
+            "timestamp": timestamp,
+            "message_content": message
+            }
+            )
+
 
 
 
@@ -85,9 +117,11 @@ class MessageDeliveryServer(CommunicatingAgent):
             clientID = data['clientID']
             print(clientID)
         except KeyError:
-            return "Bad Request"
+            return "Bad Request: args: (clientID)"
         
         rooms = self.databaseManager.get_chat_selection(clientID)
+        if not rooms:
+            return "No rooms found"
         # rooms_obj = json.loads(rooms)
         print(f"result: {rooms}")
 
