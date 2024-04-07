@@ -15,6 +15,8 @@ finish set up
 from headers.CommunicatingAgent import CommunicatingAgent
 from headers.CommunicationManager import CommunicationManager
 
+from src.FirebaseMessageDatabase import FirebaseMessageDatabase
+
 
 import json
 from flask_socketio import join_room, emit
@@ -32,21 +34,27 @@ class MessageDeliveryServer(CommunicatingAgent):
         self.serverID = serverID
         self.communicationManager = communicationManager
         self.rooms = dict[str, list[str]]
+        self.databaseManager = FirebaseMessageDatabase()
 
 
         self.event_names = [
-            "join_room"
+            "join_room",
+
         ]
         self.event_functions = [
-            self.join_room
+            self.join_room,
+            
         ]
         self.endpoint_names = [
-            "create_room"
+            "create_room",
+            "get_rooms"
         ]
         self.endpoint_functions = [
-            self.create_room
+            self.create_room,
+            self.get_rooms,
         ]
         self.endpoint_methods = [
+            ["POST"],
             ["POST"]
         ]
         self.registerActions()
@@ -68,6 +76,26 @@ class MessageDeliveryServer(CommunicatingAgent):
 	        “Message”: str,
         }
         """
+
+    def get_rooms(self, data: json) -> str:
+        try:
+            clientID = data['clientID']
+            print(clientID)
+        except KeyError:
+            return "Bad Request"
+        
+        rooms = self.databaseManager.get_rooms(clientID)
+        print(f"rooms: {rooms}")
+        last_message = []
+        if rooms:
+            for room in rooms:
+                self.databaseManager.get_message_history(room)
+
+        return json.dumps(
+            {"rooms": rooms,
+             "message": last_message
+             }
+        )
 
 
     def create_room(self, data: json) -> str:
