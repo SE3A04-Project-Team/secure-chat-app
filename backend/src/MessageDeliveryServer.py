@@ -15,10 +15,11 @@ finish set up
 from headers.CommunicatingAgent import CommunicatingAgent
 from headers.CommunicationManager import CommunicationManager
 
-from src.ServerCommunicationManager import ServerCommunicationManager
+from src.FirebaseMessageDatabase import FirebaseMessageDatabase
+
 
 import json
-from flask_socketio import SocketIO, join_room, emit
+from flask_socketio import join_room, emit
 
 
 class MessageDeliveryServer(CommunicatingAgent):
@@ -33,20 +34,27 @@ class MessageDeliveryServer(CommunicatingAgent):
         self.serverID = serverID
         self.communicationManager = communicationManager
         self.rooms = dict[str, list[str]]
+        self.databaseManager = FirebaseMessageDatabase()
+
 
         self.event_names = [
-            "join_room"
+            "join_room",
+
         ]
         self.event_functions = [
-            self.join_room
+            self.join_room,
+            
         ]
         self.endpoint_names = [
-            "create_room"
+            "create_room",
+            "get_rooms"
         ]
         self.endpoint_functions = [
-            self.create_room
+            self.create_room,
+            self.get_rooms,
         ]
         self.endpoint_methods = [
+            ["POST"],
             ["POST"]
         ]
         self.registerActions()
@@ -68,9 +76,28 @@ class MessageDeliveryServer(CommunicatingAgent):
 	        “Message”: str,
         }
         """
+        
 
 
-    def create_room(self, data: str) -> str:
+
+    def get_rooms(self, data: json) -> str:
+        try:
+            clientID = data['clientID']
+            print(clientID)
+        except KeyError:
+            return "Bad Request"
+        
+        rooms = self.databaseManager.get_chat_selection(clientID)
+        # rooms_obj = json.loads(rooms)
+        print(f"result: {rooms}")
+
+        return_msg = {
+            "rooms": rooms
+        }
+        return json.dumps(return_msg)
+
+
+    def create_room(self, data: json) -> str:
         """
         creates new room for messaging
         Args: roomID
@@ -79,7 +106,7 @@ class MessageDeliveryServer(CommunicatingAgent):
         room = "14"
         return f"created room: {room}"
 
-    def remove_room(self, roomID: str):
+    def remove_room(self, roomID: json):
         """
         SOCKET EVENT
         deletes room only if there are no more users registered to that room
@@ -95,7 +122,7 @@ class MessageDeliveryServer(CommunicatingAgent):
         
         room = "14"
         join_room("14")
-        emit("send_message", f"Welcome")
+        emit("send_message", f"Welcome", room=room)
         return f"joined room: {room}"
         # add create room function
         return f"joined room"

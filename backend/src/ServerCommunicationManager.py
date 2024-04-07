@@ -77,10 +77,10 @@ class ServerCommunicationManager(CommunicationManager):
         registers actions with the broker so that requests can be forwarded correctly.
 
         """
-        self.broker.add_endpoint(f'/{self.serverName}/auth', 'authentication', self.authenticateUser, ["GET", "POST"])
+        self.broker.add_endpoint(f'/{self.serverName}/auth', f'/{self.serverName}/auth', self.authenticateUser, ["GET", "POST"])
 
         for i, endpoint in enumerate(endpoint_names):
-            self.broker.add_endpoint(f'/{self.serverName}/{endpoint}', endpoint, ProxyMethod(endpoint_handlers[i]), endpoint_methods[i])
+            self.broker.add_endpoint(f'/{self.serverName}/{endpoint}', f'/{self.serverName}/{endpoint}', ProxyMethod(endpoint_handlers[i]), endpoint_methods[i])
             
         
         for i, event in enumerate(event_names):
@@ -102,12 +102,27 @@ class ServerCommunicationManager(CommunicationManager):
         Remove all session keys on event of refresh
         """
 
-    def authenticateUser(self, message: str) -> str:
+    def authenticateUser(self, message: json) -> str:
         """
         authenticates user for communication with the server
         """
         #print(message)
-        return self.authenticationManager.authenticateUser(message)
+        auth_response = self.authenticationManager.authenticateUser(message)
+        try: 
+            auth_data = json.loads(auth_response)
+        except:
+            return auth_response
+        print(f"auth_data: {auth_data}")
+        try:
+            key = auth_data['key']
+            clientID = auth_data['clientID']
+            message = auth_data['message']
+        except KeyError:
+            return auth_response
+        
+        self.updateKey(clientID, key)
+        return message
+
       
 
 
@@ -116,10 +131,10 @@ class ProxyMethod(object):
     def __init__(self, action: Callable):
         self.action = action
 
-    def __call__(self, data):
+    def __call__(self, data: json):
         print("Received args by proxy:", data)
         # Unpack args if needed, and pass them individually
-        # Access JSON data from Flask request object
+
         resp = self.action(data)
         print(f"Response recv by proxy:{resp}") #consider jsonifying
         return resp
@@ -128,10 +143,10 @@ class ProxyEvent(object):
     def __init__(self, action: Callable):
         self.action = action
 
-    def __call__(self, data):
+    def __call__(self, data: json):
         print("Received args by proxy:", data)
         # Unpack args if needed, and pass them individually
-        # Access JSON data from Flask request object
+
         resp = self.action(data)
         print(f"Response recv by proxy:{resp}") #consider jsonifying
         return resp

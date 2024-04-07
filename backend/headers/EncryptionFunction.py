@@ -7,6 +7,7 @@ Responsible for encrypting and decrypting incoming bytes
 """
 from backend.headers.EncryptionKey import EncryptionKey
 
+
 from abc import ABC, abstractmethod
 
 
