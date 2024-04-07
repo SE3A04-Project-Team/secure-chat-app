@@ -8,7 +8,7 @@ ATTRIBUTES:
 
 """
 
-from headers.Serializer import Serializer
+from backend.headers.Serializer import Serializer
 import pickle
 
 
@@ -25,9 +25,6 @@ class PythonSerializer(Serializer):
             returns bytes representing object
 
         """
-        ### Testing
-        # print(data)
-        # print(pickle.dumps(data))
         return pickle.dumps(data)
 
     def deserialize(self, data: bytes) -> object:
@@ -41,11 +38,4 @@ class PythonSerializer(Serializer):
             returns object obtained from bytes
 
         """
-        ### Testing
-        # print(data)
-        # print(pickle.loads(data))
         return pickle.loads(data)
-
-### Testing
-# Serializer.serialize("Test")
-# Serializer.deserialize(b'\x80\x04\x95\x08\x00\x00\x00\x00\x00\x00\x00\x8c\x04Test\x94.')
