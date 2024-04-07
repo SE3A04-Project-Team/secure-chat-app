@@ -1,4 +1,4 @@
-import {SafeAreaView, ScrollView, Text, TouchableOpacity, View, FlatList, Button} from "react-native";
+import {SafeAreaView, ScrollView, Text, TouchableOpacity, View, FlatList} from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconButton from "../components/IconButton";
 import {formatDate} from "../utils/dateUtils";
@@ -6,10 +6,6 @@ import InitialIcon from "../components/InitialIcon";
 import {useEffect, useState} from "react";
 import SlidingModal from "../components/SlidingModal";
 import axios from "axios";
-import {useEffect, useRef, useState} from "react";
-import SlidingModal from "../components/SlidingModal";
-import axios from "axios";
-import { text } from "@fortawesome/fontawesome-svg-core";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import TextButton from "../components/TextButton";
 
@@ -196,25 +192,28 @@ const ChatSelectionScreen = ({ navigation }) => {
                 </ScrollView>
             </View>
             <SlidingModal modalVisible={modalVisible} setModalVisible={setModalVisible} height={0.85} dismissHandler={() => setSelectedUser(new Set([]))}>
-                <View className="m-8">
-                {/* TODO: Add contents of create new chat modal, similar design to iMessage */}
-                <TouchableOpacity className="flex h-16 border justify-center items-center mb-8 rounded-full border-green-600" onPress={handleChatCreation}>
-                    <Text className = "font-bold text-2xl text-green-600">Create</Text>
-                </TouchableOpacity>
-                <FlatList className = "h-4/5"
-                    keyExtractor = {(item) => item.id}
-                    data = {chatData}
-                    renderItem = {({item}) => (
-                        <View>
-                            <View className = "flex flex-row items-center p-4 border border-y-zinc-100 border-l-0 border-r-0"> 
-                                <InitialIcon name={item.name}/>
-                                <Text className = "grow text-md p-4">{item.name}</Text>
-                                <BouncyCheckbox fillColor="green" onPress={(isChecked) =>         handleUserSelection(isChecked, item)}/>
+                <SafeAreaView className="flex flex-col justify-end h-full">
+                    <View className="py-4">
+                        <Text className="text-black text-xl font-extrabold text-center">New Chat</Text>
+                    </View>
+                    <FlatList 
+                        className = "h-4/5 bg-white"
+                        keyExtractor = {(item) => item.id}
+                        data = {chatData}
+                        renderItem = {({item}) => (
+                            <View>
+                                <View className = "flex flex-row items-center p-4 border border-y-zinc-100 border-l-0 border-r-0"> 
+                                    <InitialIcon name={item.name}/>
+                                    <Text className = "grow text-md p-4">{item.name}</Text>
+                                    <BouncyCheckbox fillColor="green" onPress={(isChecked) =>         handleUserSelection(isChecked, item)}/>
+                                </View>
                             </View>
-                        </View>
-                    )}
-                />
-                </View>
+                        )}
+                    />
+                    <View className="px-4 pt-6 pb-2">
+                        <TextButton onPress={handleChatCreation} title="Create Chat"/>
+                    </View>
+                </SafeAreaView>
             </SlidingModal>
         </View>
     );
