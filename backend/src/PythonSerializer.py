@@ -14,7 +14,7 @@ import pickle
 
 class PythonSerializer(Serializer):
 
-    def serialize(self, data: object) -> bytes:
+    def serialize(data: object) -> bytes:
         """
         Convert object to bytes
 
@@ -27,7 +27,7 @@ class PythonSerializer(Serializer):
         """
         return pickle.dumps(data)
 
-    def deserialize(self, data: bytes) -> object:
+    def deserialize(data: bytes) -> object:
         """
         Convert bytes to object
 

@@ -54,6 +54,6 @@ class AESEncryptionFunction(EncryptionFunction):
 
 
 ### Testing
-# test_key = "ABCDEFGHIJKLMNOPQ"
-# encrypted_data, tag, nonce = AESEncryptionFunction.encrypt(b'\x80\x04\x95\x08\x00\x00\x00\x00\x00\x00\x00\x8c\x04Test\x94.', test_key)
+test_key = "ABCDEFGHIJKLMNOPQ"
+encrypted_data, tag, nonce = AESEncryptionFunction.encrypt(b'\x80\x04\x95\x08\x00\x00\x00\x00\x00\x00\x00\x8c\x04Test\x94.', test_key)
 # print(AESEncryptionFunction.decrypt(encrypted_data, test_key, tag, nonce))

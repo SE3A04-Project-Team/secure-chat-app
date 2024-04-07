@@ -5,13 +5,15 @@ Responsible for handling encryption key distribution, and periodically refreshin
 @Date: 2024-04-07
 
 ATTRIBUTES:
-    keyGenerator: a generator used to generate new keys
+   keyGenerator: a generator used to generate new keys
+    encryptionKeys: a dictionary that holds the keys for a communicating agent for each session
 
 """
 
 from abc import ABC, abstractmethod
 
-from EncryptionKey import EncryptionKey
+from backend.headers.EncryptionKey import EncryptionKey
+from backend.headers.KeyGenerator import KeyGenerator
 
 
 class KeyDistributionManager(ABC):
@@ -20,7 +22,7 @@ class KeyDistributionManager(ABC):
     @abstractmethod
     def __init__(self):
         keyGenerator: KeyGenerator
-        keys = []
+        encryptionKeys = {}
 
     @staticmethod
     @abstractmethod
