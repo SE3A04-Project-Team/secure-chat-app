@@ -5,7 +5,7 @@ Responsible for encrypting and decrypting incoming bytes
 @Date: 2024-04-02
 
 """
-from headers.EncryptionKey import EncryptionKey
+from EncryptionKey import EncryptionKey
 
 from abc import ABC, abstractmethod
 
