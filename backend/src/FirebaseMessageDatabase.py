@@ -113,8 +113,8 @@ class FirebaseMessageDatabase(MessageDatabase):
             msg_data = msg.to_dict()
             # Fetch data from the referenced sender document
             sender_ref = msg_data['sender']
-            sender_data = sender_ref.get().to_dict()
-            msg_data['sender'] = sender_data
+            sender_data = sender_ref.get(['name']).to_dict()
+            msg_data['sender'] = {'name': sender_data, 'userID': sender_ref.id}
             messages_data.append(msg_data)
         
         # Construct the response data
