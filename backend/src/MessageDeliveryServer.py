@@ -87,7 +87,7 @@ class MessageDeliveryServer(CommunicatingAgent):
         """
         print(args)
         if len(args) != 4:
-            raise ValueError("Bad Message Format")
+            raise ValueError(f"Bad Message Format: expecting 4 arguments, {len(args)} given")
         
         senderID = args[0]
         roomID = args[1]
