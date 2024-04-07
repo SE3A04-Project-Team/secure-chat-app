@@ -12,8 +12,8 @@ ATTRIBUTES:
 
 from abc import ABC, abstractmethod
 
-from backend.headers.EncryptionKey import EncryptionKey
-from backend.headers.KeyGenerator import KeyGenerator
+from headers.EncryptionKey import EncryptionKey
+from headers.KeyGenerator import KeyGenerator
 
 
 class KeyDistributionManager(ABC):

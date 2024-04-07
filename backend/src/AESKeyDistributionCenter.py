@@ -10,9 +10,9 @@ ATTRIBUTES:
 
 """
 
-from backend.headers.EncryptionKey import EncryptionKey
-from backend.headers.KeyDistributionManager import KeyDistributionManager
-from backend.src.AESKeyGenerator import AESKeyGenerator
+from headers.EncryptionKey import EncryptionKey
+from headers.KeyDistributionManager import KeyDistributionManager
+from src.AESKeyGenerator import AESKeyGenerator
 
 
 class AESKeyDistributionCenter(KeyDistributionManager):
