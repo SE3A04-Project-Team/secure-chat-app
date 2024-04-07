@@ -9,11 +9,13 @@ ATTRIBUTES:
 TODO:
 
 """
+from headers.CommunicationManager import CommunicationManager
+
 from abc import ABC, abstractmethod
 
 class CommunicationProtocol(ABC):
     @abstractmethod
-    def initialize(self, address: str):
+    def initialize(self, address: str, manager: CommunicationManager):
         """
         Initialize class to prepare for communication
 

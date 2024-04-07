@@ -5,30 +5,30 @@ import ChatSelectionScreen from "./screens/ChatSelectionScreen";
 import ChatScreen from "./screens/ChatScreen";
 import ContactScreen from "./screens/ContactScreen";
 import ProfileScreen from "./screens/ProfileScreen";
-import GenerateReportScreen from "./screens/GenerateReportScreen";
-import io from 'socket.io-client';
-import {useEffect} from "react";
+import axios from "axios";
+import React, {useEffect} from "react";
+import io from "socket.io-client";
 
 const Stack = createNativeStackNavigator();
-const SERVER_URL = 'http://flask-address:port'; // Update with your server URL
 
 export default function App() {
 
-    useEffect(() => {
-        const socket = io(SERVER_URL);
+    // const serverUrl = process.env.EXPO_PUBLIC_SERVER_URL;
 
-        socket.on('connect', () => {
-            console.log('Connected to server!');
-        });
+    // Sample code to connect to the socket server
+    // useEffect(() => {
 
-        socket.io.on('disconnect', () => {
-            console.log('Disconnected from server!');
-        });
+    //     // Connect to the socket server
+    //     const socket = io(SERVER_URL);
 
-        return () => {
-            socket.disconnect();
-        };
-    }, []);
+    //     // Emit the 'join_room' event with message 'Hello, World!'
+    //     socket.emit('join_room', { roomId: 'your-room-id', message: 'Hello, World!' });
+
+    //     // Cleanup the socket connection when component unmounts
+    //     return () => {
+    //         socket.disconnect();
+    //     };
+    // }, []);
 
     return (
         <NavigationContainer>
@@ -38,7 +38,6 @@ export default function App() {
                 <Stack.Screen name="ChatScreen" component={ChatScreen}/>
                 <Stack.Screen name="ContactScreen" component={ContactScreen}/>
                 <Stack.Screen name="ProfileScreen" component={ProfileScreen}/>
-                <Stack.Screen name="GenerateReportScreen" component={GenerateReportScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

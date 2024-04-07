@@ -1,5 +1,5 @@
 import {Text, View} from "react-native";
-import getInitials from "../utils/stringUtils";
+import {getInitials} from "../utils/stringUtils";
 
 const InitialIcon = ({ name }) => {
 

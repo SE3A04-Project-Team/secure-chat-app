@@ -1,17 +1,38 @@
 import {SafeAreaView, ScrollView, Text, TouchableOpacity, View, FlatList, Button} from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconButton from "../components/IconButton";
-import formatDate from "../utils/dateUtils";
+import {formatDate} from "../utils/dateUtils";
 import InitialIcon from "../components/InitialIcon";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import SlidingModal from "../components/SlidingModal";
+import axios from "axios";
 import { text } from "@fortawesome/fontawesome-svg-core";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import TextButton from "../components/TextButton";
 
 const ChatSelectionScreen = ({ navigation }) => {
 
-    // TODO: Query chat data from backend
+    const serverUrl = process.env.EXPO_PUBLIC_SERVER_URL;
+    const currentUserId = '1fPITEfiegat5F0xwXR9'; // User ID for which chats are to be fetched
+    useEffect(() => {
+        const getRoomsData = async () => {
+            try {
+                const response = await axios.get(`${serverUrl}/data/chat_selection`, {
+                    params: {
+                        userId: currentUserId, // User ID for which chats are to be fetched
+                    }
+                    });
+                console.log(response.data);
+                return response.data; // Returning data for further processing if needed
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        getRoomsData();
+
+    }, []);
+
 
     // Sample JSON data for chat selection
     const chatData = [

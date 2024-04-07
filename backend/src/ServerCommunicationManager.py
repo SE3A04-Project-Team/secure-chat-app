@@ -15,118 +15,78 @@ add functionality to obtain key
 """
 from headers.CommunicationManager import CommunicationManager
 from headers.EncryptionKey import EncryptionKey
-from headers.CommunicationProtocol import CommunicationProtocol
 from headers.EncryptionFunction import EncryptionFunction
+from headers.RequestBroker import RequestBroker
 from headers.Serializer import Serializer
-from headers.CommunicatingAgent import CommunicatingAgent
+from headers.AuthenticationManager import AuthenticationManager
 
-from src.TCPServerCommunicationProtocol import TCPServerCommunicationProtocol
-from src.NoneEncryptor import NoneEncryptor
-
-
+from typing import Callable
+import json
 import threading
 
 
 class ServerCommunicationManager(CommunicationManager):
 
-    protocol: CommunicationProtocol
-    encryptor: EncryptionFunction
-    serializer: Serializer
-    agent: CommunicatingAgent
     keys: dict[str: EncryptionKey]
-    registered_agents: list[str]
 
-    def __init__(self, agent: CommunicatingAgent, address: str) -> None:
+    def __init__(self, 
+                 serverName: str,
+                 broker: RequestBroker, 
+                 encryptionFunction: EncryptionFunction,
+                 serializer: Serializer,
+                 authenticationManager: AuthenticationManager):
         """
-        Initialize class to prepare for communication
-
-        Args:
-            address: network address of communicating agent. In IP:port format. 
+        initialize manager
         """
-        self.agent = agent
+        self.serverName = serverName
+        self.broker = broker
+        self.encryptionFunction = encryptionFunction
+        self.serializer = serializer
+        self.authenticationManager = authenticationManager
 
-        self.protocol = TCPServerCommunicationProtocol()
-        self.encryptor = NoneEncryptor()
-        
 
         self.keys = dict()
-        self.registered_agents = list()
-
-        protocol_handler = threading.Thread(target=self.protocol.initialize, args=(address,self))
-        protocol_handler.start()
-      
 
 
-    def registerAgent(self, clientID: str):
+
+
+    def processData(self, *args) -> object:
         """
-        Add agent to list of currently connected agents
-
-        Args:
-            address: network address of communicating agent. In IP:port format. 
+        prepares incoming data before passing to server for processing then
+        prepares data from server for sending 
         """
-        self.registered_agents.append(clientID)
-        print(f"registered {clientID}")
-
-
-    def unregisterAgent(self, clientID: str):
+        print(f"process_data {args}")
         """
-        remove agent from list of currently connected agents
+        key = self.keys.get(senderID)
+        if not key:
+            return f"401: user not authenticated. poll {self.serverName}/auth"
 
-        Args:
-            address: network address of communicating agent. In IP:port format. 
+        decrypted_data = self.encryptionFunction.decrypt(data, key)
+        deserialized_data = self.serializer.deserialize(decrypted_data)
+
+        response = handler(deserialized_data)
+
+        serialized_response = self.serializer.serialize(response)
+        encrypted_response = self.encryptionFunction.encrypt(serialized_response, key)
+        return encrypted_response
+    """
+
+
+    def registerActions(self, endpoint_names: list[str], endpoint_handlers: list[Callable], endpoint_methods:list[str], event_names: list[str], event_handlers: list[Callable]):
         """
-        try:
-            self.registered_agents.remove(clientID)
-        except:
-            pass
+        registers actions with the broker so that requests can be forwarded correctly.
 
+        """
+        self.broker.add_endpoint(f'/{self.serverName}/auth', 'authentication', self.authenticateUser, ["GET", "POST"])
 
-    
+        for i, endpoint in enumerate(endpoint_names):
+            self.broker.add_endpoint(f'/{self.serverName}/{endpoint}', endpoint, ProxyMethod(endpoint_handlers[i]), endpoint_methods[i])
+            
         
-    def sendData(self, address: str, data: object):
-        """
-        Send data to indicated address. For security, data should be encrypted before sending
+        for i, event in enumerate(event_names):
+            self.broker.add_event(event, ProxyEvent(event_handlers[i]))
 
-        Args:
-            address: network address of recipient In IP:port format.
-            data: data to send to recipient
-            key: encryption key used to encrypt data
-
-        """
-        # check if client is connected, if not add to backlog
-
-        # serialize
-        # encrypt
-        # send IF client is open
-
-        if address not in self.registered_agents:
-            #add to message backlog
-            return
         
-        message = bytes(data, 'utf-8')
-        self.protocol.sendData(address, None, message)
-        
-
-
-    
-    def recvData(self, address: str, data: bytes):
-        """
-        Recv data from indicated address
-
-        Args:
-            address: network address of sending agent In IP:port format.
-            size: size of data to accept in bytes
-
-
-        Return:
-            returns received object
-
-        """
-        
-        # decrypted_data = self.encryptor.decrypt(data, self.keys.get(address))
-        # message = self.serializer.deserialize(decrypted_data)
-        message = str(data, 'utf-8')
-        self.agent.recvData(message)
 
 
     def updateKey(self, serviceID: str, key: EncryptionKey):
@@ -136,6 +96,44 @@ class ServerCommunicationManager(CommunicationManager):
         Args:
             ServiceID: ID of service associated with encryptionKey
         """
-        self.keys.update({serviceID: key})
+
+    def dump_keys(self):
+        """
+        Remove all session keys on event of refresh
+        """
+
+    def authenticateUser(self, message: str) -> str:
+        """
+        authenticates user for communication with the server
+        """
+        #print(message)
+        return self.authenticationManager.authenticateUser(message)
+      
+
+
+class ProxyMethod(object):
+
+    def __init__(self, action: Callable):
+        self.action = action
+
+    def __call__(self, data):
+        print("Received args by proxy:", data)
+        # Unpack args if needed, and pass them individually
+        # Access JSON data from Flask request object
+        resp = self.action(data)
+        print(f"Response recv by proxy:{resp}") #consider jsonifying
+        return resp
+    
+class ProxyEvent(object):
+    def __init__(self, action: Callable):
+        self.action = action
+
+    def __call__(self, data):
+        print("Received args by proxy:", data)
+        # Unpack args if needed, and pass them individually
+        # Access JSON data from Flask request object
+        resp = self.action(data)
+        print(f"Response recv by proxy:{resp}") #consider jsonifying
+        return resp
 
 

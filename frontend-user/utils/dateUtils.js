@@ -44,4 +44,4 @@ const formatDate = (dateString) => {
 };
 
 // Export the formatDate function
-module.exports = formatDate;
+export {formatDate};

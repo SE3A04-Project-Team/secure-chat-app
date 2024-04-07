@@ -1,24 +1,40 @@
-import {
-    Keyboard,
-    KeyboardAvoidingView,
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableWithoutFeedback,
-    View
-} from "react-native";
+import {KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Text, TextInput, View} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import SlidingModal from "../components/SlidingModal";
 import {useEffect, useRef, useState} from "react";
 import TextButton from "../components/TextButton";
 import IconButton from "../components/IconButton";
 import InitialIcon from "../components/InitialIcon";
+import axios from "axios";
+import {encryptAES} from "../utils/encryptionUtils";
 
 const ChatScreen = ({route, navigation}) => {
-    // Specific chat id and name passed as route params
+    // Server URL
+    const serverUrl = process.env.EXPO_PUBLIC_SERVER_URL;
+    // Specific chat id and name passed as route params, used to fetch chat messages
     const {chat} = route.params;
+    // Sample current user ID
+    const currentUserID = 1;
+    // Sample key for encryption
+    const key = '12345678901234567890123456789012';
+
+    // Fetch chat messages data from the server
+    useEffect(() => {
+        const getRoomData = async () => {
+            try {
+                const response = await axios.get(`${serverUrl}/data/chat_screen`, {
+                    params: {
+                        roomId: chat.roomId, // Room ID for which data to be fetched
+                    }
+                });
+                console.log(response.data);
+                return response.data; // Returning data for further processing if needed
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        getRoomData();
+    } , [])
 
     // Sample chat messages data
     const chatMessages = [
@@ -26,161 +42,189 @@ const ChatScreen = ({route, navigation}) => {
             messageID: 1,
             senderID: 1,
             message: 'Hello, how are you?',
+            timeStamp: '2024-04-03T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 2,
             senderID: 2,
             message: 'I am good, thank you!',
+            timeStamp: '2024-04-01T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 3,
             senderID: 2,
             message: 'Ayo!',
+            timeStamp: '2024-04-03T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 4,
             senderID: 2,
             message: 'How are you doing?',
+            timeStamp: '2024-04-03T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 5,
             senderID: 1,
             message: 'I am doing well, thank you!\nTesting multiline message.',
+            timeStamp: '2024-04-03T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 6,
             senderID: 2,
             message: 'Good to hear!',
+            timeStamp: '2024-04-01T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 7,
             senderID: 1,
             message: 'Hi there!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 8,
             senderID: 2,
             message: 'Hello!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 9,
             senderID: 1,
             message: 'How are you doing?',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 10,
             senderID: 2,
             message: 'I am doing well, thank you!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 11,
             senderID: 1,
             message: 'Good to hear!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 12,
             senderID: 2,
             message: 'Hi there!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 13,
             senderID: 1,
             message: 'Hello!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 14,
             senderID: 2,
             message: 'How are you doing?',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 15,
             senderID: 1,
             message: 'I am doing well, thank you!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 16,
             senderID: 2,
             message: 'Good to hear!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 17,
             senderID: 1,
             message: 'Hi there!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 18,
             senderID: 2,
             message: 'Hello!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 19,
             senderID: 1,
             message: 'How are you doing?',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 20,
             senderID: 2,
             message: 'I am doing well, thank you!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 21,
             senderID: 1,
             message: 'Good to hear!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 22,
             senderID: 2,
             message: 'Hi there!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 23,
             senderID: 1,
             message: 'Hello!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 24,
             senderID: 2,
             message: 'How are you doing?',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 25,
             senderID: 1,
             message: 'I am doing well, thank you!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 26,
             senderID: 2,
             message: 'Good to hear!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 27,
             senderID: 1,
             message: 'Hi there!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 28,
             senderID: 2,
             message: 'Hello!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 29,
             senderID: 1,
             message: 'How are you doing?',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 30,
             senderID: 2,
             message: 'I am doing well, thank you!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
         {
             messageID: 31,
             senderID: 1,
             message: 'Good to hear!',
+            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
         },
-    ]; // TODO: Query chat messages from backend using chat.id
-
-    // Sample current user ID
-    const currentUserID = 1; // TODO: Get the current user's ID from the authentication context
+    ];
 
     // Modal visibility state
     const [modalVisible, setModalVisible] = useState(false);
@@ -198,8 +242,25 @@ const ChatScreen = ({route, navigation}) => {
 
     // Function to handle sending a message
     const handleSendMessage = () => {
-        // TODO: Implement send message functionality
+        // Encrypt the message using AES encryption
+        setMessage(encryptAES(message, key));
 
+        // Send the message to the server
+        const sendMessage = async () => {
+            try {
+                const response = await axios.post(`${SERVER_URL}/sendMessage`, {
+                    userId: currentUserID,
+                    roomId: chat.roomID,
+                    message: message,
+                });
+                console.log(response.data);
+                return response.data;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+        // Call the sendMessage function
+        sendMessage();
         // Clear the message input after sending the message
         setMessage('');
     }
@@ -238,20 +299,28 @@ const ChatScreen = ({route, navigation}) => {
                         scrollViewRef.current.scrollToEnd({ animated: false });
                     }}
                 >
-                    <View className="flex flex-col items-center">
-                        {
-                            chatMessages.map((message) => (
+                    <View className="flex flex-col items-center mb-3">
+                        {chatMessages.map((message, index) => (
+                            <View
+                                key={message.messageID}
+                                className={`flex flex-col max-w-3/4 ${message.senderID === currentUserID ? 'self-end' : 'self-start'} ${index > 0 && chatMessages[index - 1].senderID === message.senderID ? 'mt-0.5' : 'mt-3'}`}
+                            >
                                 <View
-                                    key={message.messageID}
-                                    className={`py-2 px-3 my-2 rounded-2xl max-w-3/4 ${message.senderID === currentUserID ? 'bg-green-300 self-end' : 'bg-gray-200 self-start'}`}
+                                    className={`flex py-2 px-3 rounded-2xl max-w-fit ${message.senderID === currentUserID ? 'bg-green-300' : 'bg-gray-200'}`}
                                 >
                                     <Text
                                         className={`text-primary text-md font-normal ${message.senderID === currentUserID ? 'text-white' : 'text-black'}`}
-                                    >{message.message}</Text>
+                                    >
+                                        {message.message}
+                                    </Text>
                                 </View>
-                            ))
-                        }
+                                {/*<Text className={`text-gray-500 text-xs mt-0.5 ${message.senderID === currentUserID ? 'self-end' : 'self-start'}`}>*/}
+                                {/*    {(message.timeStamp)}*/}
+                                {/*</Text>*/}
+                            </View>
+                        ))}
                     </View>
+
                 </ScrollView>
                 <SafeAreaView className="flex-row justify-between items-center content-center bg-gray-100">
                     <View className="flex-row justify-between flex-grow mx-6 my-2 bg-white border border-gray-300 rounded-3xl max-h-40">
@@ -273,9 +342,8 @@ const ChatScreen = ({route, navigation}) => {
                         }
                     </View>
                 </SafeAreaView>
-                <SlidingModal modalVisible={modalVisible} setModalVisible={setModalVisible} height={0.3}>
-                    <SafeAreaView className="flex flex-col m-8 justify-evenly h-full">
-                        <TextButton title="Generate Report Screen" onPress={() => navigation.navigate("GenerateReportScreen")}/>
+                <SlidingModal modalVisible={modalVisible} setModalVisible={setModalVisible}>
+                    <SafeAreaView className="flex flex-col m-8 justify-start h-full">
                         <TextButton onPress={handleLeaveChat} title="Leave Chat"/>
                     </SafeAreaView>
                 </SlidingModal>
