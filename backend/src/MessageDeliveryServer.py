@@ -86,7 +86,7 @@ class MessageDeliveryServer(CommunicatingAgent):
         arg4: message
         """
         print(args)
-        if len(args) < 4:
+        if len(args) != 4:
             raise ValueError("Bad Message Format")
         
         senderID = args[0]
@@ -162,29 +162,45 @@ class MessageDeliveryServer(CommunicatingAgent):
         deletes room only if there are no more users registered to that room
         """
 
-    def join_room(self, data) -> str:
+    def join_room(self, args: json) -> str:
         """
         SOCKET EVENT
         adds a client to a room
+        
+        arg1: clientID
+        arg2: roomID
         """
-        data = json.dumps(data)
-        print(f"RECEIVED ARGS BY SERVER: {data}")
+        if len(args) != 2:
+            return "Bad Request: args: (clientID: str, roomID: str)" 
         
-        room = "14"
-        join_room("14")
-        emit("send_message", f"Welcome", room=room)
-        return f"joined room: {room}"
-        # add create room function
-        return f"joined room"
-        if roomID not in self.rooms.keys:
-            self.create_room(roomID)
+        roomID = args[1]
+        clientID = args[0]
         
-        if clientID not in self.rooms.get(roomID):
-            self.rooms.get(roomID).append(clientID)
+        print('polling database ...', end='\r')
+        rooms = self.databaseManager.get_rooms(clientID)
+        print('database returned     ')
+        rooms = json.loads(rooms)
+        try:
+            rooms['rooms']
+        except KeyError:
+            return "Internal Error"
+        
+        room_list = rooms['rooms']
+        print(room_list)
+        for room in room_list:
+            print(f"room: {room}")
+            stored_roomID = room['room']['roomID']
+            print(stored_roomID)
+            print(roomID)
+            if roomID == stored_roomID:
+                join_room(room=roomID)
+                return "Joined Room"
+            
+        return "Not authorized: user not in room"
 
-        # get old messages
+
         
-        return f"joined room {roomID}"
+        
 
     
     def leave_room(self, clientID: str, roomID: str):
