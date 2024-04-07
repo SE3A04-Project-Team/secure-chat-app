@@ -1,15 +1,11 @@
-import {SafeAreaView, ScrollView, Text, TouchableOpacity, View, FlatList, Button} from "react-native";
+import {SafeAreaView, ScrollView, Text, TouchableOpacity, View, FlatList} from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconButton from "../components/IconButton";
-import {formatDate} from "../utils/dateUtils";
+import {formatPythonTimeString} from "../utils/dateUtils";
 import InitialIcon from "../components/InitialIcon";
 import {useEffect, useState} from "react";
 import SlidingModal from "../components/SlidingModal";
 import axios from "axios";
-import {useEffect, useRef, useState} from "react";
-import SlidingModal from "../components/SlidingModal";
-import axios from "axios";
-import { text } from "@fortawesome/fontawesome-svg-core";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import TextButton from "../components/TextButton";
 
@@ -17,128 +13,33 @@ import TextButton from "../components/TextButton";
 const ChatSelectionScreen = ({ navigation }) => {
 
     const serverUrl = process.env.EXPO_PUBLIC_SERVER_URL;
-    const currentUserId = '1fPITEfiegat5F0xwXR9'; // User ID for which chats are to be fetched
+    const currentUserId = 'w0qh0NXts4gROIOPU7Aq'; // User ID for which chats are to be fetched
+    const [chatData, setChatData] = useState({rooms: {}});
+
     useEffect(() => {
         const getRoomsData = async () => {
             try {
-                const response = await axios.get(`${serverUrl}/data/chat_selection`, {
-                    params: {
-                        userId: currentUserId, // User ID for which chats are to be fetched
-                    }
-                    });
+                const response = await axios.post(`${serverUrl}/message_server/get_rooms`, {
+                    clientID: currentUserId,
+                });
                 console.log(response.data);
-                return response.data; // Returning data for further processing if needed
+                setChatData(response.data); // Set the fetched data to chatData
+                return response.data;
             } catch (error) {
                 console.error('Error:', error);
             }
         };
-
+    
         getRoomsData();
-
+        
     }, []);
+    
 
-
-    // Sample JSON data for chat selection
-    const chatData = [
-        {
-            id: 1,
-            name: 'John Doe',
-            timeOfLastMessage: '2024-04-03T18:25:43.511Z', // ISO 8601 format
-            lastMessage: 'Hello, how are you?',
-        },
-        {
-            id: 2,
-            name: 'Jane Doe',
-            timeOfLastMessage: '2024-02-21T14:25:43.511Z',
-            lastMessage: 'I am good, thank you!',
-        },
-        {
-            id: 3,
-            name: 'Alice',
-            timeOfLastMessage: '2024-04-02T13:25:43.511Z',
-            lastMessage: 'That\'s great to hear!',
-        },
-        {
-            id: 4,
-            name: 'Bob',
-            timeOfLastMessage: '2024-03-27T19:25:43.511Z',
-            lastMessage: 'How are you doing?',
-        },
-        {
-            id: 5,
-            name: 'Charlie',
-            timeOfLastMessage: '2024-03-27T17:25:43.511Z',
-            lastMessage: 'I am doing well, thank you!',
-        },
-        {
-            id: 6,
-            name: 'David',
-            timeOfLastMessage: '2024-03-27T15:25:43.511Z',
-            lastMessage: 'Good to hear!',
-        },
-        {
-            id: 7,
-            name: 'Eve',
-            timeOfLastMessage: '2024-03-27T16:25:43.511Z',
-            lastMessage: 'Hi there!',
-        },
-        {
-            id: 8,
-            name: 'Frank',
-            timeOfLastMessage: '2024-03-27T12:25:43.511Z',
-            lastMessage: 'Hello!',
-        },
-        {
-            id: 9,
-            name: 'Grace',
-            timeOfLastMessage: '2024-03-27T11:25:43.511Z',
-            lastMessage: 'Hey!',
-        },
-        {
-            id: 10,
-            name: 'Henry',
-            timeOfLastMessage: '2024-03-27T10:25:43.511Z',
-            lastMessage: 'Howdy!',
-        },
-        {
-            id: 11,
-            name: 'Ivy',
-            timeOfLastMessage: '2024-03-27T09:25:43.511Z',
-            lastMessage: 'Hi!',
-        },
-        {
-            id: 12,
-            name: 'Jack',
-            timeOfLastMessage: '2024-03-27T08:25:43.511Z',
-            lastMessage: 'Hey there!',
-        },
-        {
-            id: 13,
-            name: 'Katie',
-            timeOfLastMessage: '2024-03-27T07:25:43.511Z',
-            lastMessage: 'Hello, how are you?',
-        },
-        {
-            id: 14,
-            name: 'Liam',
-            timeOfLastMessage: '2024-04-02T06:25:43.511Z',
-            lastMessage: 'I am good, thank you!',
-        },
-        {
-            id: 15,
-            name: 'Mia',
-            timeOfLastMessage: '2024-04-01T05:25:43.511Z',
-            lastMessage: 'That\'s great to hear!',
-        }
-    ];
-
-    // Order chatData by timeOfLastMessage in descending order
-    chatData.sort((a, b) => new Date(b.timeOfLastMessage) - new Date(a.timeOfLastMessage));
-
-    const handleChatSelection = (chat) => {
+    const handleChatSelection = (room_id) => {
         // Handle chat selection logic here
         // navigate to ChatScreen with chat data for the selected chat
-        navigation.navigate("ChatScreen", { chat });
+        console.log(room_id);
+        navigation.navigate("ChatScreen", room_id);
     }
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -173,48 +74,51 @@ const ChatSelectionScreen = ({ navigation }) => {
             <View className="flex flex-col flex-grow bg-primary rounded-t-3xl" >
                 <ScrollView className="p-2 flex-1">
                     <View className="flex flex-col gap-y-2 justify-center items-center pb-12">
-                        {
-                            chatData.map((chat) => {
-                                const formattedDate = formatDate(chat.timeOfLastMessage);
+                        {chatData.rooms.length > 0 && (
+                            chatData.rooms.map((room) => {
+                                const formattedDate = formatPythonTimeString(room.recent_message.timestamp);
 
                                 return (
-                                    <TouchableOpacity key={chat.id} onPress={() => handleChatSelection(chat)} className="flex flex-row w-full p-4 content-center items-center justify-center">
-                                        <InitialIcon name={chat.name}/>
+                                    <TouchableOpacity key={room.room_id} onPress={() => handleChatSelection(room.room_id)} className="flex flex-row w-full p-4 content-center items-center justify-center">
+                                        <InitialIcon name={room.room_name}/>
                                         <View className="flex flex-col flex-grow">
                                             <View className="flex flex-row justify-between items-center content-center mx-2">
-                                                <Text className="text-lg flex-grow font-semibold">{chat.name}</Text>
+                                                <Text className="text-lg flex-grow font-semibold">{room.room_name}</Text>
                                                 <Text className="px-2 text-gray-400">{formattedDate}</Text>
                                                 <Icon name="angle-right" size={24} color="#9ca3af" className="self-end"/>
                                             </View>
-                                            <Text className="mx-2 text-gray-400">{chat.lastMessage}</Text>
+                                            <Text className="mx-2 text-gray-400">{room.recent_message.content}</Text>
                                         </View>
                                     </TouchableOpacity>
                                 );
                             })
-                        }
+                        )}
                     </View>
                 </ScrollView>
             </View>
             <SlidingModal modalVisible={modalVisible} setModalVisible={setModalVisible} height={0.85} dismissHandler={() => setSelectedUser(new Set([]))}>
-                <View className="m-8">
-                {/* TODO: Add contents of create new chat modal, similar design to iMessage */}
-                <TouchableOpacity className="flex h-16 border justify-center items-center mb-8 rounded-full border-green-600" onPress={handleChatCreation}>
-                    <Text className = "font-bold text-2xl text-green-600">Create</Text>
-                </TouchableOpacity>
-                <FlatList className = "h-4/5"
-                    keyExtractor = {(item) => item.id}
-                    data = {chatData}
-                    renderItem = {({item}) => (
-                        <View>
-                            <View className = "flex flex-row items-center p-4 border border-y-zinc-100 border-l-0 border-r-0"> 
-                                <InitialIcon name={item.name}/>
-                                <Text className = "grow text-md p-4">{item.name}</Text>
-                                <BouncyCheckbox fillColor="green" onPress={(isChecked) =>         handleUserSelection(isChecked, item)}/>
+                <SafeAreaView className="flex flex-col justify-end h-full">
+                    <View className="py-4">
+                        <Text className="text-black text-xl font-extrabold text-center">New Chat</Text>
+                    </View>
+                    <FlatList 
+                        className = "h-4/5 bg-white"
+                        keyExtractor = {(item) => item.id}
+                        data = {chatData}
+                        renderItem = {({item}) => (
+                            <View>
+                                <View className = "flex flex-row items-center p-4 border border-y-zinc-100 border-l-0 border-r-0"> 
+                                    <InitialIcon name={item.name}/>
+                                    <Text className = "grow text-md p-4">{item.name}</Text>
+                                    <BouncyCheckbox fillColor="green" onPress={(isChecked) => handleUserSelection(isChecked, item)}/>
+                                </View>
                             </View>
-                        </View>
-                    )}
-                />
-                </View>
+                        )}
+                    />
+                    <View className="px-4 pt-6 pb-2">
+                        <TextButton onPress={handleChatCreation} title="Create Chat"/>
+                    </View>
+                </SafeAreaView>
             </SlidingModal>
         </View>
     );
