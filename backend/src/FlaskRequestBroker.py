@@ -59,11 +59,6 @@ class FlaskRequestBroker(RequestBroker):
         """
         self.socketio.run(self.app, host=host, port=port)
 
-    def on_join(self, data):
-        user = data["user"]
-        room = data["room"]
-        print(f"client {user} wants to join: {room}")
-        SocketIO.emit("room_message", f"Welcome to {room}, {user}", room=room)
     
 
 class EventAction(object):
@@ -85,12 +80,14 @@ class EndpointAction(object):
         self.response = Response(status=200, headers={})
 
     def __call__(self, *args):
-        print("Received args by endpoint:", args)
-        # Unpack args if needed, and pass them individually
+        #print("Received args by endpoint:", args)
         # Access JSON data from Flask request object
-        json_data = request.json
+        
+        json_data = request.json # comes in as json dict type
         print("Received JSON data by endpoint:", json_data)
+
         resp = self.action(json_data)
+
         print(f"Response recv by broker:{resp}") #consider jsonifying
         self.response.set_data(resp) # set to a string to return
         print(self.response)

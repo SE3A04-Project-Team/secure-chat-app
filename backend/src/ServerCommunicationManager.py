@@ -77,10 +77,10 @@ class ServerCommunicationManager(CommunicationManager):
         registers actions with the broker so that requests can be forwarded correctly.
 
         """
-        self.broker.add_endpoint(f'/{self.serverName}/auth', 'authentication', self.authenticateUser, ["GET", "POST"])
+        self.broker.add_endpoint(f'/{self.serverName}/auth', f'/{self.serverName}/auth', self.authenticateUser, ["GET", "POST"])
 
         for i, endpoint in enumerate(endpoint_names):
-            self.broker.add_endpoint(f'/{self.serverName}/{endpoint}', endpoint, ProxyMethod(endpoint_handlers[i]), endpoint_methods[i])
+            self.broker.add_endpoint(f'/{self.serverName}/{endpoint}', f'/{self.serverName}/{endpoint}', ProxyMethod(endpoint_handlers[i]), endpoint_methods[i])
             
         
         for i, event in enumerate(event_names):
@@ -107,7 +107,22 @@ class ServerCommunicationManager(CommunicationManager):
         authenticates user for communication with the server
         """
         #print(message)
-        return self.authenticationManager.authenticateUser(message)
+        auth_response = self.authenticationManager.authenticateUser(message)
+        try: 
+            auth_data = json.loads(auth_response)
+        except:
+            return auth_response
+        print(f"auth_data: {auth_data}")
+        try:
+            key = auth_data['key']
+            clientID = auth_data['clientID']
+            message = auth_data['message']
+        except KeyError:
+            return auth_response
+        
+        self.updateKey(clientID, key)
+        return message
+
       
 
 

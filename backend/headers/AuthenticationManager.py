@@ -24,7 +24,7 @@ class AuthenticationManager(ABC):
         """
 
     @abstractmethod
-    def authenticateUser(self, message: json) -> tuple[EncryptionKey, object]:
+    def authenticateUser(self, data: json) -> str:
         """
         authenticates user for communication with the server
 
