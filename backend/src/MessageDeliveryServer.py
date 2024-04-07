@@ -39,21 +39,26 @@ class MessageDeliveryServer(CommunicatingAgent):
 
         self.event_names = [
             "join_room",
+            "send_message"
 
         ]
         self.event_functions = [
             self.join_room,
+            self.handle_message
             
         ]
         self.endpoint_names = [
+            "get_rooms",
             "create_room",
-            "get_rooms"
+            "message_history"
         ]
         self.endpoint_functions = [
-            self.create_room,
             self.get_rooms,
+            self.create_room,
+            self.get_message_history
         ]
         self.endpoint_methods = [
+            ["POST"],
             ["POST"],
             ["POST"]
         ]
@@ -66,18 +71,57 @@ class MessageDeliveryServer(CommunicatingAgent):
         self.communicationManager.registerActions(self.endpoint_names, self.endpoint_functions, self.endpoint_methods, self.event_names, self.event_functions)
 
 
-    def handle_message(self, message: json):
+    def handle_message(self, args: json):
         """
         handles the storing and forwarding of messages in the following format
         {
 	        “SenderID”: str,
 	        “ChatID”: str,
-	        “Timestamp”: str,
+	        “Timestamp”: int,
 	        “Message”: str,
         }
+        arg1: senderID
+        arg2: roomID,
+        arg3: timestamp
+        arg4: message
         """
+        print(args)
+        if len(args) < 4:
+            raise ValueError("Bad Message Format")
         
+        senderID = args[0]
+        roomID = args[1]
+        timestamp = args[2]
+        message = args[3]
+        
+        # store message
+        self.databaseManager.store_message(
+            user_id=senderID,
+            room_id=roomID,
+            timestamp=timestamp,
+            message_content=message
+        )
 
+        # emit to connected clients
+        # TODO: add room=roomID when rooms are set up
+        emit('receive_message', 
+             {
+            "senderID": senderID, 
+            "timestamp": timestamp,
+            "message_content": message
+            }
+            )
+
+
+    def get_message_history(self, data: json) ->str:
+        try:
+            roomID = data['roomID']
+            print(roomID)
+        except KeyError:
+            return "Bad Request: args: (roomID)"
+        
+        msg_history = self.databaseManager.get_message_history(roomID)
+        return json.dumps(msg_history)
 
 
     def get_rooms(self, data: json) -> str:
@@ -85,9 +129,11 @@ class MessageDeliveryServer(CommunicatingAgent):
             clientID = data['clientID']
             print(clientID)
         except KeyError:
-            return "Bad Request"
+            return "Bad Request: args: (clientID)"
         
         rooms = self.databaseManager.get_chat_selection(clientID)
+        if not rooms:
+            return "No rooms found"
         # rooms_obj = json.loads(rooms)
         print(f"result: {rooms}")
 
@@ -100,11 +146,15 @@ class MessageDeliveryServer(CommunicatingAgent):
     def create_room(self, data: json) -> str:
         """
         creates new room for messaging
-        Args: roomID
+        Args: list of clientIDs
         """
-        print(f"RECEIVED ARGS BY SERVER: {data}")
-        room = "14"
-        return f"created room: {room}"
+        try:
+            data['clientIDs']
+        except KeyError:
+            return "Bad Request: args: (clientIDs)"
+        
+        return self.databaseManager.create_room(data)
+
 
     def remove_room(self, roomID: json):
         """

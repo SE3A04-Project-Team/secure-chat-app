@@ -35,11 +35,10 @@ const ChatSelectionScreen = ({ navigation }) => {
     }, []);
     
 
-    const handleChatSelection = (room_id) => {
+    const handleChatSelection = (room_id, room_name) => {
         // Handle chat selection logic here
         // navigate to ChatScreen with chat data for the selected chat
-        console.log(room_id);
-        navigation.navigate("ChatScreen", room_id);
+        navigation.navigate("ChatScreen", {room_id, room_name});
     }
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -79,7 +78,7 @@ const ChatSelectionScreen = ({ navigation }) => {
                                 const formattedDate = formatPythonTimeString(room.recent_message.timestamp);
 
                                 return (
-                                    <TouchableOpacity key={room.room_id} onPress={() => handleChatSelection(room.room_id)} className="flex flex-row w-full p-4 content-center items-center justify-center">
+                                    <TouchableOpacity key={room.room_id} onPress={() => handleChatSelection(room.room_id, room.room_name)} className="flex flex-row w-full p-4 content-center items-center justify-center">
                                         <InitialIcon name={room.room_name}/>
                                         <View className="flex flex-col flex-grow">
                                             <View className="flex flex-row justify-between items-center content-center mx-2">

@@ -7,27 +7,40 @@ import IconButton from "../components/IconButton";
 import InitialIcon from "../components/InitialIcon";
 import axios from "axios";
 import {encryptAES} from "../utils/encryptionUtils";
+import {formatPythonTimeString} from "../utils/dateUtils";
 
 const ChatScreen = ({route, navigation}) => {
     // Server URL
     const serverUrl = process.env.EXPO_PUBLIC_SERVER_URL;
     // Specific chat id and name passed as route params, used to fetch chat messages
-    const {chat} = route.params;
+    const {room_id, room_name} = route.params;
     // Sample current user ID
-    const currentUserID = 1;
+    const currentUserID = '1fPITEfiegat5F0xwXR9';
     // Sample key for encryption
     const key = '12345678901234567890123456789012';
+
+    const [chatInfo, setChatInfo] = useState({
+        messages: [
+          {
+            content: "",
+            sender: {
+              name: { name: "" },
+              userID: ""
+            },
+            timestamp: 0
+          }
+        ]
+      });
 
     // Fetch chat messages data from the server
     useEffect(() => {
         const getRoomData = async () => {
             try {
-                const response = await axios.get(`${serverUrl}/data/chat_screen`, {
-                    params: {
-                        roomId: chat.roomId, // Room ID for which data to be fetched
-                    }
+                const response = await axios.post(`${serverUrl}/message_server/message_history`, {
+                    roomID: room_id,
                 });
                 console.log(response.data);
+                setChatInfo(response.data);
                 return response.data; // Returning data for further processing if needed
             } catch (error) {
                 console.error('Error:', error);
@@ -35,196 +48,6 @@ const ChatScreen = ({route, navigation}) => {
         }
         getRoomData();
     } , [])
-
-    // Sample chat messages data
-    const chatMessages = [
-        {
-            messageID: 1,
-            senderID: 1,
-            message: 'Hello, how are you?',
-            timeStamp: '2024-04-03T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 2,
-            senderID: 2,
-            message: 'I am good, thank you!',
-            timeStamp: '2024-04-01T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 3,
-            senderID: 2,
-            message: 'Ayo!',
-            timeStamp: '2024-04-03T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 4,
-            senderID: 2,
-            message: 'How are you doing?',
-            timeStamp: '2024-04-03T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 5,
-            senderID: 1,
-            message: 'I am doing well, thank you!\nTesting multiline message.',
-            timeStamp: '2024-04-03T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 6,
-            senderID: 2,
-            message: 'Good to hear!',
-            timeStamp: '2024-04-01T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 7,
-            senderID: 1,
-            message: 'Hi there!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 8,
-            senderID: 2,
-            message: 'Hello!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 9,
-            senderID: 1,
-            message: 'How are you doing?',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 10,
-            senderID: 2,
-            message: 'I am doing well, thank you!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 11,
-            senderID: 1,
-            message: 'Good to hear!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 12,
-            senderID: 2,
-            message: 'Hi there!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 13,
-            senderID: 1,
-            message: 'Hello!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 14,
-            senderID: 2,
-            message: 'How are you doing?',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 15,
-            senderID: 1,
-            message: 'I am doing well, thank you!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 16,
-            senderID: 2,
-            message: 'Good to hear!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 17,
-            senderID: 1,
-            message: 'Hi there!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 18,
-            senderID: 2,
-            message: 'Hello!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 19,
-            senderID: 1,
-            message: 'How are you doing?',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 20,
-            senderID: 2,
-            message: 'I am doing well, thank you!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 21,
-            senderID: 1,
-            message: 'Good to hear!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 22,
-            senderID: 2,
-            message: 'Hi there!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 23,
-            senderID: 1,
-            message: 'Hello!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 24,
-            senderID: 2,
-            message: 'How are you doing?',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 25,
-            senderID: 1,
-            message: 'I am doing well, thank you!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 26,
-            senderID: 2,
-            message: 'Good to hear!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 27,
-            senderID: 1,
-            message: 'Hi there!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 28,
-            senderID: 2,
-            message: 'Hello!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 29,
-            senderID: 1,
-            message: 'How are you doing?',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 30,
-            senderID: 2,
-            message: 'I am doing well, thank you!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-        {
-            messageID: 31,
-            senderID: 1,
-            message: 'Good to hear!',
-            timeStamp: '2024-03-07T18:25:43.511Z', // ISO 8601 format
-        },
-    ];
 
     // Modal visibility state
     const [modalVisible, setModalVisible] = useState(false);
@@ -285,8 +108,8 @@ const ChatScreen = ({route, navigation}) => {
                     <View className="flex-row justify-between items-start content-center p-4 ">
                         <IconButton icon={<Icon name="arrow-left" size={32} color="#86efac"/>} onPress={() => navigation.goBack()}/>
                         <View className="flex flex-col justify-center items-center">
-                            <InitialIcon name={chat.name}/>
-                            <Text className="text-black text-md text-center">{chat.name}</Text>
+                            <InitialIcon name={room_name}/>
+                            <Text className="text-black text-md text-center">{room_name}</Text>
                         </View>
                         <IconButton icon={<Icon name="gear" size={32} color="#86efac"/>} onPress={() => setModalVisible(true)}/>
                     </View>
@@ -300,25 +123,27 @@ const ChatScreen = ({route, navigation}) => {
                     }}
                 >
                     <View className="flex flex-col items-center mb-3">
-                        {chatMessages.map((message, index) => (
+                        {chatInfo.messages.map((message, index) => (
                             <View
-                                key={message.messageID}
-                                className={`flex flex-col max-w-3/4 ${message.senderID === currentUserID ? 'self-end' : 'self-start'} ${index > 0 && chatMessages[index - 1].senderID === message.senderID ? 'mt-0.5' : 'mt-3'}`}
+                                key={index} // You can use index as key if messageID is not unique
+                                className={`flex flex-col max-w-3/4 ${message.sender.userID === currentUserID ? 'self-end' : 'self-start'} ${index > 0 && chatInfo.messages[index - 1].sender.userID === message.sender.userID ? 'mt-0.5' : 'mt-3'}`}
                             >
                                 <View
-                                    className={`flex py-2 px-3 rounded-2xl max-w-fit ${message.senderID === currentUserID ? 'bg-green-300' : 'bg-gray-200'}`}
+                                className={`flex py-2 px-3 rounded-2xl max-w-fit ${message.sender.userID === currentUserID ? 'bg-green-300' : 'bg-gray-200'}`}
                                 >
-                                    <Text
-                                        className={`text-primary text-md font-normal ${message.senderID === currentUserID ? 'text-white' : 'text-black'}`}
-                                    >
-                                        {message.message}
-                                    </Text>
+                                <Text
+                                    className={`text-primary text-md font-normal ${message.sender.userID === currentUserID ? 'text-white' : 'text-black'}`}
+                                >
+                                    {message.content}
+                                </Text>
                                 </View>
-                                {/*<Text className={`text-gray-500 text-xs mt-0.5 ${message.senderID === currentUserID ? 'self-end' : 'self-start'}`}>*/}
-                                {/*    {(message.timeStamp)}*/}
-                                {/*</Text>*/}
+                                {/* Uncomment below section when timeStamp is available */}
+                                <Text className={`text-gray-500 text-xs mt-0.5 ${message.sender.userID === currentUserID ? 'self-end' : 'self-start'}`}>
+                                    {formatPythonTimeString(message.timestamp)}
+                                    </Text>
                             </View>
-                        ))}
+                            ))
+                        }
                     </View>
 
                 </ScrollView>
