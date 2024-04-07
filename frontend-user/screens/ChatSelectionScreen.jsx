@@ -120,10 +120,18 @@ const ChatSelectionScreen = ({ navigation }) => {
 
     const [selectedUser, setSelectedUser] = useState(new Set());
     
+    // After clicking the "Create" button
     const handleChatCreation = () => {
         console.log(selectedUser);
+        const chat = {
+            id: 16, // Change to a new chat ID 
+            name: "New Chat", // Change to new name 
+        }
+        navigation.navigate("ChatScreen", {chat});
+        setModalVisible(false)
     }
 
+    // Handles clicking checkboxes when selecting users in a group 
     const handleUserSelection = (isChecked, item) => {
         selectedUser.has(item.id) ? selectedUser.delete(item.id) : selectedUser.add(item.id)
     }
@@ -176,7 +184,7 @@ const ChatSelectionScreen = ({ navigation }) => {
                             <View className = "flex flex-row items-center p-4 border border-y-zinc-100 border-l-0 border-r-0"> 
                                 <InitialIcon name={item.name}/>
                                 <Text className = "grow text-md p-4">{item.name}</Text>
-                                <BouncyCheckbox onPress={(isChecked) =>         handleUserSelection(isChecked, item)}/>
+                                <BouncyCheckbox fillColor="green" onPress={(isChecked) =>         handleUserSelection(isChecked, item)}/>
                             </View>
                         </View>
                     )}
