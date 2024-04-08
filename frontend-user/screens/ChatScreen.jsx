@@ -6,7 +6,7 @@ import TextButton from "../components/TextButton";
 import IconButton from "../components/IconButton";
 import InitialIcon from "../components/InitialIcon";
 import axios from "axios";
-import {encryptAES} from "../utils/encryptionUtils";
+import {encryptAES, decryptAES} from "../utils/encryptionUtils";
 import {formatPythonTimeString, pythonTime} from "../utils/dateUtils";
 import io from "socket.io-client";
 
@@ -66,7 +66,7 @@ const ChatScreen = ({route, navigation}) => {
     const handleSendMessage = () => {
         if (socketRef.current) {
             // Encrypt the message using AES encryption
-            // const encryptedMessage = encryptAES(message, key);
+            const encryptedMessage = encryptAES(message, key);
             // Emit the message to the server
             socketRef.current.emit('send_message', currentUserID, room_id, pythonTime(), message);
             // Clear the message input after sending the message
@@ -116,7 +116,7 @@ const ChatScreen = ({route, navigation}) => {
                                 >
                                     <View className={`flex py-2 px-3 rounded-2xl max-w-fit ${message.sender === currentUserID ? 'bg-green-300' : 'bg-gray-200'}`}>
                                         <Text className={`text-primary text-md font-normal ${message.sender === currentUserID ? 'text-white' : 'text-black'}`}>
-                                            {message.content}
+                                            {decryptAES(message.content, key)}
                                         </Text>
                                     </View>
                                     <Text className={`text-gray-500 text-xs mt-0.5 ${message.sender === currentUserID ? 'self-end' : 'self-start'}`}>
