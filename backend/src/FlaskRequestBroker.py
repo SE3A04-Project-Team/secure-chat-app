@@ -84,9 +84,11 @@ class EndpointAction(object):
         # Access JSON data from Flask request object
         
         json_data = request.json # comes in as json dict type
+        headers = request.headers
+        print(headers)
         print("Received JSON data by endpoint:", json_data)
 
-        resp = self.action(json_data)
+        resp = self.action(headers, json_data)
 
         print(f"Response recv by broker: {resp}") #consider jsonifying
         self.response.set_data(resp)# set to a string to return

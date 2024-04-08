@@ -6,8 +6,10 @@ from src.JSONSerializer import JSONSerializer
 from src.KerberosServerAuthManager import KerberosServerAuthManager
 from src.KerberosAuthServer import KerberosAuthServer
 from src.KerberosTicketServer import KerberosTicketServer
+from src.AESEncryptionFunction import AESEncryptionFunction
+from src.AESKeyGenerator import AESKeyGenerator
 
-import json
+import base64
 
 '''s = KerberosAuthServer("t", None)
 data = dict({"clientIDs": "sample"})
@@ -15,12 +17,19 @@ json_data = json.dumps(data)
 
 print(s.login(json_data))'''
 
+a = AESKeyGenerator()
+k = b'\x81\xc9\x1cy{\xddmL\x86\x93\xc9W\x92\xd7\x93x'
+print(f"K = {k}")
+ab = AESEncryptionFunction()
+
+msg = ab.encrypt(bytes("Hello, World!", 'utf-8'), k)
+print(f"msg= {msg}")
 
 broker = FlaskRequestBroker()
 message_server_communication_manager = ServerCommunicationManager(
     'message_server',
     broker,
-    NoneEncryptor(),
+    AESEncryptionFunction(),
     JSONSerializer(),
     KerberosServerAuthManager()
 )
