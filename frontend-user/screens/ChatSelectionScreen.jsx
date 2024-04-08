@@ -22,7 +22,6 @@ const ChatSelectionScreen = ({ navigation }) => {
                 const response = await axios.post(`${serverUrl}/message_server/get_rooms`, {
                     clientID: currentUserId,
                 });
-                console.log(response.data);
                 setChatData(response.data); // Set the fetched data to chatData
                 return response.data;
             } catch (error) {

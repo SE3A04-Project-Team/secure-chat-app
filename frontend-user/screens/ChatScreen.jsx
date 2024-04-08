@@ -7,7 +7,8 @@ import IconButton from "../components/IconButton";
 import InitialIcon from "../components/InitialIcon";
 import axios from "axios";
 import {encryptAES} from "../utils/encryptionUtils";
-import {formatPythonTimeString} from "../utils/dateUtils";
+import {formatPythonTimeString, pythonTime} from "../utils/dateUtils";
+import io from "socket.io-client";
 
 const ChatScreen = ({route, navigation}) => {
     // Server URL
@@ -23,23 +24,41 @@ const ChatScreen = ({route, navigation}) => {
         messages: [
           {
             content: "",
-            sender: {
-              name: { name: "" },
-              userID: ""
-            },
+            sender: "",
             timestamp: 0
           }
         ]
-      });
+    });
+
+    // Connect to the socket server when the component mounts
+    const socketRef = useRef(null);
+    useEffect(() => {
+        socketRef.current = io(serverUrl);
+
+        // Listen for incoming messages
+        socketRef.current.on('receive_message', (newMessage) => {
+            setChatInfo(prevState => ({
+                ...prevState,
+                messages: [...prevState.messages, newMessage]
+            }));
+        });
+
+        // Disconnect from the socket server when the component unmounts
+        return () => {
+            if (socketRef.current) {
+                socketRef.current.disconnect();
+            }
+        };
+    }, []);
 
     // Fetch chat messages data from the server
     useEffect(() => {
+
         const getRoomData = async () => {
             try {
                 const response = await axios.post(`${serverUrl}/message_server/message_history`, {
                     roomID: room_id,
                 });
-                console.log(response.data);
                 setChatInfo(response.data);
                 return response.data; // Returning data for further processing if needed
             } catch (error) {
@@ -63,30 +82,19 @@ const ChatScreen = ({route, navigation}) => {
         navigation.goBack();
     }
 
-    // Function to handle sending a message
+    // Send a message to the server socket
     const handleSendMessage = () => {
-        // Encrypt the message using AES encryption
-        setMessage(encryptAES(message, key));
+        if (socketRef.current) {
+            // Encrypt the message using AES encryption
+            // const encryptedMessage = encryptAES(message, key);
 
-        // Send the message to the server
-        const sendMessage = async () => {
-            try {
-                const response = await axios.post(`${SERVER_URL}/sendMessage`, {
-                    userId: currentUserID,
-                    roomId: chat.roomID,
-                    message: message,
-                });
-                console.log(response.data);
-                return response.data;
-            } catch (error) {
-                console.error('Error:', error);
-            }
+            // Emit the message to the server
+            socketRef.current.emit('send_message', currentUserID, room_id, pythonTime(), message);
+
+            // Clear the message input after sending the message
+            setMessage('');
         }
-        // Call the sendMessage function
-        sendMessage();
-        // Clear the message input after sending the message
-        setMessage('');
-    }
+    };
 
     // ScrollView starts with most recent messages (at the bottom)
     const scrollViewRef = useRef(null);
@@ -126,19 +134,19 @@ const ChatScreen = ({route, navigation}) => {
                         {chatInfo.messages.map((message, index) => (
                             <View
                                 key={index} // You can use index as key if messageID is not unique
-                                className={`flex flex-col max-w-3/4 ${message.sender.userID === currentUserID ? 'self-end' : 'self-start'} ${index > 0 && chatInfo.messages[index - 1].sender.userID === message.sender.userID ? 'mt-0.5' : 'mt-3'}`}
+                                className={`flex flex-col max-w-3/4 ${message.sender === currentUserID ? 'self-end' : 'self-start'} ${index > 0 && chatInfo.messages[index - 1].sender.userID === message.sender ? 'mt-0.5' : 'mt-3'}`}
                             >
                                 <View
-                                className={`flex py-2 px-3 rounded-2xl max-w-fit ${message.sender.userID === currentUserID ? 'bg-green-300' : 'bg-gray-200'}`}
+                                className={`flex py-2 px-3 rounded-2xl max-w-fit ${message.sender === currentUserID ? 'bg-green-300' : 'bg-gray-200'}`}
                                 >
                                 <Text
-                                    className={`text-primary text-md font-normal ${message.sender.userID === currentUserID ? 'text-white' : 'text-black'}`}
+                                    className={`text-primary text-md font-normal ${message.sender === currentUserID ? 'text-white' : 'text-black'}`}
                                 >
                                     {message.content}
                                 </Text>
                                 </View>
                                 {/* Uncomment below section when timeStamp is available */}
-                                <Text className={`text-gray-500 text-xs mt-0.5 ${message.sender.userID === currentUserID ? 'self-end' : 'self-start'}`}>
+                                <Text className={`text-gray-500 text-xs mt-0.5 ${message.sender === currentUserID ? 'self-end' : 'self-start'}`}>
                                     {formatPythonTimeString(message.timestamp)}
                                     </Text>
                             </View>

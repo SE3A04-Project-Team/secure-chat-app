@@ -88,6 +88,10 @@ const formatPythonTimeString = (timeString) => {
     return `${dateObject.getFullYear()}-${(dateObject.getMonth() + 1).toString().padStart(2, '0')}-${dateObject.getDate().toString().padStart(2, '0')}`;
 };
 
+const pythonTime = () => {
+    return Math.floor(Date.now() / 1000);
+}
+
 
 // Export the formatDate function
-export {formatDateString, formatPythonTimeString};
+export {formatDateString, formatPythonTimeString, pythonTime};
