@@ -29,11 +29,11 @@ class FirebaseMessageDatabase(MessageDatabase):
 
         """
         # Get data from the request body
-        user_ids = room.get('userIds')
+        user_ids = room.get('clientIDs')
         
         # Validate request data
         if not user_ids:
-            return "error: Missing required data"
+            return "error: Missing required data (clientIDs)"
 
         # Retrieve user names
         user_names = []
@@ -117,7 +117,8 @@ class FirebaseMessageDatabase(MessageDatabase):
             # Fetch data from the referenced sender document
             sender_ref = msg_data['sender']
             sender_data = sender_ref.get(['name']).to_dict()
-            msg_data['sender'] = {'name': sender_data, 'userID': sender_ref.id}
+            # msg_data['sender'] = {'name': sender_data, 'userID': sender_ref.id}
+            msg_data['sender'] = sender_ref.id
             messages_data.append(msg_data)
         
         # Construct the response data

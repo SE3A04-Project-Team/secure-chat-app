@@ -7,7 +7,8 @@ import IconButton from "../components/IconButton";
 import InitialIcon from "../components/InitialIcon";
 import axios from "axios";
 import {encryptAES} from "../utils/encryptionUtils";
-import {formatPythonTimeString} from "../utils/dateUtils";
+import {formatPythonTimeString, pythonTime} from "../utils/dateUtils";
+import io from "socket.io-client";
 
 const ChatScreen = ({route, navigation}) => {
     // Server URL
@@ -18,19 +19,34 @@ const ChatScreen = ({route, navigation}) => {
     const currentUserID = '1fPITEfiegat5F0xwXR9';
     // Sample key for encryption
     const key = '12345678901234567890123456789012';
+    // Modal visibility state
+    const [modalVisible, setModalVisible] = useState(false);
+    // Message input state
+    const [message, setMessage] = useState('');
+    // Chat messages state
+    const [chatMessages, setchatMessages] = useState(
+        // {messages: [{
+        //     content: "",
+        //     sender: "",
+        //     timestamp: 0
+        // }]}
+        null
+    );
 
-    const [chatInfo, setChatInfo] = useState({
-        messages: [
-          {
-            content: "",
-            sender: {
-              name: { name: "" },
-              userID: ""
-            },
-            timestamp: 0
-          }
-        ]
-      });
+    // Connect to the socket server when the component mounts
+    const socketRef = useRef(null);
+    useEffect(() => {
+        socketRef.current = io(serverUrl);
+        // Listen for incoming messages
+        socketRef.current.on('receive_message', (newMessage) => {
+            setchatMessages(prevState => ({
+                ...prevState,
+                messages: [...prevState.messages, newMessage]
+            }));
+        });
+        // Disconnect from the socket server when the component unmounts
+        return () => {if (socketRef.current) {socketRef.current.disconnect()}};
+    }, []);
 
     // Fetch chat messages data from the server
     useEffect(() => {
@@ -39,64 +55,35 @@ const ChatScreen = ({route, navigation}) => {
                 const response = await axios.post(`${serverUrl}/message_server/message_history`, {
                     roomID: room_id,
                 });
-                console.log(response.data);
-                setChatInfo(response.data);
+                setchatMessages(response.data);
                 return response.data; // Returning data for further processing if needed
-            } catch (error) {
-                console.error('Error:', error);
-            }
+            } catch (error) {console.error('Error:', error)}
         }
         getRoomData();
     } , [])
 
-    // Modal visibility state
-    const [modalVisible, setModalVisible] = useState(false);
-
-    // Message input state
-    const [message, setMessage] = useState('');
+    // Send a message to the server socket
+    const handleSendMessage = () => {
+        if (socketRef.current) {
+            // Encrypt the message using AES encryption
+            // const encryptedMessage = encryptAES(message, key);
+            // Emit the message to the server
+            socketRef.current.emit('send_message', currentUserID, room_id, pythonTime(), message);
+            // Clear the message input after sending the message
+            setMessage('');
+        }
+    };
 
     // Function to handle leaving the chat
     const handleLeaveChat = () => {
         // TODO: Implement leave chat functionality
-
         // Navigate back to the chat selection screen
         navigation.goBack();
     }
 
-    // Function to handle sending a message
-    const handleSendMessage = () => {
-        // Encrypt the message using AES encryption
-        setMessage(encryptAES(message, key));
-
-        // Send the message to the server
-        const sendMessage = async () => {
-            try {
-                const response = await axios.post(`${SERVER_URL}/sendMessage`, {
-                    userId: currentUserID,
-                    roomId: chat.roomID,
-                    message: message,
-                });
-                console.log(response.data);
-                return response.data;
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
-        // Call the sendMessage function
-        sendMessage();
-        // Clear the message input after sending the message
-        setMessage('');
-    }
-
     // ScrollView starts with most recent messages (at the bottom)
     const scrollViewRef = useRef(null);
-    useEffect(() => {
-        // Scrolls to the bottom of the ScrollView when it's initially rendered
-        if (scrollViewRef.current) {
-            scrollViewRef.current.scrollToEnd({ animated: false });
-        }
-    }, []);
-
+    const scrollToBottom = () => {if (scrollViewRef.current) {scrollViewRef.current.scrollToEnd({ animated: true })}};
 
     return (
         <KeyboardAvoidingView
@@ -109,7 +96,7 @@ const ChatScreen = ({route, navigation}) => {
                         <IconButton icon={<Icon name="arrow-left" size={32} color="#86efac"/>} onPress={() => navigation.goBack()}/>
                         <View className="flex flex-col justify-center items-center">
                             <InitialIcon name={room_name}/>
-                            <Text className="text-black text-md text-center">{room_name}</Text>
+                            <Text numberOfLines={1} ellipsizeMode="tail" className="text-black text-md text-center">{room_name}</Text>
                         </View>
                         <IconButton icon={<Icon name="gear" size={32} color="#86efac"/>} onPress={() => setModalVisible(true)}/>
                     </View>
@@ -117,35 +104,28 @@ const ChatScreen = ({route, navigation}) => {
                 <ScrollView
                     className="px-3"
                     ref={scrollViewRef}
-                    onLayout={() => {
-                        // Scrolls to the bottom of the ScrollView when it's initially rendered
-                        scrollViewRef.current.scrollToEnd({ animated: false });
-                    }}
+                    onContentSizeChange={scrollToBottom}
+                    onLayout={() => {scrollViewRef.current.scrollToEnd({ animated: false })}}
                 >
                     <View className="flex flex-col items-center mb-3">
-                        {chatInfo.messages.map((message, index) => (
-                            <View
-                                key={index} // You can use index as key if messageID is not unique
-                                className={`flex flex-col max-w-3/4 ${message.sender.userID === currentUserID ? 'self-end' : 'self-start'} ${index > 0 && chatInfo.messages[index - 1].sender.userID === message.sender.userID ? 'mt-0.5' : 'mt-3'}`}
-                            >
+                        {chatMessages &&
+                            chatMessages.messages.map((message, index) => (
                                 <View
-                                className={`flex py-2 px-3 rounded-2xl max-w-fit ${message.sender.userID === currentUserID ? 'bg-green-300' : 'bg-gray-200'}`}
+                                    key={index} // You can use index as key if messageID is not unique
+                                    className={`flex flex-col max-w-3/4 ${message.sender === currentUserID ? 'self-end' : 'self-start'} ${index > 0 && chatMessages.messages[index - 1].sender.userID === message.sender ? 'mt-0.5' : 'mt-3'}`}
                                 >
-                                <Text
-                                    className={`text-primary text-md font-normal ${message.sender.userID === currentUserID ? 'text-white' : 'text-black'}`}
-                                >
-                                    {message.content}
-                                </Text>
-                                </View>
-                                {/* Uncomment below section when timeStamp is available */}
-                                <Text className={`text-gray-500 text-xs mt-0.5 ${message.sender.userID === currentUserID ? 'self-end' : 'self-start'}`}>
-                                    {formatPythonTimeString(message.timestamp)}
+                                    <View className={`flex py-2 px-3 rounded-2xl max-w-fit ${message.sender === currentUserID ? 'bg-green-300' : 'bg-gray-200'}`}>
+                                        <Text className={`text-primary text-md font-normal ${message.sender === currentUserID ? 'text-white' : 'text-black'}`}>
+                                            {message.content}
+                                        </Text>
+                                    </View>
+                                    <Text className={`text-gray-500 text-xs mt-0.5 ${message.sender === currentUserID ? 'self-end' : 'self-start'}`}>
+                                        {formatPythonTimeString(message.timestamp)}
                                     </Text>
-                            </View>
+                                </View>
                             ))
                         }
                     </View>
-
                 </ScrollView>
                 <SafeAreaView className="flex-row justify-between items-center content-center bg-gray-100">
                     <View className="flex-row justify-between flex-grow mx-6 my-2 bg-white border border-gray-300 rounded-3xl max-h-40">
@@ -156,8 +136,7 @@ const ChatScreen = ({route, navigation}) => {
                             value={message}
                             onChangeText={(text) => setMessage(text)}
                         />
-                        {
-                            !(message === '') &&
+                        {!(message === '') &&
                             <IconButton
                                 icon={<Icon name="send" size={20} color="#FFFFFF"/>}
                                 onPress={handleSendMessage}
