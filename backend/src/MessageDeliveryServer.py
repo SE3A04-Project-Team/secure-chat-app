@@ -106,9 +106,9 @@ class MessageDeliveryServer(CommunicatingAgent):
         # TODO: add room=roomID when rooms are set up
         emit('receive_message', 
              {
-            "senderID": senderID, 
+            "sender": senderID, 
             "timestamp": timestamp,
-            "message_content": message
+            "content": message
             }
             )
 
