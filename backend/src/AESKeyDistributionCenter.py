@@ -51,6 +51,7 @@ class AESKeyDistributionCenter(KeyDistributionManager):
         id = agentID + serviceID
 
         # get latest keys stored on server
+        # TODO: might be very inefficient ----- flag for optimization if slow
         self.encryptionKeys = self.keyStore.getInfo()
 
         # Session key does not already exist

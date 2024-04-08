@@ -12,6 +12,12 @@ finish set up
 """
 from headers.CommunicatingAgent import CommunicatingAgent
 from headers.CommunicationManager import CommunicationManager
+from headers.KeyDistributionManager import KeyDistributionManager
+from headers.Hasher import Hasher
+
+from src.AESKeyDistributionCenter import AESKeyDistributionCenter
+from src.Hashing32Bit import Hashin32Bit
+from src.AESEncryptionFunction import AESEncryptionFunction
 
 import json
 import time
@@ -27,8 +33,11 @@ class KerberosAuthServer(CommunicatingAgent):
         """
         self.serverID = serverID
         self.communicationManager = communicationManager
+        self.passwordHasher = Hashin32Bit()
+        self.KDC = AESKeyDistributionCenter()
         self.TGS_Key = "TGS_KEY"
         self.VALID_PERIOD = 10000000
+        self.encryptionFunction = AESEncryptionFunction()
         self.credentials = dict(
             {"USER1": "PASSWORD1"}
         )
@@ -73,8 +82,10 @@ class KerberosAuthServer(CommunicatingAgent):
             password = self.__get_credential(clientID)
         except KeyError:
             return "User not found"
+        
+        Hashed_Password = self.passwordHasher(password)
 
-        Session_Key = "TEST_KEY"
+        Session_Key = self.KDC.getKey(clientID, 'ticket_server')
         Timestamp = time.time()
         Validity_Period = time.time()+self.VALID_PERIOD
 

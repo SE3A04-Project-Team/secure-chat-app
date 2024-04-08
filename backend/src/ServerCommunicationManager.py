@@ -174,25 +174,34 @@ class ProxyMethod(object):
         print("Received headers by proxy:", headers)
         print("Received args by proxy:", json_data)
         # Unpack args if needed, and pass them individually
-
+        secure_message = True
         clientID = headers['clientID']
-        data = json_data['data']
         try:
-            unencrypted_data = self.manager.decrypt(clientID, data)
-            print(unencrypted_data)
+            data = json_data['secure_data']
         except KeyError:
-            return ("405: No Key found, please authenticate")
-        
+            print("no secure data")
+            secure_message = False
+            unencrypted_data = json_data
+
+        if secure_message:
+            try:
+                unencrypted_data = self.manager.decrypt(clientID, data)
+                print(unencrypted_data)
+            except KeyError:
+                return ("405: No Key found, please authenticate")
+            
+
         resp = self.action(unencrypted_data)
         print(resp)
 
-        try:
-            encrypted_data = self.manager.encrypt(clientID, resp)
-        except KeyError:
-            return ("405: No Key found, please authenticate")
+        if secure_message:
+            try:
+                resp = self.manager.encrypt(clientID, resp)
+            except KeyError:
+                return ("405: No Key found, please authenticate")
 
-        print(f"Response recv by proxy:{encrypted_data}") #consider jsonifying
-        return encrypted_data
+        print(f"Response recv by proxy:{resp}") #consider jsonifying
+        return resp
     
 class ProxyEvent(object):
     def __init__(self, manager: ServerCommunicationManager, action: Callable):
