@@ -5,11 +5,12 @@ Communicates with firebase
 @Date: 2024-04-07
 
 """
-from headers.MessageDatabase import MessageDatabase
+from MessageDatabase import MessageDatabase
 
-from flask import Flask, jsonify, request
-import firebase_admin
-from firebase_admin import credentials, firestore
+from flask import jsonify
+from Lib import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import firestore
 from datetime import datetime
 import json
 
