@@ -35,7 +35,7 @@ class KerberosAuthServer(CommunicatingAgent):
         self.communicationManager = communicationManager
         self.passwordHasher = Hashin32Bit()
         self.KDC = AESKeyDistributionCenter()
-        self.TGS_Key = "TGS_KEY"
+        self.TGS_Key = b'\xa8\xe9\xae\xa1\x99\x18\xa7R\xa3\x01Cg\xe4\x97\x86\xbf'
         self.VALID_PERIOD = 10000000
         self.encryptionFunction = AESEncryptionFunction()
         self.credentials = dict(
@@ -98,7 +98,7 @@ class KerberosAuthServer(CommunicatingAgent):
         
 
         #Encrypt Session_Key with Hashed_Password
-        encrypted_session_key = Session_Key
+        encrypted_session_key = self.encryptionFunction.encrypt()
         # encrypt TGT with TGS_KEY
         encrypted_TGT = Ticket_Granting_Ticket
 

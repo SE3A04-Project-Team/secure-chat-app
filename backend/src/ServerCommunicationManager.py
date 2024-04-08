@@ -135,9 +135,8 @@ class ServerCommunicationManager(CommunicationManager):
         key = self.keys.get(clientID)
 
         data = json.dumps(data)
-        encoded_data = data.encode()
-        encrypted_data = self.encryptionFunction.encrypt(encoded_data, key)
-        return base64.b64encode(encrypted_data)
+
+        return self.encryptionFunction.encrypt(data, key)
         
 
     def decrypt(self, clientID:str, data:bytes) -> json:
@@ -149,11 +148,11 @@ class ServerCommunicationManager(CommunicationManager):
         
         key = self.keys.get(clientID)
 
-        decoded_data = base64.b64decode(data)
+
         decrypted_data = self.encryptionFunction.decrypt(decoded_data, key)
         # print(f"decrypted_data: {decrypted_data}")
         # print(decrypted_data.decode())
-        return json.loads(decrypted_data.decode())
+        return json.loads(decrypted_data)
 
 
 
