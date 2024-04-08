@@ -10,6 +10,7 @@ from src.AESEncryptionFunction import AESEncryptionFunction
 from src.AESKeyGenerator import AESKeyGenerator
 
 import base64
+import json
 
 '''s = KerberosAuthServer("t", None)
 data = dict({"clientIDs": "sample"})
@@ -21,9 +22,16 @@ a = AESKeyGenerator()
 k = b'\x81\xc9\x1cy{\xddmL\x86\x93\xc9W\x92\xd7\x93x'
 print(f"K = {k}")
 ab = AESEncryptionFunction()
+dic = {
+    "clientIDs": ["TESTID", "TESTID2"]
+}
+msg = json.dumps(dic)
 
-msg = ab.encrypt(bytes("Hello, World!", 'utf-8'), k)
+msg = ab.encrypt(msg.encode(), k)
+msg = base64.b64encode(msg)
 print(f"msg= {msg}")
+msg = ab.decrypt(base64.b64decode(msg), k)
+print(msg.decode())
 
 broker = FlaskRequestBroker()
 message_server_communication_manager = ServerCommunicationManager(
