@@ -2,7 +2,7 @@
 Responsible for handling encryption key distribution, and periodically refreshing keys. Implements the KeyDistributionManager
 
 @Author: Daniel Franzé-Da Silva
-@Date: 2024-04-07
+@Date: 2024-04-08
 
 ATTRIBUTES:
     keyGenerator: a generator used to generate new keys
@@ -10,9 +10,10 @@ ATTRIBUTES:
 
 """
 
-from headers.EncryptionKey import EncryptionKey
-from headers.KeyDistributionManager import KeyDistributionManager
-from src.AESKeyGenerator import AESKeyGenerator
+from backend.headers.EncryptionKey import EncryptionKey
+from backend.headers.KeyDistributionManager import KeyDistributionManager
+from backend.src.AESKeyGenerator import AESKeyGenerator
+from backend.src.KeyStorageFirebase import KeyStorageFirebase
 
 
 class AESKeyDistributionCenter(KeyDistributionManager):
@@ -20,14 +21,19 @@ class AESKeyDistributionCenter(KeyDistributionManager):
     def __init__(self):
         self.keyGenerator = AESKeyGenerator()
         self.encryptionKeys = {}
+        self.keyStore = KeyStorageFirebase()
 
     def refreshKeys(self) -> None:
         """
         refresh the stored keys to be distributed
 
         """
+        # get latest keys stored on server
+        self.encryptionKeys = self.keyStore.getInfo()
+
+        # update keys
         for id in self.encryptionKeys.keys():
-            self.encryptionKeys[id] = self.keyGenerator.generateKey()
+            self.keyStore.updateEntry(id, self.keyGenerator.generateKey())
 
     def getKey(self, agentID: str, serviceID: str) -> EncryptionKey:
         """
@@ -43,9 +49,12 @@ class AESKeyDistributionCenter(KeyDistributionManager):
         """
         id = agentID + serviceID
 
+        # get latest keys stored on server
+        self.encryptionKeys = self.keyStore.getInfo()
+
         # Session key does not already exist
         if self.encryptionKeys.get(id) is None:
-            self.encryptionKeys[id] = self.keyGenerator.generateKey()
+            self.keyStore.addEntry(id, self.keyGenerator.generateKey())
         else:
             return self.encryptionKeys.get(id)
 

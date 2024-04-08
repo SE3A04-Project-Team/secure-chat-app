@@ -2,7 +2,7 @@
 Responsible for generating encryption keys
 
 @Author: Daniel Franzé-Da Silva
-@Date: 2024-04-07
+@Date: 2024-04-08
 
 """
 

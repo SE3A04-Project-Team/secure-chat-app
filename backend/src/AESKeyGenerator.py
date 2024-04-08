@@ -2,7 +2,7 @@
 Responsible for generating AES encryption keys. Implements the KeyGenerator
 
 @Author: Daniel Franzé-Da Silva
-@Date: 2024-04-07
+@Date: 2024-04-08
 
 """
 
