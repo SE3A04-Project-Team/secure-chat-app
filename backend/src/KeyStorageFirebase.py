@@ -9,8 +9,8 @@ Responsible for storing encryption keys to database
 from backend.headers.EncryptionKey import EncryptionKey
 from backend.headers.KeyStorage import KeyStorage
 
-from backend.src import firebase_admin
-from backend.src.firebase_admin import credentials, firestore
+import firebase_admin
+from firebase_admin import credentials, firestore
 
 
 class KeyStorageFirebase(KeyStorage):
