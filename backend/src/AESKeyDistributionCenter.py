@@ -2,7 +2,7 @@
 Responsible for handling encryption key distribution, and periodically refreshing keys. Implements the KeyDistributionManager
 
 @Author: Daniel Franzé-Da Silva
-@Date: 2024-04-07
+@Date: 2024-04-08
 
 ATTRIBUTES:
     keyGenerator: a generator used to generate new keys
