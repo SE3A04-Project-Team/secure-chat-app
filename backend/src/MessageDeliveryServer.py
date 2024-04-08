@@ -109,7 +109,8 @@ class MessageDeliveryServer(CommunicatingAgent):
             "sender": senderID, 
             "timestamp": timestamp,
             "content": message
-            }
+            },
+            broadcast=True
             )
 
 
