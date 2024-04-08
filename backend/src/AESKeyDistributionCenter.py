@@ -60,19 +60,19 @@ class AESKeyDistributionCenter(KeyDistributionManager):
 
 
 ### Testing
-# kdc = AESKeyDistributionCenter()
-# kdc.getKey("0", "1",)
-# kdc.getKey("1", "1",)
-# kdc.getKey("2", "2",)
-# kdc.getKey("3", "2",)
-# kdc.getKey("4", "3",)
-#
-# for i in kdc.encryptionKeys.values():
-#     print(i)
-#
-# kdc.refreshKeys()
-#
-# print("*******************************")
-# for j in kdc.encryptionKeys.values():
-#     print(j)
+kdc = AESKeyDistributionCenter()
+kdc.getKey("0", "1",)
+kdc.getKey("1", "1",)
+kdc.getKey("2", "2",)
+kdc.getKey("3", "2",)
+kdc.getKey("4", "3",)
+
+for i in kdc.encryptionKeys.values():
+    print(i)
+
+kdc.refreshKeys()
+
+print("*******************************")
+for j in kdc.encryptionKeys.values():
+    print(j)
 
