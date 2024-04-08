@@ -67,11 +67,15 @@ const ChatSelectionScreen = ({ navigation }) => {
                             chatData.rooms.map((room) => {
                                 const formattedDate = room.recent_message?.timestamp ? formatPythonTimeString(room.recent_message.timestamp) : null;
                                 return (
-                                    <TouchableOpacity key={room.room_id} onPress={() => handleChatSelection(room.room_id, room.room_name)} className="flex flex-row w-full p-4 content-center items-center justify-center">
+                                    <TouchableOpacity 
+                                        key={room.room_id} 
+                                        onPress={() => handleChatSelection(room.room_id, room.room_name)} 
+                                        className="flex flex-row w-fit p-4 content-center items-center justify-center"
+                                    >
                                         {room.room_name && <InitialIcon name={room.room_name}/>}
                                         <View className="flex flex-col flex-grow">
                                             <View className="flex flex-row justify-between items-center content-center mx-2">
-                                                {room.room_name && <Text className="text-lg flex-grow font-semibold">{room.room_name}</Text>}
+                                                {room.room_name && <Text className="text-lg w-48 font-semibold" numberOfLines={1}>{room.room_name}</Text>}
                                                 {formattedDate && <Text className="px-2 text-gray-400">{formattedDate}</Text>}
                                                 <Icon name="angle-right" size={24} color="#9ca3af" className="self-end"/>
                                             </View>
