@@ -6,8 +6,8 @@ Responsible for storing encryption keys to database
 
 """
 
-from backend.headers.EncryptionKey import EncryptionKey
-from backend.headers.KeyStorage import KeyStorage
+from headers.EncryptionKey import EncryptionKey
+from headers.KeyStorage import KeyStorage
 
 import firebase_admin
 from firebase_admin import credentials, firestore
@@ -16,7 +16,7 @@ from firebase_admin import credentials, firestore
 class KeyStorageFirebase(KeyStorage):
     def __init__(self):
         # Initialize firebase admin ADK
-        cred = credentials.Certificate("./firebase.json")
+        cred = credentials.Certificate("backend/firebase.json")
         firebase_admin.initialize_app(cred)
         self.db = firestore.client()
 

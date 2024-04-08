@@ -10,10 +10,11 @@ ATTRIBUTES:
 
 """
 
-from backend.headers.EncryptionKey import EncryptionKey
-from backend.headers.KeyDistributionManager import KeyDistributionManager
-from backend.src.AESKeyGenerator import AESKeyGenerator
-from backend.src.KeyStorageFirebase import KeyStorageFirebase
+from headers.EncryptionKey import EncryptionKey
+from headers.KeyDistributionManager import KeyDistributionManager
+
+from src.AESKeyGenerator import AESKeyGenerator
+from src.KeyStorageFirebase import KeyStorageFirebase
 
 
 class AESKeyDistributionCenter(KeyDistributionManager):
