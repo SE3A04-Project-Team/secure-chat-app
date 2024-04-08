@@ -76,10 +76,10 @@ const ChatSelectionScreen = ({ navigation }) => {
                                         <View className="flex flex-col flex-grow">
                                             <View className="flex flex-row justify-between items-center content-center mx-2">
                                                 {room.room_name && <Text className="text-lg w-48 font-semibold" numberOfLines={1}>{room.room_name}</Text>}
-                                                {formattedDate && <Text className="px-2 text-gray-400">{formattedDate}</Text>}
+                                                {formattedDate && <Text className="px-2 text-gray-400" numberOfLines={1}>{formattedDate}</Text>}
                                                 <Icon name="angle-right" size={24} color="#9ca3af" className="self-end"/>
                                             </View>
-                                            <Text className="mx-2 text-gray-400">{room.recent_message.content}</Text>
+                                            <Text className="mx-2 text-gray-400 w-48" numberOfLines={1}>{room.recent_message.content}</Text>
                                         </View>
                                     </TouchableOpacity>
                                 );
