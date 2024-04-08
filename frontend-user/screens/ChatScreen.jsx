@@ -20,15 +20,14 @@ const ChatScreen = ({route, navigation}) => {
     // Sample key for encryption
     const key = '12345678901234567890123456789012';
 
-    const [chatInfo, setChatInfo] = useState({
-        messages: [
-          {
-            content: "",
-            sender: "",
-            timestamp: 0
-          }
-        ]
-    });
+    const [chatMessages, setchatMessages] = useState(
+        // {messages: [{
+        //     content: "",
+        //     sender: "",
+        //     timestamp: 0
+        // }]}
+        null
+    );
 
     // Connect to the socket server when the component mounts
     const socketRef = useRef(null);
@@ -37,7 +36,7 @@ const ChatScreen = ({route, navigation}) => {
 
         // Listen for incoming messages
         socketRef.current.on('receive_message', (newMessage) => {
-            setChatInfo(prevState => ({
+            setchatMessages(prevState => ({
                 ...prevState,
                 messages: [...prevState.messages, newMessage]
             }));
@@ -59,7 +58,7 @@ const ChatScreen = ({route, navigation}) => {
                 const response = await axios.post(`${serverUrl}/message_server/message_history`, {
                     roomID: room_id,
                 });
-                setChatInfo(response.data);
+                setchatMessages(response.data);
                 return response.data; // Returning data for further processing if needed
             } catch (error) {
                 console.error('Error:', error);
@@ -98,13 +97,11 @@ const ChatScreen = ({route, navigation}) => {
 
     // ScrollView starts with most recent messages (at the bottom)
     const scrollViewRef = useRef(null);
-    useEffect(() => {
-        // Scrolls to the bottom of the ScrollView when it's initially rendered
+    const scrollToBottom = () => {
         if (scrollViewRef.current) {
-            scrollViewRef.current.scrollToEnd({ animated: false });
+            scrollViewRef.current.scrollToEnd({ animated: true });
         }
-    }, []);
-
+    };
 
     return (
         <KeyboardAvoidingView
@@ -125,16 +122,18 @@ const ChatScreen = ({route, navigation}) => {
                 <ScrollView
                     className="px-3"
                     ref={scrollViewRef}
+                    onContentSizeChange={scrollToBottom}
                     onLayout={() => {
                         // Scrolls to the bottom of the ScrollView when it's initially rendered
                         scrollViewRef.current.scrollToEnd({ animated: false });
                     }}
                 >
                     <View className="flex flex-col items-center mb-3">
-                        {chatInfo.messages.map((message, index) => (
+                        {chatMessages &&
+                            chatMessages.messages.map((message, index) => (
                             <View
                                 key={index} // You can use index as key if messageID is not unique
-                                className={`flex flex-col max-w-3/4 ${message.sender === currentUserID ? 'self-end' : 'self-start'} ${index > 0 && chatInfo.messages[index - 1].sender.userID === message.sender ? 'mt-0.5' : 'mt-3'}`}
+                                className={`flex flex-col max-w-3/4 ${message.sender === currentUserID ? 'self-end' : 'self-start'} ${index > 0 && chatMessages.messages[index - 1].sender.userID === message.sender ? 'mt-0.5' : 'mt-3'}`}
                             >
                                 <View
                                 className={`flex py-2 px-3 rounded-2xl max-w-fit ${message.sender === currentUserID ? 'bg-green-300' : 'bg-gray-200'}`}
