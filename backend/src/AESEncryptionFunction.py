@@ -13,11 +13,12 @@ from src.PythonSerializer import PythonSerializer
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad, unpad
 
+import base64
 
 class AESEncryptionFunction(EncryptionFunction):
 
     @staticmethod
-    def encrypt(data: bytes, key: bytes) -> bytes:
+    def encrypt(data: str, key: bytes) -> bytes:
         """
         encrypt bytes
 
@@ -29,15 +30,18 @@ class AESEncryptionFunction(EncryptionFunction):
             returns a tuple containing (in this order) the encrypted bytes of the data, the reference tag, and a nonce value (number used once)
 
         """
-        print(f"BLOCK_SIZE: {AES.block_size}")
+        try:
+            data = data.encode()
+        except:
+            pass
         cipher = AES.new(key, AES.MODE_ECB)
         padded_data = pad(data, AES.block_size)
         cipher_data = cipher.encrypt(padded_data)
-
-        return cipher_data
+        return base64.b64encode(cipher_data)
+        
 
     @staticmethod
-    def decrypt(data: bytes, key: bytes) -> bytes:
+    def decrypt(data: str, key: bytes) -> bytes:
         """
         decrypt bytes
 
@@ -51,11 +55,15 @@ class AESEncryptionFunction(EncryptionFunction):
             returns decrypted bytes
 
         """
-        print(f"BLOCK_SIZE: {AES.block_size}")
+        try:
+            decoded_data = base64.b64decode(data)
+        except:
+            pass
+
         cipher = AES.new(key, AES.MODE_ECB)
-        plain_data = cipher.decrypt(data)
+        plain_data = cipher.decrypt(decoded_data)
         unpadded_data = unpad(plain_data, AES.block_size)
-        return unpadded_data
+        return unpadded_data.decode()
 
 
 ### Testing
