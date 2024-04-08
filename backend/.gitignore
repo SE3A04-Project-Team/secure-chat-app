@@ -2,6 +2,7 @@
 google-services.json
 GoogleService-Info.plist
 src/firebase.json
+firebase.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

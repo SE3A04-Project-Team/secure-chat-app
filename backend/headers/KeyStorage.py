@@ -8,7 +8,7 @@ Responsible for storing encryption keys to database
 
 from abc import ABC, abstractmethod
 
-from backend.headers.EncryptionKey import EncryptionKey
+from headers.EncryptionKey import EncryptionKey
 
 
 class KeyStorage(ABC):
