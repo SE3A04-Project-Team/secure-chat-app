@@ -96,7 +96,7 @@ const ChatScreen = ({route, navigation}) => {
                         <IconButton icon={<Icon name="arrow-left" size={32} color="#86efac"/>} onPress={() => navigation.goBack()}/>
                         <View className="flex flex-col justify-center items-center">
                             <InitialIcon name={room_name}/>
-                            <Text className="text-black text-md text-center">{room_name}</Text>
+                            <Text numberOfLines={1} ellipsizeMode="tail" className="text-black text-md text-center">{room_name}</Text>
                         </View>
                         <IconButton icon={<Icon name="gear" size={32} color="#86efac"/>} onPress={() => setModalVisible(true)}/>
                     </View>
