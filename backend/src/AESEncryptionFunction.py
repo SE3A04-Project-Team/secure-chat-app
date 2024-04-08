@@ -11,11 +11,13 @@ from headers.EncryptionFunction import EncryptionFunction
 from src.PythonSerializer import PythonSerializer
 
 from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
 
 
 class AESEncryptionFunction(EncryptionFunction):
 
-    def encrypt(data: bytes, key: EncryptionKey) -> tuple[bytes, bytes, bytes]:
+    @staticmethod
+    def encrypt(data: bytes, key: bytes) -> bytes:
         """
         encrypt bytes
 
@@ -27,13 +29,14 @@ class AESEncryptionFunction(EncryptionFunction):
             returns a tuple containing (in this order) the encrypted bytes of the data, the reference tag, and a nonce value (number used once)
 
         """
-        serialized_key = PythonSerializer.serialize(key)
-        cipher = AES.new(serialized_key, AES.MODE_EAX)
-        cipher_data, tag = cipher.encrypt_and_digest(data)
-        nonce = cipher.nonce
-        return cipher_data, tag, nonce
+        cipher = AES.new(key, AES.MODE_ECB)
+        padded_data = pad(data, AES.block_size)
+        cipher_data = cipher.encrypt(padded_data)
 
-    def decrypt(data: bytes, key: EncryptionKey, tag: bytes, nonce: bytes) -> bytes:
+        return cipher_data
+
+    @staticmethod
+    def decrypt(data: bytes, key: bytes) -> bytes:
         """
         decrypt bytes
 
@@ -47,13 +50,14 @@ class AESEncryptionFunction(EncryptionFunction):
             returns decrypted bytes
 
         """
-        serialized_key = PythonSerializer.serialize(key)
-        cipher = AES.new(serialized_key, AES.MODE_EAX, nonce)
-        plain_data = cipher.decrypt_and_verify(data, tag)
-        return plain_data
+        # serialized_key = PythonSerializer.serialize(key)
+        cipher = AES.new(key, AES.MODE_ECB)
+        plain_data = cipher.decrypt(data)
+        unpadded_data = unpad(plain_data, AES.block_size)
+        return unpadded_data
 
 
 ### Testing
-test_key = "ABCDEFGHIJKLMNOPQ"
-encrypted_data, tag, nonce = AESEncryptionFunction.encrypt(b'\x80\x04\x95\x08\x00\x00\x00\x00\x00\x00\x00\x8c\x04Test\x94.', test_key)
+### test_key = "ABCDEFGHIJKLMNOPQ"
+###encrypted_data, tag, nonce = AESEncryptionFunction.encrypt(b'\x80\x04\x95\x08\x00\x00\x00\x00\x00\x00\x00\x8c\x04Test\x94.', test_key)
 # print(AESEncryptionFunction.decrypt(encrypted_data, test_key, tag, nonce))

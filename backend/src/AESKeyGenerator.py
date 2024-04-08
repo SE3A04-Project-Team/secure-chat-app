@@ -8,7 +8,7 @@ Responsible for generating AES encryption keys. Implements the KeyGenerator
 
 from headers.EncryptionKey import EncryptionKey
 from headers.KeyGenerator import KeyGenerator
-from src.Crypto.Random import get_random_bytes
+from Crypto.Random import get_random_bytes
 
 
 class AESKeyGenerator(KeyGenerator):
@@ -25,3 +25,5 @@ class AESKeyGenerator(KeyGenerator):
 
         """
         return get_random_bytes(size)
+    
+
