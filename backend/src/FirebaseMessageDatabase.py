@@ -24,13 +24,17 @@ class FirebaseMessageDatabase(MessageDatabase):
 
 
     def create_room(self, room: dict) -> dict:
+        """
+        room should have the following fields:
+        userIds - list of user_Ids
 
+        """
         # Get data from the request body
-        user_ids = room.get('userIds')
+        user_ids = room.get('clientIDs')
         
         # Validate request data
         if not user_ids:
-            return jsonify({"error": "Missing required data"}), 400
+            return "error: Missing required data (clientIDs)"
 
         # Retrieve user names
         user_names = []
@@ -58,27 +62,30 @@ class FirebaseMessageDatabase(MessageDatabase):
             user_rooms_ref = user_ref.collection('rooms')
             user_rooms_ref.add({'room': room_ref})
 
-        return jsonify({"message": "Room created successfully"})
+        return f"message: Room {room_name} created successfully"
     
 
-    def get_rooms(self, user_id: str) -> list[str, list[str]]:
+    def get_rooms(self, user_id: str) -> str:
            
             user_ref = firestore.client().collection('users').document(user_id)
             user_data = user_ref.get().to_dict()
             if user_data is None:
-                return jsonify({"error": "User not found"}), 404
+                return "error: User not found"
            
             rooms_ref = user_ref.collection('rooms').stream()
             rooms_data = []
             for room_ref in rooms_ref:
                 room_data = room_ref.to_dict()
                 room_doc = room_data['room'].get().to_dict()  # Fetch data from referenced room document
-                rooms_data.append(room_doc)  # Append full room data
+                 # Fetch data from the referenced sender document
+                room_ref = room_data['room']
+                room_data['room'] = {'room_name': room_doc['name'], 'roomID': room_ref.id}
+                rooms_data.append(room_data)
 
             rooms = {
                 "rooms": rooms_data
             }
-            print(json.dumps(rooms))
+            # print(json.dumps(rooms))
             return json.dumps(rooms)
         
 
@@ -99,38 +106,39 @@ class FirebaseMessageDatabase(MessageDatabase):
         room_ref = firestore.client().collection('rooms').document(room_id)
         room_data = room_ref.get().to_dict()
         if room_data is None:
-            return jsonify({"error": "Room not found"}), 404
+            return "error: Room not found"
         
         # Fetch all messages for the room
         messages_ref = room_ref.collection('messages').order_by('timestamp', direction=firestore.Query.ASCENDING).stream()
+        if not messages_ref:
+            return "no messages"
         messages_data = []
         for msg in messages_ref:
             msg_data = msg.to_dict()
             # Fetch data from the referenced sender document
             sender_ref = msg_data['sender']
-            sender_data = sender_ref.get().to_dict()
-            msg_data['sender'] = sender_data
+            sender_data = sender_ref.get(['name']).to_dict()
+            # msg_data['sender'] = {'name': sender_data, 'userID': sender_ref.id}
+            msg_data['sender'] = sender_ref.id
             messages_data.append(msg_data)
         
         # Construct the response data
         chat_screen_data = {
-            'room_id': room_id,
-            'room_name': room_data.get('name'),
             'messages': messages_data
         }
         
-        return jsonify(chat_screen_data)
+        return chat_screen_data
     
   
-    def store_message(self, room_id: str, user_id, message_content: str):
+    def store_message(self, room_id: str, user_id, message_content: str, timestamp: int):
         
         # Validate request data
-        if not room_id or not user_id or not message_content:
-            return jsonify({"error": "Missing required data"}), 400
+        if not room_id or not user_id or not message_content or not timestamp:
+            return "error: Missing required data"
 
         # Construct message data
         message_data = {
-            'timestamp': datetime.now(),
+            'timestamp': timestamp,
             'content': message_content,
             'sender': firestore.client().collection('users').document(user_id)
         }
@@ -139,7 +147,7 @@ class FirebaseMessageDatabase(MessageDatabase):
         room_ref = firestore.client().collection('rooms').document(room_id)
         room_ref.collection('messages').add(message_data)
 
-        return jsonify({"message": "Message sent successfully"})
+        return "message: Message sent successfully"
 
 
 

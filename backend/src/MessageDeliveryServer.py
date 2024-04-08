@@ -39,21 +39,26 @@ class MessageDeliveryServer(CommunicatingAgent):
 
         self.event_names = [
             "join_room",
+            "send_message"
 
         ]
         self.event_functions = [
             self.join_room,
+            self.handle_message
             
         ]
         self.endpoint_names = [
+            "get_rooms",
             "create_room",
-            "get_rooms"
+            "message_history"
         ]
         self.endpoint_functions = [
-            self.create_room,
             self.get_rooms,
+            self.create_room,
+            self.get_message_history
         ]
         self.endpoint_methods = [
+            ["POST"],
             ["POST"],
             ["POST"]
         ]
@@ -66,18 +71,58 @@ class MessageDeliveryServer(CommunicatingAgent):
         self.communicationManager.registerActions(self.endpoint_names, self.endpoint_functions, self.endpoint_methods, self.event_names, self.event_functions)
 
 
-    def handle_message(self, message: json):
+    def handle_message(self, args: json):
         """
         handles the storing and forwarding of messages in the following format
         {
 	        “SenderID”: str,
 	        “ChatID”: str,
-	        “Timestamp”: str,
+	        “Timestamp”: int,
 	        “Message”: str,
         }
+        arg1: senderID
+        arg2: roomID,
+        arg3: timestamp
+        arg4: message
         """
+        print(args)
+        if len(args) != 4:
+            raise ValueError(f"Bad Message Format: expecting 4 arguments, {len(args)} given")
         
+        senderID = args[0]
+        roomID = args[1]
+        timestamp = args[2]
+        message = args[3]
+        
+        # store message
+        self.databaseManager.store_message(
+            user_id=senderID,
+            room_id=roomID,
+            timestamp=timestamp,
+            message_content=message
+        )
 
+        # emit to connected clients
+        # TODO: add room=roomID when rooms are set up
+        emit('receive_message', 
+             {
+            "sender": senderID, 
+            "timestamp": timestamp,
+            "content": message
+            },
+            broadcast=True
+            )
+
+
+    def get_message_history(self, data: json) ->str:
+        try:
+            roomID = data['roomID']
+            print(roomID)
+        except KeyError:
+            return "Bad Request: args: (roomID)"
+        
+        msg_history = self.databaseManager.get_message_history(roomID)
+        return json.dumps(msg_history)
 
 
     def get_rooms(self, data: json) -> str:
@@ -85,9 +130,11 @@ class MessageDeliveryServer(CommunicatingAgent):
             clientID = data['clientID']
             print(clientID)
         except KeyError:
-            return "Bad Request"
+            return "Bad Request: args: (clientID)"
         
         rooms = self.databaseManager.get_chat_selection(clientID)
+        if not rooms:
+            return "No rooms found"
         # rooms_obj = json.loads(rooms)
         print(f"result: {rooms}")
 
@@ -100,11 +147,15 @@ class MessageDeliveryServer(CommunicatingAgent):
     def create_room(self, data: json) -> str:
         """
         creates new room for messaging
-        Args: roomID
+        Args: list of clientIDs
         """
-        print(f"RECEIVED ARGS BY SERVER: {data}")
-        room = "14"
-        return f"created room: {room}"
+        try:
+            data['clientIDs']
+        except KeyError:
+            return "Bad Request: args: (clientIDs)"
+        
+        return self.databaseManager.create_room(data)
+
 
     def remove_room(self, roomID: json):
         """
@@ -112,29 +163,45 @@ class MessageDeliveryServer(CommunicatingAgent):
         deletes room only if there are no more users registered to that room
         """
 
-    def join_room(self, data) -> str:
+    def join_room(self, args: json) -> str:
         """
         SOCKET EVENT
         adds a client to a room
+        
+        arg1: clientID
+        arg2: roomID
         """
-        data = json.dumps(data)
-        print(f"RECEIVED ARGS BY SERVER: {data}")
+        if len(args) != 2:
+            return "Bad Request: args: (clientID: str, roomID: str)" 
         
-        room = "14"
-        join_room("14")
-        emit("send_message", f"Welcome", room=room)
-        return f"joined room: {room}"
-        # add create room function
-        return f"joined room"
-        if roomID not in self.rooms.keys:
-            self.create_room(roomID)
+        roomID = args[1]
+        clientID = args[0]
         
-        if clientID not in self.rooms.get(roomID):
-            self.rooms.get(roomID).append(clientID)
+        print('polling database ...', end='\r')
+        rooms = self.databaseManager.get_rooms(clientID)
+        print('database returned     ')
+        rooms = json.loads(rooms)
+        try:
+            rooms['rooms']
+        except KeyError:
+            return "Internal Error"
+        
+        room_list = rooms['rooms']
+        print(room_list)
+        for room in room_list:
+            print(f"room: {room}")
+            stored_roomID = room['room']['roomID']
+            print(stored_roomID)
+            print(roomID)
+            if roomID == stored_roomID:
+                join_room(room=roomID)
+                return "Joined Room"
+            
+        return "Not authorized: user not in room"
 
-        # get old messages
+
         
-        return f"joined room {roomID}"
+        
 
     
     def leave_room(self, clientID: str, roomID: str):

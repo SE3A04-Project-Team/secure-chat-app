@@ -11,10 +11,11 @@ import TextButton from "../components/TextButton";
 
 
 const ChatSelectionScreen = ({ navigation }) => {
-
     const serverUrl = process.env.EXPO_PUBLIC_SERVER_URL;
-    const currentUserId = 'w0qh0NXts4gROIOPU7Aq'; // User ID for which chats are to be fetched
-    const [chatData, setChatData] = useState({rooms: {}});
+    const currentUserId = 'w0qh0NXts4gROIOPU7Aq';
+    const [chatData, setChatData] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(new Set());
 
     useEffect(() => {
         const getRoomsData = async () => {
@@ -22,30 +23,23 @@ const ChatSelectionScreen = ({ navigation }) => {
                 const response = await axios.post(`${serverUrl}/message_server/get_rooms`, {
                     clientID: currentUserId,
                 });
-                console.log(response.data);
-                setChatData(response.data); // Set the fetched data to chatData
+                setChatData(response.data);
                 return response.data;
-            } catch (error) {
-                console.error('Error:', error);
-            }
+            } catch (error) {console.error('Error:', error)}
         };
-    
         getRoomsData();
-        
     }, []);
     
-
-    const handleChatSelection = (room_id) => {
+    const handleChatSelection = (room_id, room_name) => {
         // Handle chat selection logic here
         // navigate to ChatScreen with chat data for the selected chat
-        console.log(room_id);
-        navigation.navigate("ChatScreen", room_id);
+        navigation.navigate("ChatScreen", {room_id, room_name});
     }
-
-    const [modalVisible, setModalVisible] = useState(false);
-
-    const [selectedUser, setSelectedUser] = useState(new Set());
     
+    // Handles clicking checkboxes when selecting users in a group 
+    const handleUserSelection = (isChecked, item) => {
+        selectedUser.has(item.id) ? selectedUser.delete(item.id) : selectedUser.add(item.id)
+    }
     // After clicking the "Create" button
     const handleChatCreation = () => {
         console.log(selectedUser);
@@ -55,11 +49,6 @@ const ChatSelectionScreen = ({ navigation }) => {
         }
         navigation.navigate("ChatScreen", {chat});
         setModalVisible(false)
-    }
-
-    // Handles clicking checkboxes when selecting users in a group 
-    const handleUserSelection = (isChecked, item) => {
-        selectedUser.has(item.id) ? selectedUser.delete(item.id) : selectedUser.add(item.id)
     }
 
     return (
@@ -74,17 +63,20 @@ const ChatSelectionScreen = ({ navigation }) => {
             <View className="flex flex-col flex-grow bg-primary rounded-t-3xl" >
                 <ScrollView className="p-2 flex-1">
                     <View className="flex flex-col gap-y-2 justify-center items-center pb-12">
-                        {chatData.rooms.length > 0 && (
+                        {chatData?.rooms && (
                             chatData.rooms.map((room) => {
-                                const formattedDate = formatPythonTimeString(room.recent_message.timestamp);
-
+                                const formattedDate = room.recent_message?.timestamp ? formatPythonTimeString(room.recent_message.timestamp) : null;
                                 return (
-                                    <TouchableOpacity key={room.room_id} onPress={() => handleChatSelection(room.room_id)} className="flex flex-row w-full p-4 content-center items-center justify-center">
-                                        <InitialIcon name={room.room_name}/>
+                                    <TouchableOpacity 
+                                        key={room.room_id} 
+                                        onPress={() => handleChatSelection(room.room_id, room.room_name)} 
+                                        className="flex flex-row w-fit p-4 content-center items-center justify-center"
+                                    >
+                                        {room.room_name && <InitialIcon name={room.room_name}/>}
                                         <View className="flex flex-col flex-grow">
                                             <View className="flex flex-row justify-between items-center content-center mx-2">
-                                                <Text className="text-lg flex-grow font-semibold">{room.room_name}</Text>
-                                                <Text className="px-2 text-gray-400">{formattedDate}</Text>
+                                                {room.room_name && <Text className="text-lg w-48 font-semibold" numberOfLines={1}>{room.room_name}</Text>}
+                                                {formattedDate && <Text className="px-2 text-gray-400">{formattedDate}</Text>}
                                                 <Icon name="angle-right" size={24} color="#9ca3af" className="self-end"/>
                                             </View>
                                             <Text className="mx-2 text-gray-400">{room.recent_message.content}</Text>

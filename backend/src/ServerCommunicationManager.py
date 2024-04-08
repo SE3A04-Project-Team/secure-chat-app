@@ -45,7 +45,9 @@ class ServerCommunicationManager(CommunicationManager):
         self.authenticationManager = authenticationManager
 
 
-        self.keys = dict()
+        self.keys = dict({
+            "TEST_USER" : b'\x81\xc9\x1cy{\xddmL\x86\x93\xc9W\x92\xd7\x93x',
+        })
 
 
 
@@ -80,11 +82,11 @@ class ServerCommunicationManager(CommunicationManager):
         self.broker.add_endpoint(f'/{self.serverName}/auth', f'/{self.serverName}/auth', self.authenticateUser, ["GET", "POST"])
 
         for i, endpoint in enumerate(endpoint_names):
-            self.broker.add_endpoint(f'/{self.serverName}/{endpoint}', f'/{self.serverName}/{endpoint}', ProxyMethod(endpoint_handlers[i]), endpoint_methods[i])
+            self.broker.add_endpoint(f'/{self.serverName}/{endpoint}', f'/{self.serverName}/{endpoint}', ProxyMethod(self, endpoint_handlers[i]), endpoint_methods[i])
             
         
         for i, event in enumerate(event_names):
-            self.broker.add_event(event, ProxyEvent(event_handlers[i]))
+            self.broker.add_event(event, ProxyEvent(self, event_handlers[i]))
 
         
 
@@ -123,25 +125,67 @@ class ServerCommunicationManager(CommunicationManager):
         self.updateKey(clientID, key)
         return message
 
-      
+    def encrypt(self, clientID:str, data:str) -> str:
+        """
+        encrpyt message using given clientID
+        """
+        if clientID not in self.keys.keys():
+            raise KeyError ("405: No Key found, please authenticate")
+        
+        key = self.keys.get(clientID)
+        data = bytes(data, 'utf-8')
+        encrypted_data = self.encryptionFunction.encrypt(data, key)
+        return str(encrypted_data, 'utf-8')
+        
+
+    def decrypt(self, clientID:str, data:str) -> str:
+        """
+        Decrypt message using given clientID
+        """
+        if clientID not in self.keys.keys():
+            raise KeyError ("405: No Key found, please authenticate")
+        
+        key = self.keys.get(clientID)
+        data = bytes(data, 'utf-8')
+        decrypted_data = self.encryptionFunction.decrypt(data, key)
+        return str(decrypted_data, 'utf-8')
+
+
 
 
 class ProxyMethod(object):
 
-    def __init__(self, action: Callable):
+    def __init__(self, manager: ServerCommunicationManager, action: Callable):
         self.action = action
+        self.manager = manager
 
-    def __call__(self, data: json):
-        print("Received args by proxy:", data)
+    def __call__(self, headers, json_data: json):
+        print("Received headers by proxy:", headers)
+        print("Received args by proxy:", json_data)
         # Unpack args if needed, and pass them individually
 
-        resp = self.action(data)
-        print(f"Response recv by proxy:{resp}") #consider jsonifying
-        return resp
+        clientID = headers['clientID']
+        data = json_data['data']
+        try:
+            unencrypted_data = self.manager.decrypt(clientID, data)
+            print(unencrypted_data)
+        except KeyError:
+            return ("405: No Key found, please authenticate")
+        
+        resp = self.action(unencrypted_data)
+
+        try:
+            encrypted_data = self.manager.encrypt(clientID, data)
+        except KeyError:
+            return ("405: No Key found, please authenticate")
+
+        print(f"Response recv by proxy:{encrypted_data}") #consider jsonifying
+        return encrypted_data
     
 class ProxyEvent(object):
-    def __init__(self, action: Callable):
+    def __init__(self, manager: ServerCommunicationManager, action: Callable):
         self.action = action
+        self.manager = manager
 
     def __call__(self, data: json):
         print("Received args by proxy:", data)
