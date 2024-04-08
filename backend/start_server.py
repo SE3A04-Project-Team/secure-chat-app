@@ -22,7 +22,7 @@ a = AESKeyGenerator()
 print(a.generateKey())
 k = b'\x81\xc9\x1cy{\xddmL\x86\x93\xc9W\x92\xd7\x93x'
 
-print(f"K = {k.hex()}")
+print(f"K = {k}")
 ab = AESEncryptionFunction()
 dic = {
     "clientIDs": ["TESTID", "TESTID2"]

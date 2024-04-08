@@ -30,14 +30,11 @@ class AESEncryptionFunction(EncryptionFunction):
             returns a tuple containing (in this order) the encrypted bytes of the data, the reference tag, and a nonce value (number used once)
 
         """
-        try:
-            data = data.encode()
-        except:
-            pass
+        
         cipher = AES.new(key, AES.MODE_ECB)
         padded_data = pad(data, AES.block_size)
         cipher_data = cipher.encrypt(padded_data)
-        return base64.b64encode(cipher_data)
+        return cipher_data
         
 
     @staticmethod
@@ -55,15 +52,11 @@ class AESEncryptionFunction(EncryptionFunction):
             returns decrypted bytes
 
         """
-        try:
-            decoded_data = base64.b64decode(data)
-        except:
-            pass
 
         cipher = AES.new(key, AES.MODE_ECB)
-        plain_data = cipher.decrypt(decoded_data)
+        plain_data = cipher.decrypt(data)
         unpadded_data = unpad(plain_data, AES.block_size)
-        return unpadded_data.decode()
+        return unpadded_data
 
 
 ### Testing
