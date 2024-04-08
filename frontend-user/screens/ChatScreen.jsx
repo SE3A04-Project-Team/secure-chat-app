@@ -104,40 +104,28 @@ const ChatScreen = ({route, navigation}) => {
                 <ScrollView
                     className="px-3"
                     ref={scrollViewRef}
-                    onContentSizeChange={
-                        // Scrolls to the bottom of the ScrollView when the content size changes
-                        scrollToBottom
-                    }
-                    onLayout={() => {
-                        // Scrolls to the bottom of the ScrollView when it's initially rendered
-                        scrollViewRef.current.scrollToEnd({ animated: false });
-                    }}
+                    onContentSizeChange={scrollToBottom}
+                    onLayout={() => {scrollViewRef.current.scrollToEnd({ animated: false })}}
                 >
                     <View className="flex flex-col items-center mb-3">
                         {chatMessages &&
                             chatMessages.messages.map((message, index) => (
-                            <View
-                                key={index} // You can use index as key if messageID is not unique
-                                className={`flex flex-col max-w-3/4 ${message.sender === currentUserID ? 'self-end' : 'self-start'} ${index > 0 && chatMessages.messages[index - 1].sender.userID === message.sender ? 'mt-0.5' : 'mt-3'}`}
-                            >
                                 <View
-                                className={`flex py-2 px-3 rounded-2xl max-w-fit ${message.sender === currentUserID ? 'bg-green-300' : 'bg-gray-200'}`}
+                                    key={index} // You can use index as key if messageID is not unique
+                                    className={`flex flex-col max-w-3/4 ${message.sender === currentUserID ? 'self-end' : 'self-start'} ${index > 0 && chatMessages.messages[index - 1].sender.userID === message.sender ? 'mt-0.5' : 'mt-3'}`}
                                 >
-                                <Text
-                                    className={`text-primary text-md font-normal ${message.sender === currentUserID ? 'text-white' : 'text-black'}`}
-                                >
-                                    {message.content}
-                                </Text>
-                                </View>
-                                {/* Uncomment below section when timeStamp is available */}
-                                <Text className={`text-gray-500 text-xs mt-0.5 ${message.sender === currentUserID ? 'self-end' : 'self-start'}`}>
-                                    {formatPythonTimeString(message.timestamp)}
+                                    <View className={`flex py-2 px-3 rounded-2xl max-w-fit ${message.sender === currentUserID ? 'bg-green-300' : 'bg-gray-200'}`}>
+                                        <Text className={`text-primary text-md font-normal ${message.sender === currentUserID ? 'text-white' : 'text-black'}`}>
+                                            {message.content}
+                                        </Text>
+                                    </View>
+                                    <Text className={`text-gray-500 text-xs mt-0.5 ${message.sender === currentUserID ? 'self-end' : 'self-start'}`}>
+                                        {formatPythonTimeString(message.timestamp)}
                                     </Text>
-                            </View>
+                                </View>
                             ))
                         }
                     </View>
-
                 </ScrollView>
                 <SafeAreaView className="flex-row justify-between items-center content-center bg-gray-100">
                     <View className="flex-row justify-between flex-grow mx-6 my-2 bg-white border border-gray-300 rounded-3xl max-h-40">
@@ -148,8 +136,7 @@ const ChatScreen = ({route, navigation}) => {
                             value={message}
                             onChangeText={(text) => setMessage(text)}
                         />
-                        {
-                            !(message === '') &&
+                        {!(message === '') &&
                             <IconButton
                                 icon={<Icon name="send" size={20} color="#FFFFFF"/>}
                                 onPress={handleSendMessage}
