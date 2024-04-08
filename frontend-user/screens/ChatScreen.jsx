@@ -19,7 +19,11 @@ const ChatScreen = ({route, navigation}) => {
     const currentUserID = '1fPITEfiegat5F0xwXR9';
     // Sample key for encryption
     const key = '12345678901234567890123456789012';
-
+    // Modal visibility state
+    const [modalVisible, setModalVisible] = useState(false);
+    // Message input state
+    const [message, setMessage] = useState('');
+    // Chat messages state
     const [chatMessages, setchatMessages] = useState(
         // {messages: [{
         //     content: "",
@@ -33,7 +37,6 @@ const ChatScreen = ({route, navigation}) => {
     const socketRef = useRef(null);
     useEffect(() => {
         socketRef.current = io(serverUrl);
-
         // Listen for incoming messages
         socketRef.current.on('receive_message', (newMessage) => {
             setchatMessages(prevState => ({
@@ -41,18 +44,12 @@ const ChatScreen = ({route, navigation}) => {
                 messages: [...prevState.messages, newMessage]
             }));
         });
-
         // Disconnect from the socket server when the component unmounts
-        return () => {
-            if (socketRef.current) {
-                socketRef.current.disconnect();
-            }
-        };
+        return () => {if (socketRef.current) {socketRef.current.disconnect()}};
     }, []);
 
     // Fetch chat messages data from the server
     useEffect(() => {
-
         const getRoomData = async () => {
             try {
                 const response = await axios.post(`${serverUrl}/message_server/message_history`, {
@@ -60,48 +57,33 @@ const ChatScreen = ({route, navigation}) => {
                 });
                 setchatMessages(response.data);
                 return response.data; // Returning data for further processing if needed
-            } catch (error) {
-                console.error('Error:', error);
-            }
+            } catch (error) {console.error('Error:', error)}
         }
         getRoomData();
     } , [])
-
-    // Modal visibility state
-    const [modalVisible, setModalVisible] = useState(false);
-
-    // Message input state
-    const [message, setMessage] = useState('');
-
-    // Function to handle leaving the chat
-    const handleLeaveChat = () => {
-        // TODO: Implement leave chat functionality
-
-        // Navigate back to the chat selection screen
-        navigation.goBack();
-    }
 
     // Send a message to the server socket
     const handleSendMessage = () => {
         if (socketRef.current) {
             // Encrypt the message using AES encryption
             // const encryptedMessage = encryptAES(message, key);
-
             // Emit the message to the server
             socketRef.current.emit('send_message', currentUserID, room_id, pythonTime(), message);
-
             // Clear the message input after sending the message
             setMessage('');
         }
     };
 
+    // Function to handle leaving the chat
+    const handleLeaveChat = () => {
+        // TODO: Implement leave chat functionality
+        // Navigate back to the chat selection screen
+        navigation.goBack();
+    }
+
     // ScrollView starts with most recent messages (at the bottom)
     const scrollViewRef = useRef(null);
-    const scrollToBottom = () => {
-        if (scrollViewRef.current) {
-            scrollViewRef.current.scrollToEnd({ animated: true });
-        }
-    };
+    const scrollToBottom = () => {if (scrollViewRef.current) {scrollViewRef.current.scrollToEnd({ animated: true })}};
 
     return (
         <KeyboardAvoidingView
@@ -122,7 +104,10 @@ const ChatScreen = ({route, navigation}) => {
                 <ScrollView
                     className="px-3"
                     ref={scrollViewRef}
-                    onContentSizeChange={scrollToBottom}
+                    onContentSizeChange={
+                        // Scrolls to the bottom of the ScrollView when the content size changes
+                        scrollToBottom
+                    }
                     onLayout={() => {
                         // Scrolls to the bottom of the ScrollView when it's initially rendered
                         scrollViewRef.current.scrollToEnd({ animated: false });
