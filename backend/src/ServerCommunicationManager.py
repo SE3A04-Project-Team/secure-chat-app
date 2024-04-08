@@ -22,7 +22,7 @@ from headers.AuthenticationManager import AuthenticationManager
 
 from typing import Callable
 import json
-import threading
+import base64
 
 
 class ServerCommunicationManager(CommunicationManager):
@@ -125,7 +125,7 @@ class ServerCommunicationManager(CommunicationManager):
         self.updateKey(clientID, key)
         return message
 
-    def encrypt(self, clientID:str, data:str) -> str:
+    def encrypt(self, clientID:str, data:json) -> bytes:
         """
         encrpyt message using given clientID
         """
@@ -133,12 +133,14 @@ class ServerCommunicationManager(CommunicationManager):
             raise KeyError ("405: No Key found, please authenticate")
         
         key = self.keys.get(clientID)
-        data = bytes(data, 'utf-8')
-        encrypted_data = self.encryptionFunction.encrypt(data, key)
-        return str(encrypted_data, 'utf-8')
+
+        data = json.dumps(data)
+        encoded_data = data.encode()
+        encrypted_data = self.encryptionFunction.encrypt(encoded_data, key)
+        return base64.b64encode(encrypted_data)
         
 
-    def decrypt(self, clientID:str, data:str) -> str:
+    def decrypt(self, clientID:str, data:bytes) -> json:
         """
         Decrypt message using given clientID
         """
@@ -146,9 +148,12 @@ class ServerCommunicationManager(CommunicationManager):
             raise KeyError ("405: No Key found, please authenticate")
         
         key = self.keys.get(clientID)
-        data = bytes(data, 'utf-8')
-        decrypted_data = self.encryptionFunction.decrypt(data, key)
-        return str(decrypted_data, 'utf-8')
+
+        decoded_data = base64.b64decode(data)
+        decrypted_data = self.encryptionFunction.decrypt(decoded_data, key)
+        # print(f"decrypted_data: {decrypted_data}")
+        # print(decrypted_data.decode())
+        return json.loads(decrypted_data.decode())
 
 
 
@@ -160,6 +165,12 @@ class ProxyMethod(object):
         self.manager = manager
 
     def __call__(self, headers, json_data: json):
+        """
+        Handles the encryption and decryption of server calls
+        Data is received in base 64, and decrypted using client Key
+        unencrypted data is in 'utf-8', which is converted to string
+        string is attempted to be converted to dict object
+        """
         print("Received headers by proxy:", headers)
         print("Received args by proxy:", json_data)
         # Unpack args if needed, and pass them individually
@@ -173,9 +184,10 @@ class ProxyMethod(object):
             return ("405: No Key found, please authenticate")
         
         resp = self.action(unencrypted_data)
+        print(resp)
 
         try:
-            encrypted_data = self.manager.encrypt(clientID, data)
+            encrypted_data = self.manager.encrypt(clientID, resp)
         except KeyError:
             return ("405: No Key found, please authenticate")
 

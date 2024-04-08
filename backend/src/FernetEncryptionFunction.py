@@ -56,9 +56,3 @@ class AESEncryptionFunction(EncryptionFunction):
         plain_data = cipher.decrypt(data)
         unpadded_data = unpad(plain_data, AES.block_size)
         return unpadded_data
-
-
-### Testing
-### test_key = "ABCDEFGHIJKLMNOPQ"
-###encrypted_data, tag, nonce = AESEncryptionFunction.encrypt(b'\x80\x04\x95\x08\x00\x00\x00\x00\x00\x00\x00\x8c\x04Test\x94.', test_key)
-# print(AESEncryptionFunction.decrypt(encrypted_data, test_key, tag, nonce))
