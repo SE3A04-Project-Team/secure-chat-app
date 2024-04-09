@@ -9,24 +9,31 @@ from src.KerberosTicketServer import KerberosTicketServer
 from src.AESEncryptionFunction import AESEncryptionFunction
 from src.AESKeyGenerator import AESKeyGenerator
 from src.AESKeyDistributionCenter import AESKeyDistributionCenter
-# from src.KeyStorageFirebase import KeyStorageFirebase
+from src.KeyStorageFirebase import KeyStorageFirebase
 
 import base64
 import json
+import time
 
-'''s = KerberosAuthServer("t", None)
+
 data = dict({"clientIDs": "sample"})
 json_data = json.dumps(data)
 
-print(s.login(json_data))'''
+
 
 a = AESKeyGenerator()
 print(a.generateKey())
 k = b'\x80L-FI\x0ev\xae\x1f\xe6C\xe5\xcd\x04\xc3\x9e'
 k = base64.b64encode(k)
+k = b'gEwtRkkOdq4f5kPlzQTDng=='
 print(f"k = {k}")
 ab = AESEncryptionFunction()
-dic = {"userID":"w0qh0NXts4gROIOPU7Aq"}
+dic = {
+    "client_details": {
+        "clientID": "fURjH98QX4A0Ro6swlVb",
+        "timestamp": time.time()
+    }
+}
 msg = json.dumps(dic)
 
 msg = ab.encrypt(msg.encode(), k)
@@ -46,9 +53,10 @@ message_server_communication_manager = ServerCommunicationManager(
 s = MessageDeliveryServer("message_server", message_server_communication_manager)
 
 
-# key_database = KeyStorageFirebase()
-# KDC = AESKeyDistributionCenter(key_database)
-'''
+key_database = KeyStorageFirebase()
+KDC = AESKeyDistributionCenter(key_database)
+
+
 auth_server_communication_manager = ServerCommunicationManager(
     'login_server',
     broker,
@@ -67,7 +75,7 @@ ticket_server_communication_manager = ServerCommunicationManager(
 
 a = KerberosAuthServer("login_server", auth_server_communication_manager, KDC)
 t = KerberosTicketServer("ticket_server", ticket_server_communication_manager, KDC)
-'''
+
 broker.start()
 
 
