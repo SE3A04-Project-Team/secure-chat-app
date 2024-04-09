@@ -23,13 +23,10 @@ print(s.login(json_data))'''
 a = AESKeyGenerator()
 print(a.generateKey())
 k = b'\x80L-FI\x0ev\xae\x1f\xe6C\xe5\xcd\x04\xc3\x9e'
-
-print(f"K = {k}")
+k = base64.b64encode(k)
+print(f"k = {k}")
 ab = AESEncryptionFunction()
-dic = {
-    "clientID": "fURjH98QX4A0Ro6swlVb",
-    "timestamp": 1722623441.7484334
-}
+dic = {"userID":"w0qh0NXts4gROIOPU7Aq"}
 msg = json.dumps(dic)
 
 msg = ab.encrypt(msg.encode(), k)
