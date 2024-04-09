@@ -87,13 +87,13 @@ class KerberosTicketServer(CommunicatingAgent):
             return "missing field: client_details"
         
 
-        # TODO: decrypt TGT fields
+        # decrypt TGT fields
         TGT = base64.b64decode(TGT)
         TGT = self.encryptionFunction.decrypt(TGT, self.TGS_Key)
         TGT = TGT.decode()
         TGT = json.loads(TGT)
         try:
-            session_key = TGT['session_key']
+            session_key = base64.b64decode(TGT['session_key'])
             TGT_clientID = TGT['clientID']
             TGT_timeout = TGT['timeout_date']
         except KeyError:
@@ -106,12 +106,14 @@ class KerberosTicketServer(CommunicatingAgent):
         
         print(len(session_key))
 
+        session_key = b'gEwtRkkOdq4f5kPlzQTDng=='
 
-        # TODO: decrypt client_details using session_key----------
+
+        # decrypt client_details using session_key----------
         client_details = base64.b64decode(client_details)
         client_details = self.encryptionFunction.decrypt(client_details, session_key)
         client_details = client_details.decode()
-        client_details = json.loads(client_details)
+        client_details = json.loads(client_details)['client_details']
 
         print(client_details)
         try:

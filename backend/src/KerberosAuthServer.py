@@ -92,7 +92,7 @@ class KerberosAuthServer(CommunicatingAgent):
         Validity_Period = time.time()+self.VALID_PERIOD
 
         Ticket_Granting_Ticket = {
-            "session_key": str(Session_Key),
+            "session_key": str(base64.b64encode(Session_Key +b'==')),
             "clientID": clientID,
             "timestamp": Timestamp,
             "timeout_date": Validity_Period
