@@ -1,13 +1,14 @@
 # Secure Chat App
 
 ## Technologies
-![React Native](https://img.shields.io/badge/-React%20Native-61DAFB?logo=react&logoColor=white&style=flat)
-![Nativewind CSS](https://img.shields.io/badge/-Nativewind%20CSS-000000?logo=tailwind-css&logoColor=white&style=flat)
-![Expo](https://img.shields.io/badge/-Expo-000020?logo=expo&logoColor=white&style=flat)
-![Node.js](https://img.shields.io/badge/-Node.js-339933?logo=node.js&logoColor=white&style=flat)
-![Python](https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white&style=flat)
-![Flask](https://img.shields.io/badge/-Flask-000000?logo=flask&logoColor=white&style=flat)
-![Firebase](https://img.shields.io/badge/-Firebase-FFCA28?logo=firebase&logoColor=white&style=flat)
+
+<img src="https://img.shields.io/badge/-React%20Native-61DAFB?logo=react&logoColor=white&style=flat" alt="React Native" width="150" height="30">
+<img src="https://img.shields.io/badge/-Nativewind%20CSS-000000?logo=tailwind-css&logoColor=white&style=flat" alt="Nativewind CSS" width="180" height="30">
+<img src="https://img.shields.io/badge/-Expo-000020?logo=expo&logoColor=white&style=flat" alt="Expo" width="100" height="30">
+<img src="https://img.shields.io/badge/-Node.js-339933?logo=node.js&logoColor=white&style=flat" alt="Node.js" width="110" height="30">
+<img src="https://img.shields.io/badge/-Python-3776AB?logo=python&logoColor=white&style=flat" alt="Python" width="100" height="30">
+<img src="https://img.shields.io/badge/-Flask-000000?logo=flask&logoColor=white&style=flat" alt="Flask" width="90" height="30">
+<img src="https://img.shields.io/badge/-Firebase-FFCA28?logo=firebase&logoColor=white&style=flat" alt="Firebase" width="110" height="30">
 
 ## Key Features
 
