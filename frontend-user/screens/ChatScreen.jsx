@@ -1,7 +1,7 @@
 import {KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, Text, TextInput, View} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import SlidingModal from "../components/SlidingModal";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState, useContext} from "react";
 import TextButton from "../components/TextButton";
 import IconButton from "../components/IconButton";
 import InitialIcon from "../components/InitialIcon";
@@ -9,14 +9,13 @@ import axios from "axios";
 import {encryptAES, decryptAES} from "../utils/encryptionUtils";
 import {formatPythonTimeString, pythonTime} from "../utils/dateUtils";
 import io from "socket.io-client";
+import {UserContext} from "../contexts/UserContext";
 
 const ChatScreen = ({route, navigation}) => {
     // Server URL
     const serverUrl = process.env.EXPO_PUBLIC_SERVER_URL;
     // Specific chat id and name passed as route params, used to fetch chat messages
     const {room_id, room_name} = route.params;
-    // Sample current user ID
-    const currentUserID = '1fPITEfiegat5F0xwXR9';
     // Sample key for encryption
     const key = '12345678901234567890123456789012';
     // Modal visibility state
@@ -32,6 +31,9 @@ const ChatScreen = ({route, navigation}) => {
         // }]}
         null
     );
+
+    // User context for user details
+    const {user} = useContext(UserContext);
 
     // Connect to the socket server when the component mounts
     const socketRef = useRef(null);
@@ -52,9 +54,16 @@ const ChatScreen = ({route, navigation}) => {
     useEffect(() => {
         const getRoomData = async () => {
             try {
-                const response = await axios.post(`${serverUrl}/message_server/message_history`, {
+                const response = await axios.post(`${serverUrl}/message_server/message_history`, 
+                {
                     roomID: room_id,
-                });
+                },
+                {
+                    headers: {
+                        clientID: user.id,
+                    }
+                }
+            );
                 setchatMessages(response.data);
                 return response.data; // Returning data for further processing if needed
             } catch (error) {console.error('Error:', error)}
@@ -66,9 +75,9 @@ const ChatScreen = ({route, navigation}) => {
     const handleSendMessage = () => {
         if (socketRef.current) {
             // Encrypt the message using AES encryption
-            const encryptedMessage = encryptAES(message, key);
+            // const encryptedMessage = encryptAES(message, key);
             // Emit the message to the server
-            socketRef.current.emit('send_message', currentUserID, room_id, pythonTime(), message);
+            socketRef.current.emit('send_message', user.id, room_id, pythonTime(), message);
             // Clear the message input after sending the message
             setMessage('');
         }
@@ -112,14 +121,14 @@ const ChatScreen = ({route, navigation}) => {
                             chatMessages.messages.map((message, index) => (
                                 <View
                                     key={index} // You can use index as key if messageID is not unique
-                                    className={`flex flex-col max-w-3/4 ${message.sender === currentUserID ? 'self-end' : 'self-start'} ${index > 0 && chatMessages.messages[index - 1].sender.userID === message.sender ? 'mt-0.5' : 'mt-3'}`}
+                                    className={`flex flex-col max-w-3/4 ${message.sender === user.id ? 'self-end' : 'self-start'} ${index > 0 && chatMessages.messages[index - 1].sender.userID === message.sender ? 'mt-0.5' : 'mt-3'}`}
                                 >
-                                    <View className={`flex py-2 px-3 rounded-2xl max-w-fit ${message.sender === currentUserID ? 'bg-green-300' : 'bg-gray-200'}`}>
-                                        <Text className={`text-primary text-md font-normal ${message.sender === currentUserID ? 'text-white' : 'text-black'}`}>
-                                            {decryptAES(message.content, key)}
+                                    <View className={`flex py-2 px-3 rounded-2xl max-w-fit ${message.sender === user.id ? 'bg-green-300' : 'bg-gray-200'}`}>
+                                        <Text className={`text-primary text-md font-normal ${message.sender === user.id ? 'text-white' : 'text-black'}`}>
+                                            {message.content}
                                         </Text>
                                     </View>
-                                    <Text className={`text-gray-500 text-xs mt-0.5 ${message.sender === currentUserID ? 'self-end' : 'self-start'}`}>
+                                    <Text className={`text-gray-500 text-xs mt-0.5 ${message.sender === user.id ? 'self-end' : 'self-start'}`}>
                                         {formatPythonTimeString(message.timestamp)}
                                     </Text>
                                 </View>

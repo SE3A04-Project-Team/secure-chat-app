@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
+import {UserContext} from '../contexts/UserContext';
 import {
     Keyboard,
     KeyboardAvoidingView,
@@ -16,6 +17,8 @@ const UserLoginScreen = ({navigation}) => {
 
     // Server URL
     const SERVER_URL = process.env.SERVER_URL;
+
+    const { loginUser } = useContext(UserContext);
 
     // Login credentials
     const [formData, setFormData] = useState({
@@ -49,8 +52,13 @@ const UserLoginScreen = ({navigation}) => {
             }
         }
 
-        // After successful login, you can navigate to the next screen
-        navigation.navigate("ChatSelectionScreen");
+        if (loginUser(formData.email, formData.password)) {
+            // After successful login, you can navigate to the next screen
+            navigation.navigate("ChatSelectionScreen");
+        } else {
+            // Handle login failure
+            console.log("Login failed");
+        }
     };
 
     return (
