@@ -88,5 +88,18 @@ In the frontend-user folder:
 
 ## Instructions for Running the Backend of the App
 
+### From EXE
+Run `start_server.exe`
+Obtain IP and port printed by program to include in front end .env
+Ensure listed port is open on machine firewall
+
+### from source
+Run `python3 backend/start_server.py` from project root
+Obtain IP and port printed by program to include in front end .env
+Ensure listed port is open on machine firewall
+
+
+
+
 
 
