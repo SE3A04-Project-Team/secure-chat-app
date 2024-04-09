@@ -45,14 +45,14 @@ const ProfileScreen = ({navigation}) => {
                 <View className="flex flex-col flex-grow">
                     {
                         Object.keys(user).map((key, index) => (
-                            <>
+                            <View key={index}>
                                 {key !== 'password' &&
-                                <View key={index} className="flex flex-col justify-between border-b border-gray-200 py-4">
+                                <View className="flex flex-col justify-between border-b border-gray-200 py-4">
                                     <Text className="text-secondary font-light text-lg">{key}</Text>
                                     <Text className="text-secondary font-semibold text-lg">{user[key]}</Text>
                                 </View>
                                 }
-                            </>
+                            </View>
                         ))
                     }
                 </View>
