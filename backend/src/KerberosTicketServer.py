@@ -11,25 +11,31 @@ TODO:
 """
 from headers.CommunicatingAgent import CommunicatingAgent
 from headers.CommunicationManager import CommunicationManager
+from headers.KeyDistributionManager import KeyDistributionManager
+
+from src.AESEncryptionFunction import AESEncryptionFunction
 
 
 import json
 import time
+import base64
 
 class KerberosTicketServer(CommunicatingAgent):
     
 
-    def __init__(self, serverID: str, communicationManager: CommunicationManager):
+    def __init__(self, serverID: str, communicationManager: CommunicationManager, KDC: KeyDistributionManager):
         """
         initialize server
 
         """
         self.serverID = serverID
         self.communicationManager = communicationManager
-        self.TGS_Key = "TGS_KEY"
+        self.KDC = KDC
+        self.TGS_Key = b'\xa8\xe9\xae\xa1\x99\x18\xa7R\xa3\x01Cg\xe4\x97\x86\xbf'
         self.VALID_PERIOD = 10000000
+        self.encryptionFunction = AESEncryptionFunction()
         self.servers = dict(
-            {"message_server": "MESSAGE_SERVER_KEY"}
+            {"message_server": b'\xec\x12;\xd8\xdb\x18\xfcj|\xdd\xfaj\x08\x07{\xad'}
         )
         self.event_names = [
 
@@ -82,6 +88,10 @@ class KerberosTicketServer(CommunicatingAgent):
         
 
         # TODO: decrypt TGT fields
+        TGT = base64.b64decode(TGT)
+        TGT = self.encryptionFunction.decrypt(TGT, self.TGS_Key)
+        TGT = TGT.decode()
+        TGT = json.loads(TGT)
         try:
             session_key = TGT['session_key']
             TGT_clientID = TGT['clientID']
@@ -89,8 +99,21 @@ class KerberosTicketServer(CommunicatingAgent):
         except KeyError:
             return "Incorrect Ticket"
         
-        # TODO: decrypt client_details using session_key----------
+        print("session key:", session_key)
+        print(TGT_clientID)
+        print(TGT_timeout)
+        
+        
+        print(len(session_key))
 
+
+        # TODO: decrypt client_details using session_key----------
+        client_details = base64.b64decode(client_details)
+        client_details = self.encryptionFunction.decrypt(client_details, session_key)
+        client_details = client_details.decode()
+        client_details = json.loads(client_details)
+
+        print(client_details)
         try:
             clientID = client_details['clientID']
             timestamp = client_details['timestamp']

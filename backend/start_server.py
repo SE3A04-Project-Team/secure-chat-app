@@ -8,6 +8,8 @@ from src.KerberosAuthServer import KerberosAuthServer
 from src.KerberosTicketServer import KerberosTicketServer
 from src.AESEncryptionFunction import AESEncryptionFunction
 from src.AESKeyGenerator import AESKeyGenerator
+from src.AESKeyDistributionCenter import AESKeyDistributionCenter
+# from src.KeyStorageFirebase import KeyStorageFirebase
 
 import base64
 import json
@@ -19,19 +21,19 @@ json_data = json.dumps(data)
 print(s.login(json_data))'''
 
 a = AESKeyGenerator()
-k = b'\x81\xc9\x1cy{\xddmL\x86\x93\xc9W\x92\xd7\x93x'
-print(f"K = {k}")
+print(a.generateKey())
+k = b'\x80L-FI\x0ev\xae\x1f\xe6C\xe5\xcd\x04\xc3\x9e'
+k = base64.b64encode(k)
+print(f"k = {k}")
 ab = AESEncryptionFunction()
-dic = {
-    "clientIDs": ["TESTID", "TESTID2"]
-}
+dic = {"userID":"w0qh0NXts4gROIOPU7Aq"}
 msg = json.dumps(dic)
 
 msg = ab.encrypt(msg.encode(), k)
 msg = base64.b64encode(msg)
 print(f"msg= {msg}")
 msg = ab.decrypt(base64.b64decode(msg), k)
-print(msg.decode())
+print(msg)
 
 broker = FlaskRequestBroker()
 message_server_communication_manager = ServerCommunicationManager(
@@ -41,6 +43,12 @@ message_server_communication_manager = ServerCommunicationManager(
     JSONSerializer(),
     KerberosServerAuthManager()
 )
+s = MessageDeliveryServer("message_server", message_server_communication_manager)
+
+
+# key_database = KeyStorageFirebase()
+# KDC = AESKeyDistributionCenter(key_database)
+'''
 auth_server_communication_manager = ServerCommunicationManager(
     'login_server',
     broker,
@@ -57,11 +65,9 @@ ticket_server_communication_manager = ServerCommunicationManager(
 )
 
 
-
-s = MessageDeliveryServer("message_server", message_server_communication_manager)
-a = KerberosAuthServer("login_server", auth_server_communication_manager)
-t = KerberosTicketServer("ticket_server", ticket_server_communication_manager)
-
+a = KerberosAuthServer("login_server", auth_server_communication_manager, KDC)
+t = KerberosTicketServer("ticket_server", ticket_server_communication_manager, KDC)
+'''
 broker.start()
 
 

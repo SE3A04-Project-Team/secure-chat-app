@@ -3,16 +3,16 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import IconButton from "../components/IconButton";
 import {formatPythonTimeString} from "../utils/dateUtils";
 import InitialIcon from "../components/InitialIcon";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useContext} from "react";
 import SlidingModal from "../components/SlidingModal";
 import axios from "axios";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import TextButton from "../components/TextButton";
-
+import {UserContext} from "../contexts/UserContext";
 
 const ChatSelectionScreen = ({ navigation }) => {
     const serverUrl = process.env.EXPO_PUBLIC_SERVER_URL;
-    const currentUserId = 'w0qh0NXts4gROIOPU7Aq';
+    const {user} = useContext(UserContext);
     const [chatData, setChatData] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedUser, setSelectedUser] = useState(new Set());
@@ -20,9 +20,16 @@ const ChatSelectionScreen = ({ navigation }) => {
     useEffect(() => {
         const getRoomsData = async () => {
             try {
-                const response = await axios.post(`${serverUrl}/message_server/get_rooms`, {
-                    clientID: currentUserId,
-                });
+                const response = await axios.post(`${serverUrl}/message_server/get_rooms`, 
+                {
+                    clientID: user.id,
+                },
+                {
+                    headers: {
+                        clientID: user.id,
+                    }
+                }
+            );
                 setChatData(response.data);
                 return response.data;
             } catch (error) {console.error('Error:', error)}

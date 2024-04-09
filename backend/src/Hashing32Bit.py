@@ -12,6 +12,7 @@ from Crypto.Hash import SHA256
 
 class Hashin32Bit(Hasher):
 
+    @staticmethod
     def hash(data: object) -> bytes:
         # Create a SHA-256 hash object
         hasher = SHA256.new()
@@ -22,8 +23,8 @@ class Hashin32Bit(Hasher):
         # Get the full 256-bit hash
         full_hash = hasher.digest()
         
-        # Truncate the hash to 32 bits (4 bytes)
-        truncated_hash = full_hash[:4]
+        # Truncate the hash to 32 bits (16 bytes)
+        truncated_hash = full_hash[:16]
         
         # Return the 32-bit key as bytes
         return truncated_hash

@@ -5,20 +5,23 @@ Responsible for storing encryption keys to database
 @Date: 2024-04-08
 
 """
-
-from headers.EncryptionKey import EncryptionKey
 from headers.KeyStorage import KeyStorage
+'''
+from headers.EncryptionKey import EncryptionKey
+
 
 import firebase_admin
 from firebase_admin import credentials, firestore
 
-
+'''
 class KeyStorageFirebase(KeyStorage):
+    pass
+'''
     def __init__(self):
         # Initialize firebase admin ADK
         cred = credentials.Certificate("backend/firebase.json")
-        firebase_admin.initialize_app(cred)
-        self.db = firestore.client()
+        app = firebase_admin.initialize_app(cred, name="key_database")
+        self.db = firestore.client(app)
 
     def addEntry(self, id: str, key: EncryptionKey) -> None:
         """
@@ -29,11 +32,11 @@ class KeyStorageFirebase(KeyStorage):
             key: the encryption key used in a session
 
         """
-        data = {id: key}
 
         # Add a new key to the firestore
-        db_ref = self.db.collection("encryptionKeys").document("AESEncryptionKeys")
-        db_ref.set(data, merge=True)
+        self.db.collection("encryptionKeys").document(id).set(
+            {'value': key}
+        )
 
     def updateEntry(self, id: str, key: EncryptionKey) -> None:
         """
@@ -47,13 +50,26 @@ class KeyStorageFirebase(KeyStorage):
         data = {id: key}
 
         # Add a new key to the firestore
-        db_ref = self.db.collection("encryptionKeys").document("AESEncryptionKeys")
-        db_ref.update({id: key})
+        self.db.collection("encryptionKeys").document(id).update(
+            {'value': key}
+        )
+        return key
 
     def getInfo(self) -> dict:
         """
         retrieves encryption keys from the database
 
         """
-        doc = self.db.collection("encryptionKeys").document("AESEncryptionKeys")
-        return doc.get().to_dict()
+        try:
+            docs = self.db.collection("encryptionKeys").stream()
+            doc_dict = dict()
+
+            for doc in docs:
+                key = doc.to_dict().get('value')
+                doc_dict.update({doc.id: key})
+
+            return doc_dict
+        
+        except:
+            return "error"
+'''

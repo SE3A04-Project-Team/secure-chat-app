@@ -22,6 +22,7 @@ class FirebaseMessageDatabase(MessageDatabase):
 
 
 
+
     def create_room(self, room: dict) -> dict:
         """
         room should have the following fields:
