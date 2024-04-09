@@ -1,4 +1,14 @@
 # Secure Chat App
+## Table of Contents
+- [Description](#description)
+- [Technologies](#technologies)
+- [Key Features](#key-features)
+- [Project Planning](#project-planning)
+- [Contributors](#contributors)
+- [Instructions](#instructions)
+## Description
+
+
 ## Technologies
 ![React Native](https://img.shields.io/badge/-React%20Native-61DAFB?logo=react&logoColor=white&style=flat)
 ![Nativewind CSS](https://img.shields.io/badge/-Nativewind%20CSS-000000?logo=tailwind-css&logoColor=white&style=flat)
@@ -20,11 +30,11 @@
   The application stores a history of messages sent and received by users. Users can view their chat history and see the messages they have sent and received.
 - ### Group Chat
   The application allows users to create and join group chats. Users can send messages to multiple users in a group chat and view the messages sent by other users in the group.
-## Contributors
-- ### [Aidan Froggatt](https://github.com/aidanfroggatt)
-- ### [Rosa Chen](https://github.com/rosachen3)
-- ### [Kyle McMaster](https://github.com/KyleJMcMaster)
-- ### [Daniel Franze-Da Silva](https://github.com/DanielFD04)
+
+---
+
+## Project Planning
+All project planning documents can be found in the project planning directory
 
 ---
 
@@ -89,3 +99,11 @@ Ensure listed port is open on machine firewall
 * src\FirebaseMessageDatabase.py
 #### In the frontend-user folder
 * screens\ChatScreen.jsx
+
+--- 
+
+## Contributors
+- ### [Aidan Froggatt](https://github.com/aidanfroggatt)
+- ### [Rosa Chen](https://github.com/rosachen3)
+- ### [Kyle McMaster](https://github.com/KyleJMcMaster)
+- ### [Daniel Franze-Da Silva](https://github.com/DanielFD04)
