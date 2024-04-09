@@ -3,16 +3,17 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import TextButton from "../components/TextButton";
 import IconButton from "../components/IconButton";
 import axios from "axios";
+import React, {useContext} from "react";
+import {UserContext} from "../contexts/UserContext";
 
 const ProfileScreen = ({navigation}) => {
-    const currentUserId = '12345'; // User ID of the current user
-    //TODO: Query current user profile data from backend
+    const {user, logoutUser} = useContext(UserContext);
     const SERVER_URL = process.env.SERVER_URL
     const getProfileData = async () => {
         try {
             const response = await axios.get(`${SERVER_URL}/data/profile`, {
                 params: {
-                    userID: currentUserId
+                    userID: user.id
                 }
             });
             console.log(response.data);
@@ -22,16 +23,9 @@ const ProfileScreen = ({navigation}) => {
         }
     }
 
-    // Sample profile data
-    const profileData = {
-        name: 'John Doe',
-        email: 'johndoe@gmail.com',
-        phone: '+1234567890',
-    };
-
     const handleLogout = () => {
         //TODO: add logic to logout user, clear session, etc.
-
+        logoutUser();
         // Navigate to UserLoginScreen
         navigation.navigate('UserLoginScreen');
     }
@@ -47,13 +41,17 @@ const ProfileScreen = ({navigation}) => {
                 <Icon name="user-o" size={96} color="white"/>
             </View>
             <View className="bg-primary rounded-t-3xl h-3/5 p-7 gap-y-4 flex flex-col">
-                <Text className="text-secondary font-bold text-4xl text-center">{profileData.name}</Text>
+                <Text className="text-secondary font-bold text-4xl text-center">{user.name}</Text>
                 <View className="flex flex-col flex-grow">
                     {
-                        Object.keys(profileData).map((key, index) => (
-                            <View key={index} className="flex flex-col justify-between border-b border-gray-200 py-4">
-                                <Text className="text-secondary font-light text-lg">{key}</Text>
-                                <Text className="text-secondary font-semibold text-lg">{profileData[key]}</Text>
+                        Object.keys(user).map((key, index) => (
+                            <View key={index}>
+                                {key !== 'password' &&
+                                <View className="flex flex-col justify-between border-b border-gray-200 py-4">
+                                    <Text className="text-secondary font-light text-lg">{key}</Text>
+                                    <Text className="text-secondary font-semibold text-lg">{user[key]}</Text>
+                                </View>
+                                }
                             </View>
                         ))
                     }

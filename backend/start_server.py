@@ -21,26 +21,23 @@ json_data = json.dumps(data)
 
 
 
-a = AESKeyGenerator()
-print(a.generateKey())
-k = b'\x80L-FI\x0ev\xae\x1f\xe6C\xe5\xcd\x04\xc3\x9e'
-k = base64.b64encode(k)
-k = b'gEwtRkkOdq4f5kPlzQTDng=='
-print(f"k = {k}")
-ab = AESEncryptionFunction()
-dic = {
-    "client_details": {
-        "clientID": "fURjH98QX4A0Ro6swlVb",
-        "timestamp": time.time()
-    }
-}
-msg = json.dumps(dic)
 
-msg = ab.encrypt(msg.encode(), k)
-msg = base64.b64encode(msg)
-print(f"msg= {msg}")
-msg = ab.decrypt(base64.b64decode(msg), k)
-print(msg)
+
+# a = AESKeyGenerator()
+# print(a.generateKey())
+# k = b'\x80L-FI\x0ev\xae\x1f\xe6C\xe5\xcd\x04\xc3\x9e'
+# k = base64.b64encode(k)
+# print(f"k = {k}")
+# ab = AESEncryptionFunction()
+# dic = {"userID":"w0qh0NXts4gROIOPU7Aq"}
+# msg = json.dumps(dic)
+#
+# msg = ab.encrypt(msg.encode(), k)
+# msg = base64.b64encode(msg)
+# print(f"msg= {msg}")
+# msg = ab.decrypt(base64.b64decode(msg), k)
+# print(msg)
+
 
 broker = FlaskRequestBroker()
 message_server_communication_manager = ServerCommunicationManager(
