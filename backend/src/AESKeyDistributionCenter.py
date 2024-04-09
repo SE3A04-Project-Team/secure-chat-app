@@ -12,6 +12,7 @@ ATTRIBUTES:
 
 from headers.EncryptionKey import EncryptionKey
 from headers.KeyDistributionManager import KeyDistributionManager
+from headers.KeyStorage import KeyStorage
 
 from src.AESKeyGenerator import AESKeyGenerator
 from src.KeyStorageFirebase import KeyStorageFirebase
@@ -19,10 +20,10 @@ from src.KeyStorageFirebase import KeyStorageFirebase
 
 class AESKeyDistributionCenter(KeyDistributionManager):
 
-    def __init__(self):
+    def __init__(self, keyStore: KeyStorage ):
         self.keyGenerator = AESKeyGenerator()
-        self.encryptionKeys = {}
-        self.keyStore = KeyStorageFirebase()
+        self.encryptionKeys = []
+        self.keyStore = keyStore
 
     def refreshKeys(self) -> None:
         """
@@ -33,7 +34,8 @@ class AESKeyDistributionCenter(KeyDistributionManager):
         self.encryptionKeys = self.keyStore.getInfo()
 
         # update keys
-        for id in self.encryptionKeys.keys():
+        for key in self.encryptionKeys:
+            id = key.keys()[0]
             self.keyStore.updateEntry(id, self.keyGenerator.generateKey())
 
     def getKey(self, agentID: str, serviceID: str) -> EncryptionKey:
@@ -53,10 +55,11 @@ class AESKeyDistributionCenter(KeyDistributionManager):
         # get latest keys stored on server
         # TODO: might be very inefficient ----- flag for optimization if slow
         self.encryptionKeys = self.keyStore.getInfo()
-
+        print("keys", self.encryptionKeys)
         # Session key does not already exist
-        if self.encryptionKeys.get(id) is None:
-            self.keyStore.addEntry(id, self.keyGenerator.generateKey())
+        if id not in self.encryptionKeys.keys():
+            print("new Key")
+            return self.keyStore.addEntry(id, self.keyGenerator.generateKey())
         else:
             return self.encryptionKeys.get(id)
 

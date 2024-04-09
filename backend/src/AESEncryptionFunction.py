@@ -30,7 +30,7 @@ class AESEncryptionFunction(EncryptionFunction):
             returns a tuple containing (in this order) the encrypted bytes of the data, the reference tag, and a nonce value (number used once)
 
         """
-        
+        print(AES.block_size)
         cipher = AES.new(key, AES.MODE_ECB)
         padded_data = pad(data, AES.block_size)
         cipher_data = cipher.encrypt(padded_data)
