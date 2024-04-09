@@ -1,4 +1,4 @@
-# Secure Chat Application
+# Secure Chat App
 
 ## Technologies
 ![React Native](https://img.shields.io/badge/-React%20Native-61DAFB?logo=react&logoColor=white&style=flat)
