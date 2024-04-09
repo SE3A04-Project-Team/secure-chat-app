@@ -22,12 +22,13 @@ print(s.login(json_data))'''
 
 a = AESKeyGenerator()
 print(a.generateKey())
-k = b'\x81\xc9\x1cy{\xddmL\x86\x93\xc9W\x92\xd7\x93x'
+k = b'\x80L-FI\x0ev\xae\x1f\xe6C\xe5\xcd\x04\xc3\x9e'
 
 print(f"K = {k}")
 ab = AESEncryptionFunction()
 dic = {
-    "clientIDs": ["TESTID", "TESTID2"]
+    "clientID": "fURjH98QX4A0Ro6swlVb",
+    "timestamp": 1722623441.7484334
 }
 msg = json.dumps(dic)
 

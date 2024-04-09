@@ -31,7 +31,8 @@ class AESEncryptionFunction(EncryptionFunction):
 
         """
         print(AES.block_size)
-        cipher = AES.new(key, AES.MODE_ECB)
+        iv = b'0000000000000000'
+        cipher = AES.new(key, AES.MODE_CBC, iv)
         padded_data = pad(data, AES.block_size)
         cipher_data = cipher.encrypt(padded_data)
         return cipher_data
@@ -52,8 +53,8 @@ class AESEncryptionFunction(EncryptionFunction):
             returns decrypted bytes
 
         """
-
-        cipher = AES.new(key, AES.MODE_ECB)
+        iv = b'0000000000000000'
+        cipher = AES.new(key, AES.MODE_CBC, iv)
         plain_data = cipher.decrypt(data)
         unpadded_data = unpad(plain_data, AES.block_size)
         return unpadded_data

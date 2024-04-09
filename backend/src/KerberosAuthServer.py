@@ -92,7 +92,7 @@ class KerberosAuthServer(CommunicatingAgent):
         Validity_Period = time.time()+self.VALID_PERIOD
 
         Ticket_Granting_Ticket = {
-            "session_key": str(Session_Key).lstrip('b').strip('\''),
+            "session_key": str(Session_Key),
             "clientID": clientID,
             "timestamp": Timestamp,
             "timeout_date": Validity_Period
@@ -101,7 +101,7 @@ class KerberosAuthServer(CommunicatingAgent):
         print(Session_Key)
         #Encrypt Session_Key with Hashed_Password
         encrypted_session_key = self.encryptionFunction.encrypt(Session_Key, Hashed_Password)
-        encrypted_session_key = str(base64.b64encode(encrypted_session_key))
+        encrypted_session_key = str(base64.b64encode(encrypted_session_key)).lstrip('b').strip('\'')
         print("encrypted_session_key: ", str(encrypted_session_key) )
         # encrypt TGT with TGS_KEY
         Ticket_Granting_Ticket = json.dumps(Ticket_Granting_Ticket)

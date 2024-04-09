@@ -99,12 +99,21 @@ class KerberosTicketServer(CommunicatingAgent):
         except KeyError:
             return "Incorrect Ticket"
         
-        print(session_key)
+        print("session key:", session_key)
         print(TGT_clientID)
         print(TGT_timeout)
         
-        # TODO: decrypt client_details using session_key----------
+        
+        print(len(session_key))
 
+
+        # TODO: decrypt client_details using session_key----------
+        client_details = base64.b64decode(client_details)
+        client_details = self.encryptionFunction.decrypt(client_details, session_key)
+        client_details = client_details.decode()
+        client_details = json.loads(client_details)
+
+        print(client_details)
         try:
             clientID = client_details['clientID']
             timestamp = client_details['timestamp']
