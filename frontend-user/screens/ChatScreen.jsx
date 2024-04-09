@@ -10,6 +10,7 @@ import {encryptAES, decryptAES} from "../utils/encryptionUtils";
 import {formatPythonTimeString, pythonTime} from "../utils/dateUtils";
 import io from "socket.io-client";
 import {UserContext} from "../contexts/UserContext";
+import {getInitials} from "../utils/stringUtils";
 
 const ChatScreen = ({route, navigation}) => {
     // Server URL

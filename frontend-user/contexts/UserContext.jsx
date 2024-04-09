@@ -37,6 +37,11 @@ export const UserProvider = ({ children }) => {
             email: "johndoe@gmail.com",
             name: "John Doe",
             password: "12345"
+        },
+        "fURjH98QX4A0Ro6swlVb": {
+            email: "j.dawg@gmail.com",
+            name: "Jane Doe",
+            password: "password123"
         }
     };
 
