@@ -92,7 +92,7 @@ class KerberosAuthServer(CommunicatingAgent):
         Validity_Period = time.time()+self.VALID_PERIOD
 
         Ticket_Granting_Ticket = {
-            "session_key": str(Session_Key),
+            "session_key": str(Session_Key).lstrip('b').strip('\''),
             "clientID": clientID,
             "timestamp": Timestamp,
             "timeout_date": Validity_Period
@@ -107,7 +107,7 @@ class KerberosAuthServer(CommunicatingAgent):
         Ticket_Granting_Ticket = json.dumps(Ticket_Granting_Ticket)
         Ticket_Granting_Ticket = Ticket_Granting_Ticket.encode()
         encrypted_TGT = self.encryptionFunction.encrypt(Ticket_Granting_Ticket, self.TGS_Key)
-        encrypted_TGT = str(base64.b64encode(encrypted_TGT))
+        encrypted_TGT = str(base64.b64encode(encrypted_TGT)).lstrip('b').strip('\'')
 
         return_message = {
             "session_key": encrypted_session_key,

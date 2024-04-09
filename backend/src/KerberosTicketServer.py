@@ -18,6 +18,7 @@ from src.AESEncryptionFunction import AESEncryptionFunction
 
 import json
 import time
+import base64
 
 class KerberosTicketServer(CommunicatingAgent):
     
@@ -87,12 +88,20 @@ class KerberosTicketServer(CommunicatingAgent):
         
 
         # TODO: decrypt TGT fields
+        TGT = base64.b64decode(TGT)
+        TGT = self.encryptionFunction.decrypt(TGT, self.TGS_Key)
+        TGT = TGT.decode()
+        TGT = json.loads(TGT)
         try:
             session_key = TGT['session_key']
             TGT_clientID = TGT['clientID']
             TGT_timeout = TGT['timeout_date']
         except KeyError:
             return "Incorrect Ticket"
+        
+        print(session_key)
+        print(TGT_clientID)
+        print(TGT_timeout)
         
         # TODO: decrypt client_details using session_key----------
 
