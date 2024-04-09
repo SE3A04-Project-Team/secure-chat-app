@@ -20,9 +20,16 @@ const ChatSelectionScreen = ({ navigation }) => {
     useEffect(() => {
         const getRoomsData = async () => {
             try {
-                const response = await axios.post(`${serverUrl}/message_server/get_rooms`, {
+                const response = await axios.post(`${serverUrl}/message_server/get_rooms`, 
+                {
                     clientID: currentUserId,
-                });
+                },
+                {
+                    headers: {
+                        clientID: currentUserId,
+                    }
+                }
+            );
                 setChatData(response.data);
                 return response.data;
             } catch (error) {console.error('Error:', error)}
