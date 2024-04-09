@@ -74,6 +74,9 @@ In the frontend-user folder:
 ```
 
 ### Setup
+- NOTE: This app is designed to be run on a mobile device
+- IMPORTANT! The backend server must be running before the app is started
+- IMPORTANT! Update the server_url in the .env environment variables file to the IP address of the backend server 
 - Install [Node.js](https://nodejs.org/en/)
 - Install Expo Go on mobile phone
 
