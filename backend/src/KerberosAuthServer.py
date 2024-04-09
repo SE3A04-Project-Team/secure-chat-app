@@ -21,12 +21,13 @@ from src.AESEncryptionFunction import AESEncryptionFunction
 
 import json
 import time
+import base64
 
 
 class KerberosAuthServer(CommunicatingAgent):
 
 
-    def __init__(self, serverID: str, communicationManager: CommunicationManager):
+    def __init__(self, serverID: str, communicationManager: CommunicationManager, KDC: KeyDistributionManager):
         """
         initialize server
 
@@ -34,12 +35,13 @@ class KerberosAuthServer(CommunicatingAgent):
         self.serverID = serverID
         self.communicationManager = communicationManager
         self.passwordHasher = Hashin32Bit()
-        self.KDC = AESKeyDistributionCenter()
+        self.KDC = KDC
         self.TGS_Key = b'\xa8\xe9\xae\xa1\x99\x18\xa7R\xa3\x01Cg\xe4\x97\x86\xbf'
         self.VALID_PERIOD = 10000000
         self.encryptionFunction = AESEncryptionFunction()
         self.credentials = dict(
-            {"USER1": "PASSWORD1"}
+            {"USER1": "PASSWORD1",
+             "fURjH98QX4A0Ro6swlVb": "PASSWORD1"}
         )
         self.event_names = [
 
@@ -83,24 +85,29 @@ class KerberosAuthServer(CommunicatingAgent):
         except KeyError:
             return "User not found"
         
-        Hashed_Password = self.passwordHasher(password)
+        Hashed_Password = self.passwordHasher.hash(password)
 
         Session_Key = self.KDC.getKey(clientID, 'ticket_server')
         Timestamp = time.time()
         Validity_Period = time.time()+self.VALID_PERIOD
 
         Ticket_Granting_Ticket = {
-            "session_key": Session_Key,
+            "session_key": str(Session_Key),
             "clientID": clientID,
             "timestamp": Timestamp,
             "timeout_date": Validity_Period
             }
         
-
+        print(Session_Key)
         #Encrypt Session_Key with Hashed_Password
-        encrypted_session_key = self.encryptionFunction.encrypt()
+        encrypted_session_key = self.encryptionFunction.encrypt(Session_Key, Hashed_Password)
+        encrypted_session_key = str(base64.b64encode(encrypted_session_key))
+        print("encrypted_session_key: ", str(encrypted_session_key) )
         # encrypt TGT with TGS_KEY
-        encrypted_TGT = Ticket_Granting_Ticket
+        Ticket_Granting_Ticket = json.dumps(Ticket_Granting_Ticket)
+        Ticket_Granting_Ticket = Ticket_Granting_Ticket.encode()
+        encrypted_TGT = self.encryptionFunction.encrypt(Ticket_Granting_Ticket, self.TGS_Key)
+        encrypted_TGT = str(base64.b64encode(encrypted_TGT))
 
         return_message = {
             "session_key": encrypted_session_key,

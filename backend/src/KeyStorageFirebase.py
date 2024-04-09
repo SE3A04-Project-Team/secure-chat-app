@@ -17,8 +17,8 @@ class KeyStorageFirebase(KeyStorage):
     def __init__(self):
         # Initialize firebase admin ADK
         cred = credentials.Certificate("backend/firebase.json")
-        firebase_admin.initialize_app(cred, name="key_database")
-        self.db = firestore.client()
+        app = firebase_admin.initialize_app(cred, name="key_database")
+        self.db = firestore.client(app)
 
     def addEntry(self, id: str, key: EncryptionKey) -> None:
         """
@@ -47,14 +47,25 @@ class KeyStorageFirebase(KeyStorage):
         data = {id: key}
 
         # Add a new key to the firestore
-        db_ref = self.db.collection("encryptionKeys").document(id).update(
+        self.db.collection("encryptionKeys").document(id).update(
             {'value': key}
         )
+        return key
 
     def getInfo(self) -> dict:
         """
         retrieves encryption keys from the database
 
         """
-        doc = self.db.collection("encryptionKeys")
-        return doc.get().to_dict()
+        try:
+            docs = self.db.collection("encryptionKeys").stream()
+            doc_dict = dict()
+
+            for doc in docs:
+                key = doc.to_dict().get('value')
+                doc_dict.update({doc.id: key})
+
+            return doc_dict
+        
+        except:
+            return "error"

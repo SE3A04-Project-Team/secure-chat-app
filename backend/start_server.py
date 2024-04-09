@@ -8,6 +8,8 @@ from src.KerberosAuthServer import KerberosAuthServer
 from src.KerberosTicketServer import KerberosTicketServer
 from src.AESEncryptionFunction import AESEncryptionFunction
 from src.AESKeyGenerator import AESKeyGenerator
+from src.AESKeyDistributionCenter import AESKeyDistributionCenter
+from src.KeyStorageFirebase import KeyStorageFirebase
 
 import base64
 import json
@@ -43,6 +45,12 @@ message_server_communication_manager = ServerCommunicationManager(
     JSONSerializer(),
     KerberosServerAuthManager()
 )
+s = MessageDeliveryServer("message_server", message_server_communication_manager)
+
+
+key_database = KeyStorageFirebase()
+KDC = AESKeyDistributionCenter(key_database)
+
 auth_server_communication_manager = ServerCommunicationManager(
     'login_server',
     broker,
@@ -59,10 +67,8 @@ ticket_server_communication_manager = ServerCommunicationManager(
 )
 
 
-
-s = MessageDeliveryServer("message_server", message_server_communication_manager)
-a = KerberosAuthServer("login_server", auth_server_communication_manager)
-t = KerberosTicketServer("ticket_server", ticket_server_communication_manager)
+a = KerberosAuthServer("login_server", auth_server_communication_manager, KDC)
+t = KerberosTicketServer("ticket_server", ticket_server_communication_manager, KDC)
 
 broker.start()
 
