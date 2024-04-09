@@ -7,7 +7,7 @@
 - [Contributors](#contributors)
 - [Instructions](#instructions)
 ## Description
-
+This secure chat app utilizes a combination of technologies such as React Native, Node.js, and Python, providing features like real-time chat, AES encryption, and group chat functionalities. Developed with contributions from Aidan Froggatt, Rosa Chen, Kyle McMaster, and Daniel Franze-Da Silva, the app offers a robust and encrypted communication platform with advanced features like Kerberos Authentication Protocol and Key Distribution Center integration.
 
 ## Technologies
 ![React Native](https://img.shields.io/badge/-React%20Native-61DAFB?logo=react&logoColor=white&style=flat)
