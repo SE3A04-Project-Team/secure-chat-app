@@ -17,7 +17,8 @@ import json
 class FirebaseMessageDatabase(MessageDatabase):
     def __init__(self) -> None:
         cred = credentials.Certificate("backend/firebase.json")
-        firebase_admin.initialize_app(cred, name='message_database')
+        firebase_admin.initialize_app(cred)
+
 
 
 

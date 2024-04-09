@@ -5,15 +5,18 @@ Responsible for storing encryption keys to database
 @Date: 2024-04-08
 
 """
-
-from headers.EncryptionKey import EncryptionKey
 from headers.KeyStorage import KeyStorage
+'''
+from headers.EncryptionKey import EncryptionKey
+
 
 import firebase_admin
 from firebase_admin import credentials, firestore
 
-
+'''
 class KeyStorageFirebase(KeyStorage):
+    pass
+'''
     def __init__(self):
         # Initialize firebase admin ADK
         cred = credentials.Certificate("backend/firebase.json")
@@ -69,3 +72,4 @@ class KeyStorageFirebase(KeyStorage):
         
         except:
             return "error"
+'''
