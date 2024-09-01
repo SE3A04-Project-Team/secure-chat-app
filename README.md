@@ -1,4 +1,4 @@
-~~ **See <a href="https://youtu.be/D-qMPdupPTQ">demo</a> here** ~~
+~~ **See <a href="https://youtu.be/D-qMPdupPTQ" target="_blank">demo</a> here** ~~
 # Secure Chat App
 ## Table of Contents
 - [Description](#description)
