@@ -1,3 +1,4 @@
+~~ **See group8_demo0001-5371.mkv for demo** ~~
 # Secure Chat App
 ## Table of Contents
 - [Description](#description)
